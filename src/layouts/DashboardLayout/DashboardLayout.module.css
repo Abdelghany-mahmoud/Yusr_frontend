@@ -1,0 +1,30 @@
+.dashboardContainerOpen,
+.dashboardContainer {
+  display: grid;
+  transition: var(--main-transition);
+  position: relative;
+  min-height: 100vh;
+  background: var(--main-bg-color);
+  direction: ltr;
+}
+.ar.dashboardContainerOpen,
+.ar.dashboardContainer {
+  direction: rtl;
+}
+
+.dashboardContainerOpen {
+  grid-template-columns: 190px 1fr;
+}
+
+.dashboardContainer {
+  grid-template-columns: 70px 1fr;
+}
+
+.content {
+  padding: 0 clamp(5px, 2vw, 15px);
+  transition: all 0.3s;
+}
+
+.header {
+  padding: clamp(10px, 2vw, 20px) 0 clamp(10px, 2vw, 30px) 0;
+}

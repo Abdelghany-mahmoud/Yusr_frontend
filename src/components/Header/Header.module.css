@@ -1,0 +1,44 @@
+.notifications_link {
+  padding: 12px;
+  font-size: 24px;
+}
+.notifications_link::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  top: 14px;
+  right: 13px;
+}
+
+.drop_downed_profile {
+  border-radius: var(--main-border-radius);
+  padding: 12px;
+}
+
+.drop_downed_profile_menu {
+  top: 115%;
+  right: 0;
+  border-radius: var(--main-border-radius);
+  animation: down 0.3s ease-in-out forwards;
+  z-index: 111;
+}
+.drop_downed_profile_menu a,
+.drop_downed_profile_menu button {
+  color: var(--primary-color);
+  font-size: 18px;
+}
+
+
+@keyframes down {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

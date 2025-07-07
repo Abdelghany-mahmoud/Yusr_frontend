@@ -1,0 +1,51 @@
+.aside_nav {
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  transition: var(--main-transition);
+  overflow-y: auto;
+  scrollbar-color: var(--primary-color) var(--secondary-color);
+  scrollbar-width: thin;
+}
+
+.aside_nav.open {
+  padding: 40px 20px;
+  width: 190px;
+}
+.aside_nav.close {
+  padding: 40px 0;
+  width: 70px;
+}
+.aside_nav_back {
+  color: #fff;
+  border-radius: var(--main-border-radius) 0 0 var(--main-border-radius);
+  position: absolute;
+  top: 15px;
+  background-color: var(--primary-color);
+  padding: 8px 12px;
+  cursor: pointer;
+  color: var(--secondary-color)
+}
+
+.aside_nav_icon_open {
+  transition: transform 0.5s ease-in-out;
+}
+
+.aside_nav_back_icon {
+  transition: transform 0.5s ease-in-out;
+}
+.aside_nav_icon_close {
+  transition: transform 0.5s ease-in-out; 
+}
+
+.aside_nav_logo_large {
+  width: 176px;
+}
+.aside_nav_logo_small {
+  width: 50px;
+}
+
+.aside_nav_logo img {
+  width: 100%;
+  object-fit: cover;
+}

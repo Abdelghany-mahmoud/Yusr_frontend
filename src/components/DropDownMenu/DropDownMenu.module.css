@@ -1,0 +1,30 @@
+.drop_downed {
+    border-radius: var(--main-border-radius);
+    padding: 12px;
+  }
+  
+  .drop_downed_menu {
+    top: 115%;
+    right: 0;
+    border-radius: var(--main-border-radius);
+    animation: down 0.3s ease-in-out forwards;
+    z-index: 111;
+  }
+  .drop_downed_menu a,
+  .drop_downed_menu button {
+    color: var(--primary-color);
+    font-size: 18px;
+  }
+  
+  
+  @keyframes down {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
