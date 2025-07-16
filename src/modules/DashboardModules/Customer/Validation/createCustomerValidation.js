@@ -22,8 +22,10 @@ export const createCustomerValidation = (lang = "ar") =>
 
     phone: Yup.string()
       .matches(
-        /^\+?\d{10,15}$/,
-        lang === "ar" ? "رقم الهاتف غير صالح" : "Invalid phone number"
+        /^5\d{8}$/,
+        lang === "ar"
+          ? "رقم الجوال السعودي يجب أن يبدأ بـ 5 ويتكون من 9 أرقام"
+          : "Saudi phone must start with 5 and be 9 digits long"
       )
       .required(lang === "ar" ? "رقم الهاتف مطلوب" : "Phone is required"),
 

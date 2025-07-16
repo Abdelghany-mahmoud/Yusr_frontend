@@ -29,7 +29,10 @@ function RegisterCustomer({ employee }) {
     country_code: Yup.string().required("رمز الدولة مطلوب"),
     phone: Yup.string()
       .required("رقم الهاتف مطلوب")
-      .matches(/^[0-9]{11}$/, "رقم الهاتف يجب أن يكون 11 رقماً"),
+      .matches(
+        /^5\d{8}$/,
+        "رقم الجوال السعودي يجب أن يبدأ بـ 5 ويتكون من 9 أرقام"
+      ),
     password: Yup.string()
       .required("كلمة المرور مطلوبة")
       .min(8, "كلمة المرور يجب أن تكون على الأقل 8 أحرف"),

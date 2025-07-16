@@ -44,8 +44,9 @@ function UpdateEmployee({ userAdmin }) {
     phone: Yup.string()
       .required(t("phone_required") || "رقم الهاتف مطلوب")
       .matches(
-        /^[0-9]{11}$/,
-        t("invalid_phone") || "رقم الهاتف يجب أن يكون 11 رقماً"
+        /^5\d{8}$/,
+        t("invalid_phone") ||
+          "رقم الجوال السعودي يجب أن يبدأ بـ 5 ويتكون من 9 أرقام"
       ),
     password: Yup.string(), // Optional for update
     password_confirmation: Yup.string().oneOf(
