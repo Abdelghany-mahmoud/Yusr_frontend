@@ -37,11 +37,11 @@ export const AssignPermissions = ({ role, permissionsSet }) => {
     if (data?.data) {
       return data?.data?.map((permission) => ({
         value: permission.name,
-        label: permission.name,
+        label: t(permission.name),
       }));
     }
     return [];
-  }, [data]);
+  }, [data, t]);
 
   const assignPermissionsHandler = async (
     values,
@@ -91,7 +91,7 @@ export const AssignPermissions = ({ role, permissionsSet }) => {
                   name={"permissions"}
                   setFieldValue={setFieldValue}
                   totalPages={1}
-                  label={t("categories")}
+                  label={t("permissions")}
                 />
               </div>
 

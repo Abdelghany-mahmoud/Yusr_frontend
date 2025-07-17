@@ -130,11 +130,11 @@ export const RolePermissionsCard = ({ roleData }) => {
                                 action
                               )}`}
                             >
-                              {action}
+                              {t(permission.name)}
                             </span>
-                            <span className="text-gray-600 ml-1">
-                              {resource}
-                            </span>
+                            {/* <span className="text-gray-600 ml-1">
+                              {t(resource)}
+                            </span> */}
                           </div>
                         </div>
                       );

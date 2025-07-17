@@ -34,23 +34,23 @@ export const MultipleSelectionField = ({
       backgroundColor: isDisabled
         ? undefined
         : isSelected
-        ? isDarkMode
-          ? "#374151"
-          : "#E5E7EB"
-        : isFocused
-        ? isDarkMode
-          ? "#4B5563"
-          : "rgba(0, 0, 0, 0.05)"
-        : undefined,
+          ? isDarkMode
+            ? "#374151"
+            : "#E5E7EB"
+          : isFocused
+            ? isDarkMode
+              ? "#4B5563"
+              : "rgba(0, 0, 0, 0.05)"
+            : undefined,
       color: isDisabled
         ? "#9CA3AF"
         : isSelected
-        ? isDarkMode
-          ? "white"
-          : "black"
-        : isDarkMode
-        ? "white"
-        : "black",
+          ? isDarkMode
+            ? "white"
+            : "black"
+          : isDarkMode
+            ? "white"
+            : "black",
       cursor: isDisabled ? "not-allowed" : "default",
     }),
     multiValue: (styles) => ({
@@ -66,9 +66,8 @@ export const MultipleSelectionField = ({
   return (
     <>
       <label
-        className={`block text-lg font-medium mb-1 ${
-          isDarkMode ? "text-white" : "text-black"
-        }`}
+        className={`block text-lg font-medium mb-1 ${isDarkMode ? "text-white" : "text-black"
+          }`}
       >
         {t("select")} {label}
       </label>
@@ -82,7 +81,7 @@ export const MultipleSelectionField = ({
           styles={colorStyles}
           isMulti
           options={options}
-          value={values}
+          value={values?.map((v) => ({ ...v, label: t(v.value) }))}
           onChange={(selected) => setFieldValue(name, selected)}
           placeholder={`${t("select")} ${label}...`}
           theme={(selectTheme) => ({
