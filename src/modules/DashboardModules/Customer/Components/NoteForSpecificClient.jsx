@@ -60,29 +60,29 @@ function NoteForSpecificClient({ customer, transaction }) {
     note: Yup.string().required(t("required")),
     ...(tab === "role"
       ? {
-          role: Yup.object({
-            value: Yup.string().required(t("required")),
-            label: Yup.string().required(),
-          }).required(t("required")),
-        }
+        role: Yup.object({
+          value: Yup.string().required(t("required")),
+          label: Yup.string().required(),
+        }).required(t("required")),
+      }
       : {
-          receiver_id: Yup.string(),
-        }),
+        receiver_id: Yup.string(),
+      }),
   });
 
   const handleSubmit = (values, { resetForm }) => {
     const payload = {
       ...(tab === "role"
         ? {
-            reciever_id: values.receiver_id?.value,
-            note: `${values.note} بخصوص عميل ${transaction?.client?.user?.name}`,
-            transaction_id: transaction?.id,
-          }
+          reciever_id: values.receiver_id?.value,
+          note: `${values.note} بخصوص عميل ${transaction?.client?.user?.name}`,
+          transaction_id: transaction?.id,
+        }
         : {
-            reciever_id: customer?.user?.id,
-            note: values.note,
-            transaction_id: transaction?.id,
-          }),
+          reciever_id: customer?.user?.id,
+          note: values.note,
+          transaction_id: transaction?.id,
+        }),
     };
 
     mutate(payload, {
@@ -92,7 +92,9 @@ function NoteForSpecificClient({ customer, transaction }) {
         sendWhatsapp(
           {
             user_id: customer?.user?.id,
-            message: `${values.note} \n بخصوص معاملة رقم: ${transaction?.id}`,
+            message: transaction?.id
+              ? `${values.note} \n بخصوص معاملة رقم: ${transaction?.id}`
+              : `${values.note} \n بخصوص عميل رقم هويه:   : ${customer?.national_id}`,
           },
           {
             onSuccess: (data) => {
@@ -125,17 +127,15 @@ function NoteForSpecificClient({ customer, transaction }) {
     >
       <div className="mb-4 flex border-b">
         <button
-          className={`px-4 py-2 font-medium ${
-            tab === "role" ? "border-b-2 border-blue-500" : ""
-          }`}
+          className={`px-4 py-2 font-medium ${tab === "role" ? "border-b-2 border-blue-500" : ""
+            }`}
           onClick={() => setTab("role")}
         >
           {t("to_role")}
         </button>
         <button
-          className={`px-4 py-2 font-medium ${
-            tab === "user" ? "border-b-2 border-blue-500" : ""
-          }`}
+          className={`px-4 py-2 font-medium ${tab === "user" ? "border-b-2 border-blue-500" : ""
+            }`}
           onClick={() => setTab("user")}
         >
           {t("to_user")}

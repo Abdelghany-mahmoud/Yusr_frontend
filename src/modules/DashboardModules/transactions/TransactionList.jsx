@@ -19,6 +19,7 @@ import CustomerTransaction from "../Customer/Components/CustomerTransaction";
 import ShowCustomer from "../Customer/Components/ShowCustomer";
 import AcceptTransaction from "../Customer/Components/AcceptTransaction";
 import { useSearchHandler } from "../../../hooks/useSearchHandler";
+import { roleNameToFieldId } from "../../../Helpers/Helpers";
 
 export default function TransactionList({ status = "", userFilter = "" }) {
   const [selected, setSelected] = useState(null);
@@ -26,6 +27,12 @@ export default function TransactionList({ status = "", userFilter = "" }) {
   const { currentPage } = useGetURLParam();
   const location = useLocation();
   const token = useRecoilValue(tokenAtom);
+  const isSuperAdmin =
+    token?.user?.roles[0]?.name == "SuperAdmin" ||
+    token?.user?.roles[0]?.name == "Executive Director";
+  console.log(token?.user?.id, "isSuperAdmin");
+
+  const empId = roleNameToFieldId(token?.user?.roles[0]?.name);
   const isQualityOfficer =
     token?.user?.roles[0]?.name === "Quality Assurance Officer";
   const isMainCaseHandler = token?.user?.roles[0]?.name == "Main Case Handler";
@@ -50,7 +57,6 @@ export default function TransactionList({ status = "", userFilter = "" }) {
   const canUpdateEstimation = useHasPermission(
     "update-estimation-transactions"
   );
-  const isSuperAdmin = token?.user?.roles[0]?.name == "SuperAdmin";
   const isExecutiveDirector =
     token?.user?.roles[0]?.name == "Executive Director";
   const isLegalSupervisor = token?.user?.roles[0]?.name == "Legal Supervisor";
@@ -62,9 +68,9 @@ export default function TransactionList({ status = "", userFilter = "" }) {
     isLoading,
     refetch,
   } = useGetData({
-    endpoint: `transactions?page=${currentPage}${filterQuery}&current_status=${
-      status?.id || ""
-    }${userFilter.roleKey && `&${userFilter.roleKey}=${userFilter.userId}`}`,
+    endpoint: `transactions?page=${currentPage}${filterQuery}${!isSuperAdmin ? `&${empId}=${token?.user?.id}&` : ``
+      }&current_status=${status?.id || ""}${userFilter.roleKey && `&${userFilter.roleKey}=${userFilter.userId}`
+      }`,
     queryKey: [
       "transactions",
       currentPage,
@@ -154,11 +160,11 @@ export default function TransactionList({ status = "", userFilter = "" }) {
             !isSuperAdmin ||
             !isExecutiveDirector ||
             !isLegalSupervisor) && (
-            <AutoTransaction
-              customer={transaction?.client}
-              transaction={transaction}
-            />
-          )}
+              <AutoTransaction
+                customer={transaction?.client}
+                transaction={transaction}
+              />
+            )}
 
           {!isLegalSupervisor && !isQualityOfficer && (
             <CustomerTransaction

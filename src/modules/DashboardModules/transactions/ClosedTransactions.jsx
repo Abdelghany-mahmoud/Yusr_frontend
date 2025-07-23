@@ -45,7 +45,7 @@ function ClosedTransactions() {
 
       {isLoading ? (
         <Loading />
-      ) : data?.data?.data?.length === 0 ? (
+      ) : data?.data?.length === 0 ? (
         <IsEmpty text={t("transactions")} />
       ) : (
         <div className="section-padding">
@@ -53,7 +53,7 @@ function ClosedTransactions() {
             tableHead={tableHead}
             body={
               <>
-                {data?.data?.data?.map((transaction, index) => (
+                {data?.data?.map((transaction, index) => (
                   <tr
                     key={transaction.id}
                     className="text-center transition-all hover:bg-[var(--secondary-bg-color)] duration-300 border-b last:border-0 font-semibold select-none"
@@ -102,7 +102,7 @@ function ClosedTransactions() {
               </>
             }
           />
-          <Pagination totalPages={data?.data?.last_page} />
+          <Pagination totalPages={data?.last_page} />
         </div>
       )}
       {selected && (

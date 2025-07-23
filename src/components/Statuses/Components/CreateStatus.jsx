@@ -19,7 +19,7 @@ function CreateStatus({ isOpen, setIsOpen, selectedStatus }) {
   const { mutate, isPending } = useMutate({
     method: selectedStatus ? "post" : "post",
     endpoint: selectedStatus
-      ? `statuses/${selectedStatus.id}update`
+      ? `statuses/${selectedStatus.id}/update`
       : "statuses",
     queryKeysToInvalidate: ["statuses"],
   });
