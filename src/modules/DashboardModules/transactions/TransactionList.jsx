@@ -30,36 +30,23 @@ export default function TransactionList({ status = "", userFilter = "" }) {
   const isSuperAdmin =
     token?.user?.roles[0]?.name == "SuperAdmin" ||
     token?.user?.roles[0]?.name == "Executive Director";
-  console.log(token?.user?.id, "isSuperAdmin");
 
   const empId = roleNameToFieldId(token?.user?.roles[0]?.name);
-  const isQualityOfficer =
-    token?.user?.roles[0]?.name === "Quality Assurance Officer";
+  const isQualityOfficer = token?.user?.roles[0]?.name === "Quality Assurance Officer";
   const isMainCaseHandler = token?.user?.roles[0]?.name == "Main Case Handler";
-  const isFrontlineLiaisonOfficer =
-    token?.user?.roles[0]?.name == "Frontline Liaison Officer";
-  const createViewFinancialEvaluation = useHasPermission(
-    "create-financial-evaluation"
-  );
-  const updateViewFinancialEvaluation = useHasPermission(
-    "update-financial-evaluation"
-  );
-
-  const canCreateDocuments = useHasPermission("create-documents");
-  const canCreateNote = useHasPermission("create-notes");
-  const canViewNote = useHasPermission("read-notes");
-  const canViewTransactions = useHasPermission("read-transactions");
-  const canCreateTransactions = useHasPermission("create-transactions");
-  const canUdateTransactions = useHasPermission("update-transactions");
-  const canCreateEstimation = useHasPermission(
-    "create-estimation-transactions"
-  );
-  const canUpdateEstimation = useHasPermission(
-    "update-estimation-transactions"
-  );
-  const isExecutiveDirector =
-    token?.user?.roles[0]?.name == "Executive Director";
-  const isLegalSupervisor = token?.user?.roles[0]?.name == "Legal Supervisor";
+  const isFrontlineLiaisonOfficer = token?.user?.roles[0]?.name == "Frontline Liaison Officer";
+  const createViewFinancialEvaluation = useHasPermission("create-financial-evaluation");
+  const updateViewFinancialEvaluation = useHasPermission("update-financial-evaluation");
+  const canCreateDocuments            = useHasPermission("create-documents");
+  const canCreateNote                 = useHasPermission("create-notes");
+  const canViewNote                   = useHasPermission("read-notes");
+  // const canViewTransactions           = useHasPermission("read-transactions");
+  const canCreateTransactions         = useHasPermission("create-transactions");
+  const canUdateTransactions          = useHasPermission("update-transactions");
+  const canCreateEstimation           = useHasPermission("create-estimation-transactions");
+  const canUpdateEstimation           = useHasPermission("update-estimation-transactions");
+  const isExecutiveDirector           = token?.user?.roles[0]?.name == "Executive Director";
+  const isLegalSupervisor             = token?.user?.roles[0]?.name == "Legal Supervisor";
   const userId = token?.user?.id;
 
   const { filterQuery } = useSearchHandler();

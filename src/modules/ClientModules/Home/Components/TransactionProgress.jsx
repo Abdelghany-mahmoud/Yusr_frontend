@@ -34,7 +34,7 @@ function TransactionProgress({ transaction, userId }) {
   const { data: notesFromEmployee, isLoading: notesLoading } = useGetData({
     endpoint: `notes?transaction_id=${transaction?.id}&sender_id=${
       transaction[selectedRole?.key]
-    }&reciever_id=${userId}&transaction_id=${
+    }&receiver_id=${userId}&transaction_id=${
       transaction?.id
     }&page=${employeeNotesPage}`,
     queryKey: [
@@ -46,7 +46,7 @@ function TransactionProgress({ transaction, userId }) {
   });
 
   const { data: notesFromClient, isLoading: notesClientLoading } = useGetData({
-    endpoint: `notes?transaction_id=${transaction?.id}&reciever_id=${
+    endpoint: `notes?transaction_id=${transaction?.id}&receiver_id=${
       transaction[selectedRole?.key]
     }&sender_id=${userId}&transaction_id=${
       transaction?.id
@@ -160,7 +160,7 @@ function TransactionProgress({ transaction, userId }) {
     sendNote(
       {
         note,
-        reciever_id: transaction[selectedRole?.key],
+        receiver_id: transaction[selectedRole?.key],
         transaction_id: transaction?.id,
       },
       {

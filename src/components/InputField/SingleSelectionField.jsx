@@ -10,7 +10,6 @@ export const SingleSelectionField = ({
   value,
   name,
   setFieldValue,
-  setFieldTouched,
   totalPages,
   label,
   currentPage,
@@ -20,7 +19,7 @@ export const SingleSelectionField = ({
   const { t } = useTranslation("layout");
   const { theme } = useTheme();
   const isDarkMode = theme === "dark";
-console.log(error,'error')
+  console.log(error, 'errorrrr')
   const colorStyles = {
     control: (styles) => ({
       ...styles,
@@ -34,23 +33,23 @@ console.log(error,'error')
       backgroundColor: isDisabled
         ? undefined
         : isSelected
-        ? isDarkMode
-          ? "#374151"
-          : "#E5E7EB"
-        : isFocused
-        ? isDarkMode
-          ? "#4B5563"
-          : "rgba(0, 0, 0, 0.05)"
-        : undefined,
+          ? isDarkMode
+            ? "#374151"
+            : "#E5E7EB"
+          : isFocused
+            ? isDarkMode
+              ? "#4B5563"
+              : "rgba(0, 0, 0, 0.05)"
+            : undefined,
       color: isDisabled
         ? "#9CA3AF"
         : isSelected
-        ? isDarkMode
-          ? "white"
-          : "black"
-        : isDarkMode
-        ? "white"
-        : "black",
+          ? isDarkMode
+            ? "white"
+            : "black"
+          : isDarkMode
+            ? "white"
+            : "black",
       cursor: isDisabled ? "not-allowed" : "default",
     }),
   };
@@ -63,9 +62,8 @@ console.log(error,'error')
   return (
     <>
       <label
-        className={`block text-lg font-medium mb-1 ${
-          isDarkMode ? "text-white" : "text-black"
-        }`}
+        className={`block text-lg font-medium mb-1 ${isDarkMode ? "text-white" : "text-black"
+          }`}
       >
         {t("select")} {label}
       </label>

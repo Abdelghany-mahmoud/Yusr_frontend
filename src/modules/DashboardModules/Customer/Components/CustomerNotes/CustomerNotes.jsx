@@ -18,7 +18,7 @@ function CustomerNotes({ senderId, receiverId, transaction }) {
   const { data: receivedNotesData, isLoading: isReceivedLoading } = useGetData({
     endpoint: `notes?${
       transaction?.id ? `transaction_id=${transaction?.id}&` : ""
-    }reciever_id=${receiverId}`,
+    }receiver_id=${receiverId}`,
     queryKey: ["received-notes", receiverId, transaction?.id],
     enabledKey: isOpen && activeTab === "received",
   });
@@ -76,7 +76,7 @@ function CustomerNotes({ senderId, receiverId, transaction }) {
               </span>
               <span className="text-xs text-gray-400">{t("to")}</span>
               <span className="font-semibold text-xs text-gray-500">
-                {note?.reciever?.name}
+                {note?.receiver?.name}
               </span>
             </div>
             <div className="flex items-center gap-2 text-xs text-gray-400">
@@ -110,7 +110,7 @@ function CustomerNotes({ senderId, receiverId, transaction }) {
                     transaction_id: transaction?.id,
                     parent_id: note.id,
                     note: values.note,
-                    reciever_id: note.sender?.id,
+                    receiver_id: note.sender?.id,
                   });
                   resetForm();
                   setReplyingNoteId(null);

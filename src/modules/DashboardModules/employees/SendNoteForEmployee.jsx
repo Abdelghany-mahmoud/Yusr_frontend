@@ -22,7 +22,7 @@ function SendNoteForEmployee({ userId }) {
 
   const initialValues = {
     note: "",
-    reciever_id: userId,
+    receiver_id: userId,
   };
 
   const validationSchema = Yup.object({

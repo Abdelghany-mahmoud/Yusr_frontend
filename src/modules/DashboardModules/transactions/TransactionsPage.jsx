@@ -49,9 +49,8 @@ export default function TransactionsPage() {
               onClick={() => {
                 setSelectedStatus(status);
               }}
-              className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${
-                selectedStatus?.id === status.id ? "bg-[var(--bg-hover)]" : ""
-              }`}
+              className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedStatus?.id === status.id ? "bg-[var(--bg-hover)]" : ""
+                }`}
             >
               {t(status.name)}
             </li>
@@ -66,8 +65,8 @@ export default function TransactionsPage() {
               selectedValue={t(
                 selectedRole
                   ? processRoleFields(roleFields).find(
-                      (role) => role.id === selectedRole
-                    )?.displayLabel
+                    (role) => role.id === selectedRole
+                  )?.displayLabel
                   : null
               )}
             >
@@ -76,9 +75,8 @@ export default function TransactionsPage() {
                   setSelectedRole("");
                   setSelectedUserId("");
                 }}
-                className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${
-                  selectedRole === "" ? "bg-[var(--bg-hover)]" : ""
-                }`}
+                className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === "" ? "bg-[var(--bg-hover)]" : ""
+                  }`}
               >
                 {t("all")}
               </li>
@@ -90,9 +88,8 @@ export default function TransactionsPage() {
                     setSelectedUserId("");
                     setSelectedRoleDisplay(role.displayLabel);
                   }}
-                  className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${
-                    selectedRole === role.id ? "bg-[var(--bg-hover)]" : ""
-                  }`}
+                  className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === role.id ? "bg-[var(--bg-hover)]" : ""
+                    }`}
                 >
                   {t(role.displayLabel)}
                 </li>
@@ -107,8 +104,8 @@ export default function TransactionsPage() {
                 selectedValue={
                   selectedUserId
                     ? usersData?.data?.data?.find(
-                        (user) => user.id === selectedUserId
-                      )?.name
+                      (user) => user.id === selectedUserId
+                    )?.name
                     : null
                 }
               >
@@ -119,9 +116,8 @@ export default function TransactionsPage() {
                     <li
                       key={user.id}
                       onClick={() => setSelectedUserId(user.id)}
-                      className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${
-                        selectedUserId === user.id ? "bg-[var(--bg-hover)]" : ""
-                      }`}
+                      className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedUserId === user.id ? "bg-[var(--bg-hover)]" : ""
+                        }`}
                     >
                       {user.name}
                     </li>

@@ -11,6 +11,7 @@ export const customerTypeOptions = [
     name: "Corporate Institution Financing Solutions",
   },
   { id: "Debt_Buyout_Solutions", name: "Debt Buyout Solutions" },
+  { id: "Undetermined", name: "Undetermined" },
 ];
 
 export const customerReligion = [

@@ -74,12 +74,12 @@ function NoteForSpecificClient({ customer, transaction }) {
     const payload = {
       ...(tab === "role"
         ? {
-          reciever_id: values.receiver_id?.value,
+          receiver_id: values.receiver_id?.value,
           note: `${values.note} بخصوص عميل ${transaction?.client?.user?.name}`,
           transaction_id: transaction?.id,
         }
         : {
-          reciever_id: customer?.user?.id,
+          receiver_id: customer?.user?.id,
           note: values.note,
           transaction_id: transaction?.id,
         }),
@@ -91,7 +91,8 @@ function NoteForSpecificClient({ customer, transaction }) {
         resetForm();
         sendWhatsapp(
           {
-            user_id: customer?.user?.id,
+            user_id:
+              tab === "role" ? values.receiver_id?.value : customer?.user?.id,
             message: transaction?.id
               ? `${values.note} \n بخصوص معاملة رقم: ${transaction?.id}`
               : `${values.note} \n بخصوص عميل رقم هويه:   : ${customer?.national_id}`,
@@ -177,7 +178,7 @@ function NoteForSpecificClient({ customer, transaction }) {
           // Sync role selection to trigger user fetching
           useEffect(() => {
             if (tab === "role" && values?.role?.value) {
-              setSelectedRole(values.role.name);
+              setSelectedRole(values.role?.name);
             }
           }, [values.role, tab]);
 
