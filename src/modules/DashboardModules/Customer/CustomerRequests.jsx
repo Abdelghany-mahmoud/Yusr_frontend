@@ -50,7 +50,7 @@ export function CustomerRequests() {
         <div className="flex gap-2 items-center flex-col sm:flex-row">
           {/* <SendNotificationForCustomer /> */}
           {/* <CreateCustomer /> */}
-          <RegisterCustomer />
+          {/* <RegisterCustomer /> */}
         </div>
       </div>
       {/* Status Dropdown with Pagination */}

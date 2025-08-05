@@ -2,10 +2,10 @@ import { Form, useFormikContext } from "formik";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { InputField } from "../../../../components/InputField/InputField";
-import { Button, DropDownMenu } from "../../../../components";
+import { Button, DropDownMenu, SelectField } from "../../../../components";
 import { FaFilter } from "react-icons/fa";
 import { processRoleFields } from "../../../../Helpers/Helpers";
-import { roleFields } from "../../../../constant/customerType";
+import { customerTypeOptions, roleFields } from "../../../../constant/customerType";
 
 function RegisterForm({
   isSubmitting,
@@ -28,12 +28,12 @@ function RegisterForm({
         placeholder={t("enter_name")}
       />
 
-      <InputField
+      {/* <InputField
         name="email"
         label={t("email")}
         type="email"
         placeholder={t("enter_email")}
-      />
+      /> */}
 
       <div className="grid grid-cols-2 gap-4">
         <InputField
@@ -51,7 +51,13 @@ function RegisterForm({
         />
       </div>
 
-      <InputField
+      <SelectField
+        name="financing_type"
+        label={t("financing_type")}
+        options={customerTypeOptions}
+      />
+
+      {/* <InputField
         name="password"
         label={t("password")}
         type="password"
@@ -63,7 +69,7 @@ function RegisterForm({
         label={t("password_confirmation")}
         type="password"
         placeholder={t("enter_password_confirmation")}
-      />
+      /> */}
 
       {/* Roles Dropdown */}
       {employee && (
@@ -81,9 +87,8 @@ function RegisterForm({
                 setSelectedRoleDisplay(t("all"));
                 setFieldValue("role", ""); // ✅ Sync with Formik
               }}
-              className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${
-                selectedRole === "" ? "bg-[var(--bg-hover)]" : ""
-              }`}
+              className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === "" ? "bg-[var(--bg-hover)]" : ""
+                }`}
             >
               {t("all")}
             </li>
@@ -97,9 +102,8 @@ function RegisterForm({
                     setSelectedRoleDisplay(role.displayLabel);
                     setFieldValue("role", role.displayLabel); // ✅ Sync with Formik
                   }}
-                  className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${
-                    selectedRole === role.id ? "bg-[var(--bg-hover)]" : ""
-                  }`}
+                  className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === role.id ? "bg-[var(--bg-hover)]" : ""
+                    }`}
                 >
                   {t(role.displayLabel)}
                 </li>

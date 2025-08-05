@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
-import { FaFemale } from "react-icons/fa";
-import { FaMale } from "react-icons/fa";
+// import { FaFemale } from "react-icons/fa";
+// import { FaMale } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 // import SendNotificationForCustomer from "./SendNotificationForCustomer";
 // import CustomerStats from "./CustomerStats";
@@ -20,15 +20,17 @@ import { tokenAtom } from "../../../../store/tokenAtom/tokenAtom";
 import { format } from "date-fns";
 import CustomerStatus from "./CustomerStatus";
 import { useHasPermission } from "../../../../hooks/useHasPermission";
+import { useState } from "react";
+import TransactionDetails from "../../transactions/TransactionDetails";
 
-export const CustomerCard = ({ customer, index }) => {
+export const CustomerCard = ({ customer,/* index */}) => {
   const { t } = useTranslation("layout");
   const location = useLocation();
   const token = useRecoilValue(tokenAtom);
   const userId = token?.user?.id;
   const canUpdateClients = useHasPermission("update-clients");
   const canDeleteClients = useHasPermission("delete-clients");
-  const canCreateNotification = useHasPermission("create-notification");
+  // const canCreateNotification = useHasPermission("create-notification");
   const canCreateStatus = useHasPermission("create-status");
   const canUpdateStatus = useHasPermission("update-status");
   const canCreateDocuments = useHasPermission("create-documents");
@@ -37,6 +39,8 @@ export const CustomerCard = ({ customer, index }) => {
   const canViewTransactions = useHasPermission("read-transactions");
   const canCreateTransactions = useHasPermission("create-transactions");
   const isSuperAdmin = token?.user?.roles[0]?.name == "SuperAdmin";
+  const [selected, setSelected] = useState(null);
+  const isLegalSupervisor = token?.user?.roles[0]?.name == "Legal Supervisor";
   return (
     <tr
       key={customer.id}
@@ -50,9 +54,8 @@ export const CustomerCard = ({ customer, index }) => {
       {/* <td className="p-3">
         {customer?.country_code || customer?.user?.country_code || "-"}
       </td> */}
-      <td className="p-3">{`${
-        customer?.phone || customer?.user?.phone || "-"
-      } `}</td>
+      <td className="p-3">{`${customer?.phone || customer?.user?.phone || "-"
+        } `}</td>
       {/* <td className="p-3">{customer?.email || customer?.user?.email || "-"}</td>
       {customer.address && <td className="p-3">{customer.address || "-"}</td>} */}
       {/* <td className="p-3">
@@ -72,44 +75,56 @@ export const CustomerCard = ({ customer, index }) => {
       )} */}
 
       <td className="flex gap-2 items-center justify-center p-3 mt-2">
-        {location?.pathname.includes("new-customer-requests") ? (
-          <>
-            {canUpdateClients && <UpdateCustomer customer={customer} />}
-            <NoteForSpecificClient customer={customer} />
-            {(canCreateStatus || canUpdateStatus) && (
-              <CustomerStatus userId={customer?.id} />
-            )}
-          </>
-        ) : (
-          <>
-            {" "}
-            <ShowCustomer customer={customer} />
-            {(canCreateStatus || canUpdateStatus) && (
-              <CustomerStatus userId={customer?.user?.id} />
-            )}
-            {canUpdateClients && <UpdateCustomer customer={customer} />}
-            {<CustomerTransaction customer={customer} />}
-            {canCreateTransactions && !isSuperAdmin && (
-              <AutoTransaction customer={customer} />
-            )}
-            {canViewTransactions && <Transactions id={customer.id} />}
-            {canViewNote && (
-              <CustomerNotes receiverId={userId} senderId={customer?.id} />
-            )}
-            {canCreateNote && <NoteForSpecificClient customer={customer} />}
-            {isSuperAdmin && <ActivityLog customer={customer} />}
-            {canCreateDocuments && <AddDocs customer={customer} />}
-            {canDeleteClients && (
-              <DeleteGlobal
-                endpoint={`clients/${customer?.id}`}
-                queryKey={[`customers`]}
-                text={t("delete_customer")}
-                tooltipText={t("delete_customer")}
-                deleteTitle={t("delete_customer")}
-              />
-            )}
-          </>
-        )}
+        {
+          location?.pathname.includes("new-customer-requests") ?
+            (
+              <>
+                {canUpdateClients && <UpdateCustomer customer={customer} />}
+                <NoteForSpecificClient customer={customer} />
+                {(canCreateStatus || canUpdateStatus) && (<CustomerStatus userId={customer?.id} />)}
+              </>
+            )
+            :
+            (
+              <>
+                {" "}
+                <ShowCustomer customer={customer} />
+                {(canCreateStatus || canUpdateStatus) && (<CustomerStatus userId={customer?.user?.id} />)}
+                {canUpdateClients && <UpdateCustomer customer={customer} />}
+                {<CustomerTransaction customer={customer} />}
+                {canCreateTransactions && !isSuperAdmin && (<AutoTransaction customer={customer} />)}
+                {canViewTransactions && <Transactions id={customer.id} />}
+                {canViewNote && (<CustomerNotes receiverId={userId} senderId={customer?.id} />)}
+                {canCreateNote && <NoteForSpecificClient customer={customer} />}
+                {isSuperAdmin && <ActivityLog customer={customer} />}
+                {canCreateDocuments && <AddDocs customer={customer} />}
+                {canDeleteClients && (
+                  <DeleteGlobal
+                    endpoint={`clients/${customer?.id}`}
+                    queryKey={[`customers`]}
+                    text={t("delete_customer")}
+                    tooltipText={t("delete_customer")}
+                    deleteTitle={t("delete_customer")}
+                  />
+                )}
+                {!isLegalSupervisor && (
+                  <button
+                    // onClick={() => console.log(customer.transactions[0])}
+                    onClick={() => setSelected(customer.transactions[0])}
+                    className="btn btn-info btn-sm"
+                  >
+                    {t("details")}
+                  </button>
+                )}
+                {selected && (
+                  <TransactionDetails
+                    transaction={selected}
+                    onClose={() => setSelected(null)}
+                  />
+                )}
+              </>
+            )
+        }
         {/* <RejectGlobal
           endpoint="/customers"
           queryKey="customers"

@@ -1,16 +1,10 @@
 export const customerTypeOptions = [
-  { id: "Personal_Financing_Solutions", name: "Personal Financing Solutions" },
-  {
-    id: "Real_Estate_Financing_Solutions",
-    name: "Real Estate Financing Solutions",
-  },
-  { id: "Mortgage_Solutions", name: "Mortgage Solutions" },
-  { id: "Self_Construction_Solutions", name: "Self Construction Solutions" },
-  {
-    id: "Corporate_Institution_Financing_Solutions",
-    name: "Corporate Institution Financing Solutions",
-  },
-  { id: "Debt_Buyout_Solutions", name: "Debt Buyout Solutions" },
+  { id: "Personal_Financing_Solutions", name: "Personal_Financing_Solutions" },
+  { id: "Real_Estate_Financing_Solutions", name: "Real_Estate_Financing_Solutions" },
+  { id: "Mortgage_Solutions", name: "Mortgage_Solutions" },
+  { id: "Self_Construction_Solutions", name: "Self_Construction_Solutions" },
+  { id: "Corporate_Institution_Financing_Solutions", name: "Corporate_Institution_Financing_Solutions" },
+  { id: "Debt_Buyout_Solutions", name: "Debt_Buyout_Solutions" },
   { id: "Undetermined", name: "Undetermined" },
 ];
 

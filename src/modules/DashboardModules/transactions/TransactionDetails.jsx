@@ -17,19 +17,21 @@ export default function TransactionDetails({ transaction, onClose }) {
 
   // Extract the transaction data from the response
   const transactionData = showTransactions?.data || transaction;
+  console.log(transactionData, "transactionData");
 
   // Officer fields configuration
   const officerFields = [
-    { key: "frontline_liaison_officer", label: t("frontline_liaison_officer") },
-    { key: "main_case_handler", label: t("main_case_handler") },
-    { key: "financial_officer", label: t("financial_officer") },
-    { key: "executive_director", label: t("executive_director") },
-    { key: "legal_supervisor", label: t("legal_supervisor") },
-    { key: "quality_assurance_officer", label: t("quality_assurance_officer") },
-    { key: "bank_liaison_officer", label: t("bank_liaison_officer") },
-  ].map((field) => ({
-    ...field,
-    value: transactionData[field.key]?.name || t("not_assigned"),
+    "frontline_liaison_officer",
+    "main_case_handler",
+    "financial_officer",
+    "executive_director",
+    "legal_supervisor",
+    "quality_assurance_officer",
+    "bank_liaison_officer",
+  ].map((key) => ({
+    key,
+    label: t(key),
+    value: transactionData.client?.[key]?.name ?? t("not_assigned"),
   }));
 
   // Client fields configuration
@@ -47,7 +49,7 @@ export default function TransactionDetails({ transaction, onClose }) {
     {
       key: "phone",
       label: t("phone"),
-      value: `${transactionData.client?.user?.country_code} ${transactionData.client?.user?.phone}`,
+      value: `${transactionData.client?.user?.phone} ${transactionData.client?.user?.country_code}`,
     },
     {
       key: "financing_type",
@@ -192,9 +194,8 @@ export default function TransactionDetails({ transaction, onClose }) {
                   <div key={index} className="flex items-start">
                     <div className="flex flex-col items-center mr-3">
                       <div
-                        className={`w-3 h-3 rounded-full ${
-                          index === 0 ? "bg-blue-500" : "bg-gray-300"
-                        }`}
+                        className={`w-3 h-3 rounded-full ${index === 0 ? "bg-blue-500" : "bg-gray-300"
+                          }`}
                       ></div>
                       {index < transactionData.status_history.length - 1 && (
                         <div className="w-px h-6 bg-gray-300"></div>

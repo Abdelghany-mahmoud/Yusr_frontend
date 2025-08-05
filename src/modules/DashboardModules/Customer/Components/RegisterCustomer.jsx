@@ -13,19 +13,19 @@ function RegisterCustomer({ employee }) {
 
   const initialValues = {
     name: "",
-    email: "",
-    country_code: "",
+    // email: "",
+    country_code: "966",
     phone: "",
-    password: "",
-    password_confirmation: "",
+    // password: "",
+    // password_confirmation: "",
     role: employee ? selectedRoleDisplay : "Client",
   };
 
   const validationSchema = Yup.object({
     name: Yup.string().required("الاسم مطلوب"),
-    email: Yup.string()
-      .email("صيغة البريد الإلكتروني غير صحيحة")
-      .required("البريد الإلكتروني مطلوب"),
+    // email: Yup.string()
+    //   .email("صيغة البريد الإلكتروني غير صحيحة")
+    //   .required("البريد الإلكتروني مطلوب"),
     country_code: Yup.string().required("رمز الدولة مطلوب"),
     phone: Yup.string()
       .required("رقم الهاتف مطلوب")
@@ -33,12 +33,12 @@ function RegisterCustomer({ employee }) {
         /^5\d{8}$/,
         "رقم الجوال السعودي يجب أن يبدأ بـ 5 ويتكون من 9 أرقام"
       ),
-    password: Yup.string()
-      .required("كلمة المرور مطلوبة")
-      .min(8, "كلمة المرور يجب أن تكون على الأقل 8 أحرف"),
-    password_confirmation: Yup.string()
-      .oneOf([Yup.ref("password"), null], "كلمتا المرور غير متطابقتين")
-      .required("تأكيد كلمة المرور مطلوب"),
+    // password: Yup.string()
+    //   .required("كلمة المرور مطلوبة")
+    //   .min(8, "كلمة المرور يجب أن تكون على الأقل 8 أحرف"),
+    // password_confirmation: Yup.string()
+    //   .oneOf([Yup.ref("password"), null], "كلمتا المرور غير متطابقتين")
+    //   .required("تأكيد كلمة المرور مطلوب"),
     role: Yup.string().required("الرتبة مطلوبة"),
   });
 
@@ -47,7 +47,7 @@ function RegisterCustomer({ employee }) {
 
   const { mutate, isPending } = useMutate({
     method: "POST",
-    endpoint: "auth/register",
+    endpoint: "clients",
     queryKeysToInvalidate: ["customers"],
   });
 

@@ -25,13 +25,11 @@ function CustomerTransaction({ transaction, customer }) {
   const [selectedRoleDisplay, setSelectedRoleDisplay] = useState("");
   const [userId, setUserId] = useState(customer?.id);
   const isSuperAdmin = token?.user?.roles[0]?.name == "SuperAdmin";
-  const isExecutiveDirector =
-    token?.user?.roles[0]?.name == "Executive Director";
+  const isExecutiveDirector = token?.user?.roles[0]?.name == "Executive Director";
   const { data: clientsData, isLoading: clientsLoading } = useGetData({
     endpoint: `users?role=Client&page=${clientPage}`,
     queryKey: ["clients", clientPage],
   });
-  console.log(customer, "customer");
 
   // Fetch officers with pagination
   const { data: officersData, isLoading: officersLoading } = useGetData({
@@ -181,20 +179,16 @@ function CustomerTransaction({ transaction, customer }) {
               selectedValue={
                 selectedRole
                   ? t(
-                      processRoleFields(roleFields).find(
-                        (role) => role.id === selectedRole
-                      )?.displayLabel
-                    )
+                    processRoleFields(roleFields).find(
+                      (role) => role.id === selectedRole
+                    )?.displayLabel
+                  )
                   : null
               }
             >
               <li
-                onClick={() => {
-                  setSelectedRole("");
-                }}
-                className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${
-                  selectedRole === "" ? "bg-[var(--bg-hover)]" : ""
-                }`}
+                onClick = {() => { setSelectedRole(""); }}
+                className = {`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === "" ? "bg-[var(--bg-hover)]" : ""}`}
               >
                 {t("all")}
               </li>
@@ -219,9 +213,8 @@ function CustomerTransaction({ transaction, customer }) {
                       setSelectedRole(role.id);
                       setSelectedRoleDisplay(role.displayLabel);
                     }}
-                    className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${
-                      selectedRole === role.id ? "bg-[var(--bg-hover)]" : ""
-                    }`}
+                    className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === role.id ? "bg-[var(--bg-hover)]" : ""
+                      }`}
                   >
                     {t(role.displayLabel)}
                   </li>
