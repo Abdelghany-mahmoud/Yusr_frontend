@@ -9,11 +9,10 @@ import { useRecoilValue } from "recoil";
 function ClientHome() {
   const { t } = useTranslation("layout");
   const token = useRecoilValue(tokenAtom);
-  const clientId = token?.user?.client?.id;
   const userId = token?.user?.id;
 
   const { data: transactions, isLoading } = useGetData({
-    endpoint: `transactions?client_id=${clientId}`,
+    endpoint: `transactions?client_id=${userId}`,
     queryKey: ["client-transactions"],
   });
 

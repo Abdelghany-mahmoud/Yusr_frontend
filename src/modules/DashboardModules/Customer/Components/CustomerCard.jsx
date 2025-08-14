@@ -93,9 +93,9 @@ export const CustomerCard = ({ customer,/* index */}) => {
                 {canUpdateClients && <UpdateCustomer customer={customer} />}
                 {<CustomerTransaction customer={customer} />}
                 {canCreateTransactions && !isSuperAdmin && (<AutoTransaction customer={customer} />)}
-                {canViewTransactions && <Transactions id={customer.id} />}
-                {canViewNote && (<CustomerNotes receiverId={userId} senderId={customer?.id} />)}
-                {canCreateNote && <NoteForSpecificClient customer={customer} />}
+                {canViewTransactions && <Transactions id={customer.user.id} />}
+                {canViewNote && (<CustomerNotes userId={userId} customer={customer.user} />)}
+                {canCreateNote && <NoteForSpecificClient client={customer} />}
                 {isSuperAdmin && <ActivityLog customer={customer} />}
                 {canCreateDocuments && <AddDocs customer={customer} />}
                 {canDeleteClients && (
@@ -109,7 +109,7 @@ export const CustomerCard = ({ customer,/* index */}) => {
                 )}
                 {!isLegalSupervisor && (
                   <button
-                    // onClick={() => console.log(customer.transactions[0])}
+                    // onClick={() => // console.log(customer.transactions[0])}
                     onClick={() => setSelected(customer.transactions[0])}
                     className="btn btn-info btn-sm"
                   >

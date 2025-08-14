@@ -123,8 +123,8 @@ export const Routes = createBrowserRouter([
     path: "/",
     element: <Login />,
   },
-  {
-    path: "/admin",
-    element: <Login />,
-  },
+  // {
+  //   path: "/admin",
+  //   element: <Login />,
+  // },
 ]);

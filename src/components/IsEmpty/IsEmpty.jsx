@@ -9,12 +9,8 @@ export const IsEmpty = ({ text, height, fontSize }) => {
       className="flex items-center justify-center"
     >
       <div>
-        <h5
-          className={`${
-            fontSize || "text-3xl"
-          } font-bold text-[var(--primary-color)]`}
-        >
-          {t("nothing")} {text} {t("available")} !
+        <h5 className={`${fontSize ? fontSize : "text-3xl"} font-bold text-[var(--primary-color)]`}>
+          {t("nothing")} {text} {t("available")}!
         </h5>
       </div>
     </div>
@@ -24,5 +20,5 @@ export const IsEmpty = ({ text, height, fontSize }) => {
 IsEmpty.propTypes = {
   text: PropTypes.string,
   height: PropTypes.string,
-  fontSize: PropTypes.fontSize,
+  fontSize: PropTypes.string,
 };

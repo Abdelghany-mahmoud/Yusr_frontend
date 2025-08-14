@@ -17,7 +17,7 @@ export default function TransactionDetails({ transaction, onClose }) {
 
   // Extract the transaction data from the response
   const transactionData = showTransactions?.data || transaction;
-  console.log(transactionData, "transactionData");
+  // console.log(transactionData, "transactionData");
 
   // Officer fields configuration
   const officerFields = [

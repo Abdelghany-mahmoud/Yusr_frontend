@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  Modal,
-  Loading,
   IsEmpty,
-  Table,
+  Loading,
+  Modal,
   ModelPagination,
+  Table,
 } from "../../../../components";
 import { MdHistory } from "react-icons/md";
 import { useGetData } from "../../../../hooks/useGetData";

@@ -10,7 +10,7 @@ const NotificationSetup = () => {
       const granted = await requestNotificationPermission();
       if (granted) {
         handleNotification((data) => {
-          console.log("Received notification:", data);
+          // console.log("Received notification:", data);
           // You can show a toast notification here
           if (data.title) {
             new Notification(data.title, {

@@ -15,7 +15,6 @@ export const AssignRole = ({ userAdmin }) => {
     endpoint: `roles`,
     queryKey: ["roles"],
   });
-  console.log(userAdmin, "userAdmin");
 
   const roleOptions = useMemo(() => {
     if (!data?.data) return [];

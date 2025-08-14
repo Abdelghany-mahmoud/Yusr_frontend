@@ -23,13 +23,13 @@ export const  InputField = ({ name, label, type, placeholder, icon }) => {
             {icon}
           </div>
         )}
-      </div>
-
       <ErrorMessage
         name={name}
         component="div"
         className="text-[var(--danger-color)] text-base mt-1"
       />
+      </div>
+
     </>
   );
 };

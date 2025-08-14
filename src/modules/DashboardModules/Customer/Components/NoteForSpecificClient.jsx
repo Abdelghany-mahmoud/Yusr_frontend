@@ -7,24 +7,21 @@ import { Modal, Loading, TextArea } from "../../../../components";
 import { useGetData } from "../../../../hooks/useGetData";
 import { useMutate } from "../../../../hooks/useMatute";
 import { SingleSelectionField } from "../../../../components/InputField/SingleSelectionField";
-import { tokenAtom } from "../../../../store/tokenAtom/tokenAtom";
-import { useRecoilState } from "recoil";
 import { useSendToWhatsapp } from "./../../../../hooks/useSendToWhatsapp";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-function NoteForSpecificClient({ customer, transaction }) {
+function NoteForSpecificClient({ client }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [tab, setTab] = useState("role"); // 'role' or 'user'
+  const [tab, setTab] = useState("employee"); // 'employee' or 'client'
   const [page, setPage] = useState(1);
   const [selectedRole, setSelectedRole] = useState("");
-  const [token] = useRecoilState(tokenAtom);
   const { t } = useTranslation("layout");
   const { mutate: sendWhatsapp } = useSendToWhatsapp();
 
   const { data: roles, isLoading: rolesLoading } = useGetData({
     endpoint: "roles",
     queryKey: ["roles"],
-    // enabledKey: token?.user?.roles[0]?.name === "SuperAdmin",
   });
 
   const { data: officersData, isLoading: officersLoading } = useGetData({
@@ -37,11 +34,11 @@ function NoteForSpecificClient({ customer, transaction }) {
     return (roles?.data || []).filter(
       (role) => role.name !== "Client" && role.name !== "SuperAdmin"
     );
-  }, [roles, selectedRole]);
+  }, [roles]);
 
   const officersOptions = useMemo(
     () => officersData?.data?.data || [],
-    [officersData, selectedRole]
+    [officersData]
   );
 
   const { mutate, isPending } = useMutate({
@@ -53,35 +50,31 @@ function NoteForSpecificClient({ customer, transaction }) {
   const initialValues = {
     note: "",
     role: "",
-    receiver_id: customer?.user && tab == "user" ? customer?.user?.id : "",
+    receiver_id: tab == "client" ? client?.user.id : "",
   };
 
-  const validationSchema = Yup.object().shape({
+  const validationSchema = Yup.object({
     note: Yup.string().required(t("required")),
-    ...(tab === "role"
-      ? {
-        role: Yup.object({
-          value: Yup.string().required(t("required")),
-          label: Yup.string().required(),
-        }).required(t("required")),
-      }
-      : {
-        receiver_id: Yup.string(),
-      }),
+    receiver_id: tab === "employee"
+      ? Yup.object({
+        value: Yup.string().required(t("required")),
+        label: Yup.string().required(),
+      }).required(t("required"))
+      : Yup.string().required(t("required")),
   });
 
   const handleSubmit = (values, { resetForm }) => {
     const payload = {
-      ...(tab === "role"
+      ...(tab === "employee"
         ? {
           receiver_id: values.receiver_id?.value,
-          note: `${values.note} بخصوص عميل ${transaction?.client?.user?.name}`,
-          transaction_id: transaction?.id,
+          note: `${values.note} بخصوص عميل ${client?.user?.name}`,
+          client_id: client?.id,
         }
         : {
-          receiver_id: customer?.user?.id,
+          receiver_id: client?.user?.id,
           note: values.note,
-          transaction_id: transaction?.id,
+          // transaction_id: transaction?.id,
         }),
     };
 
@@ -91,11 +84,9 @@ function NoteForSpecificClient({ customer, transaction }) {
         resetForm();
         sendWhatsapp(
           {
-            user_id:
-              tab === "role" ? values.receiver_id?.value : customer?.user?.id,
-            message: transaction?.id
-              ? `${values.note} \n بخصوص معاملة رقم: ${transaction?.id}`
-              : `${values.note} \n بخصوص عميل رقم هويه:   : ${customer?.national_id}`,
+            user_id: tab === "employee" ? values.receiver_id?.value : client?.user?.id,
+            message: `${values.note} بخصوص عميل ${client?.user?.name}`,
+            client_id: client?.id
           },
           {
             onSuccess: (data) => {
@@ -128,18 +119,18 @@ function NoteForSpecificClient({ customer, transaction }) {
     >
       <div className="mb-4 flex border-b">
         <button
-          className={`px-4 py-2 font-medium ${tab === "role" ? "border-b-2 border-blue-500" : ""
-            }`}
-          onClick={() => setTab("role")}
+          className={`px - 4 py - 2 font - medium ${tab === "employee" ? "border-b-2 border-blue-500" : ""
+            } `}
+          onClick={() => setTab("employee")}
         >
-          {t("to_role")}
+          {t("to_employee")}
         </button>
         <button
-          className={`px-4 py-2 font-medium ${tab === "user" ? "border-b-2 border-blue-500" : ""
-            }`}
-          onClick={() => setTab("user")}
+          className={`px - 4 py - 2 font - medium ${tab === "client" ? "border-b-2 border-blue-500" : ""
+            } `}
+          onClick={() => setTab("client")}
         >
-          {t("to_user")}
+          {t("to_client")}
         </button>
       </div>
 
@@ -177,14 +168,13 @@ function NoteForSpecificClient({ customer, transaction }) {
         }) => {
           // Sync role selection to trigger user fetching
           useEffect(() => {
-            if (tab === "role" && values?.role?.value) {
+            if (tab === "employee" && values?.role?.value) {
               setSelectedRole(values.role?.name);
             }
-          }, [values.role, tab]);
-
+          }, [values.role]);
           return (
             <form onSubmit={handleSubmit} className="space-y-4">
-              {tab === "role" && (
+              {tab === "employee" && (
                 <>
                   <SingleSelectionField
                     name="role"
@@ -248,5 +238,10 @@ function NoteForSpecificClient({ customer, transaction }) {
     </Modal>
   );
 }
+
+NoteForSpecificClient.propTypes = {
+  client: PropTypes.object.isRequired,
+  senderId: PropTypes.number.isRequired,
+};
 
 export default NoteForSpecificClient;

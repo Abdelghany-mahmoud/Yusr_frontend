@@ -7,7 +7,7 @@ export const useHasPermission = (permission) => {
   const token = useRecoilValue(tokenAtom);
   if (!currentUserRole) return false;
 
-  const isSuperAdmin = token?.user?.roles[0]?.name == "SuperAdmin";
+  const isSuperAdmin = token?.user?.roles.map((role) => role.name).includes("SuperAdmin");
   if (isSuperAdmin) return true;
 
   const allPermissions = currentUserRole?.userPermissions?.all_permissions;

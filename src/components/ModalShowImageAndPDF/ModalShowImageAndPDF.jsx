@@ -8,8 +8,8 @@ import userImage from "/assets/images/user.jpg";
 
 export const ModalShowImageAndPDF = ({ image, pdf, alt, title }) => {
   const [isOpen, setIsOpen] = useState(false);
-  console.log(pdf, "pdf");
-  console.log(image, "image");
+  // console.log(pdf, "pdf");
+  // console.log(image, "image");
   const preview = pdf ? (
     <button
       onClick={() => setIsOpen(true)}

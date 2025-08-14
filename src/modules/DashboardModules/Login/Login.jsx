@@ -21,7 +21,8 @@ export const Login = () => {
   const navigate = useNavigate();
   const { mutate, isPending } = useMutate({
     method: "POST",
-    endpoint: param?.pathname == "/admin" ? "auth/admin-login" : "auth/login",
+    // endpoint: param?.pathname == "/admin" ? "auth/admin-login" : "auth/login",
+    endpoint: "auth/login",
     queryKeysToInvalidate: ["login"],
   });
 
@@ -33,18 +34,11 @@ export const Login = () => {
       onSuccess: async (response) => {
         toast.success(response?.message);
         setToken(response?.data);
-        console.log(response?.data, "response?.data");
-        if (
-          response?.data?.token &&
-          response?.data?.user?.roles[0]?.name == "Client"
-        ) {
+        // console.log(response?.data, "response?.data");
+        if (response?.data?.token && response?.data?.user?.roles.map((role) => role.name).includes("Client")) {
           navigate("/client");
         } else {
-          if (param?.pathname == "/admin") {
-            navigate("/dashboard");
-          } else {
-            navigate("/dashboard/transactions?page=1");
-          }
+            navigate("/dashboard/customers");
         }
       },
       onError: (error) => {

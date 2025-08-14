@@ -22,8 +22,6 @@ import CustomerNotes from "../Customer/Components/CustomerNotes/CustomerNotes";
 function BankLiaisonOfficer() {
   const { t } = useTranslation("layout");
   const { currentPage } = useGetURLParam();
-  const [selectedTransaction, setSelectedTransaction] = useState(null);
-  const [activeModal, setActiveModal] = useState(null); // 'upload', 'notes', 'confirm', 'notify', 'view-receipts'
   const [token, setToken] = useRecoilState(tokenAtom);
   const userId = token?.user?.id;
   const [selected, setSelected] = useState(null);
@@ -32,9 +30,9 @@ function BankLiaisonOfficer() {
   const canCreateNote = useHasPermission("create-notes");
   const canViewNote = useHasPermission("read-notes");
   // Fetch in-progress bank transactions
-  const { data, isLoading, isError, error, refetch } = useGetData({
+  const { data, isLoading, isError, error } = useGetData({
     endpoint: `transactions?${
-      token?.user?.roles[0]?.name == "Bank Liaison Officer"
+      token?.user?.roles.map((role) => role.name).includes("Bank Liaison Officer")
         ? `bank_liaison_officer_id=${token?.user?.id}`
         : ""
     }&page=${currentPage}`,
@@ -87,15 +85,16 @@ function BankLiaisonOfficer() {
         )}
         {canCreateNote && (
           <NoteForSpecificClient
-            transaction={transaction}
-            customer={transaction?.client}
+            client={transaction?.client}
           />
         )}
         {canViewNote && (
           <CustomerNotes
-            receiverId={userId}
-            senderId={transaction?.client?.id}
-            transaction={transaction}
+            // receiverId={userId}
+            // senderId={transaction?.client?.id}
+            // transaction={transaction}
+            userId={userId}
+            customer={transaction?.client?.user}
           />
         )}
         {/* <NotifyTeamModal transaction={transaction} /> */}

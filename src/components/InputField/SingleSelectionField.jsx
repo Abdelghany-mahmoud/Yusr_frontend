@@ -19,7 +19,6 @@ export const SingleSelectionField = ({
   const { t } = useTranslation("layout");
   const { theme } = useTheme();
   const isDarkMode = theme === "dark";
-  console.log(error, 'errorrrr')
   const colorStyles = {
     control: (styles) => ({
       ...styles,

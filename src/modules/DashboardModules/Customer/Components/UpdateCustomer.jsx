@@ -54,9 +54,6 @@ function UpdateCustomer({ customer }) {
       .required(t("required")),
     work_nature: Yup.string(),
     other_income_sources: Yup.string(),
-    // nationality: Yup.string().required(t("required")),
-    // religion: Yup.string().required(t("required")),
-    // gender: Yup.string().required(t("required")),
     national_id: Yup.string().required(t("required")),
     has_previous_loan: Yup.boolean(),
     previous_loan_name: Yup.string().when("has_previous_loan", {

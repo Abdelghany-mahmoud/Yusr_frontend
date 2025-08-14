@@ -21,32 +21,40 @@ import AcceptTransaction from "../Customer/Components/AcceptTransaction";
 import { useSearchHandler } from "../../../hooks/useSearchHandler";
 import { roleNameToFieldId } from "../../../Helpers/Helpers";
 import UpdateCustomer from "../Customer/Components/UpdateCustomer";
+import PropTypes from "prop-types";
 
-export default function TransactionList({ status = "", userFilter = "", searchKey = "", searchValue = "", debouncedSearchValue = "" }) {
+export default function TransactionList({ status = "", userFilter = "", searchKey = "", debouncedSearchValue = "" }) {
   const canUpdateClients = useHasPermission("update-clients");
   const [selected, setSelected] = useState(null);
   const { t } = useTranslation("layout");
   const { currentPage } = useGetURLParam();
   const location = useLocation();
   const token = useRecoilValue(tokenAtom);
-  const isSuperAdmin = token?.user?.roles[0]?.name == "SuperAdmin" || token?.user?.roles[0]?.name == "Executive Director";
-  const empId = roleNameToFieldId(token?.user?.roles[0]?.name);
-  const isQualityOfficer = token?.user?.roles[0]?.name === "Quality Assurance Officer";
-  const isMainCaseHandler = token?.user?.roles[0]?.name == "Main Case Handler";
-  const isFrontlineLiaisonOfficer = token?.user?.roles[0]?.name == "Frontline Liaison Officer";
+  const roleNames = token?.user?.roles?.map(role => role.name) || [];
+  const isSuperAdmin = roleNames.includes("SuperAdmin") || roleNames.includes("Executive Director");
+  const isQualityOfficer = roleNames.includes("Quality Assurance Officer");
+  const isFrontlineLiaisonOfficer = roleNames.includes("Frontline Liaison Officer");
+  const isMainCaseHandler = roleNames.includes("Main Case Handler");
+  const isExecutiveDirector = roleNames.includes("Executive Director");
+  const isLegalSupervisor = roleNames.includes("Legal Supervisor");
+
+  const userId = token?.user?.id;
+  const roleFilters = roleNames
+    .map(roleName => {
+      const key = roleNameToFieldId(roleName);
+      return `${key}=${userId}`;
+    })
+    .join("&");
+
   const createViewFinancialEvaluation = useHasPermission("create-financial-evaluation");
   const updateViewFinancialEvaluation = useHasPermission("update-financial-evaluation");
   const canCreateDocuments = useHasPermission("create-documents");
   const canCreateNote = useHasPermission("create-notes");
   const canViewNote = useHasPermission("read-notes");
-  // const canViewTransactions = useHasPermission("read-transactions");
   const canCreateTransactions = useHasPermission("create-transactions");
   const canUdateTransactions = useHasPermission("update-transactions");
   const canCreateEstimation = useHasPermission("create-estimation-transactions");
   const canUpdateEstimation = useHasPermission("update-estimation-transactions");
-  const isExecutiveDirector = token?.user?.roles[0]?.name == "Executive Director";
-  const isLegalSupervisor = token?.user?.roles[0]?.name == "Legal Supervisor";
-  const userId = token?.user?.id;
 
   const { filterQuery } = useSearchHandler();
   const {
@@ -54,10 +62,24 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
     isLoading,
     refetch,
   } = useGetData({
-    endpoint: `transactions?page=${currentPage}&${searchKey}=${debouncedSearchValue}${filterQuery}${!isSuperAdmin ? `&${empId}=${token?.user?.id}&` : ``
-      }&current_status=${status?.id || ""}${userFilter.roleKey && `&${userFilter.roleKey}=${userFilter.userId}`
+    endpoint: `transactions?page=${currentPage
+      }&${searchKey}=${debouncedSearchValue
+      }${filterQuery
+      }${!isSuperAdmin ? `&${roleFilters}` : ""
+      }&current_status=${status?.id || ""
+      }${userFilter.roleKey && `&${userFilter.roleKey}=${userFilter.userId}` || ""
       }`,
-    queryKey: ["transactions", currentPage, status, userFilter?.userId, userFilter.roleKey, debouncedSearchValue, filterQuery],
+
+    queryKey: [
+      "transactions",
+      currentPage,
+      status,
+      userFilter?.userId,
+      userFilter.roleKey,
+      debouncedSearchValue,
+      filterQuery,
+      roleFilters // include for cache busting if roles change
+    ],
   });
 
   const transactions = transactionsData?.data?.data || [];
@@ -118,12 +140,12 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
             <>
               <RejectGlobal
                 endpoint={`transactions/update/${transaction.id}`}
-                queryKey={[
-                  "transactions",
-                  currentPage,
-                  status,
-                  userFilter?.userId,
-                ]}
+                // queryKey={[
+                //   "transactions",
+                //   currentPage,
+                //   status,
+                //   userFilter?.userId,
+                // ]}
                 text={`Transaction #${transaction.id}`}
                 tooltipText="reject_transaction"
                 rejectTitle={t("reject_transaction")}
@@ -149,7 +171,6 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
 
           {!isLegalSupervisor && !isQualityOfficer && (
             <CustomerTransaction
-              transaction={transaction}
               customer={transaction?.client}
             />
           )}
@@ -159,15 +180,16 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
           )}
           {canCreateNote && (
             <NoteForSpecificClient
-              transaction={transaction}
-              customer={transaction?.client}
+              client={transaction?.client.user}
             />
           )}
           {canViewNote && (
             <CustomerNotes
-              receiverId={userId}
-              senderId={transaction?.client?.user?.id}
-              transaction={transaction}
+              // receiverId={userId}
+              // senderId={transaction?.client?.user?.id}
+              // transaction={transaction}
+              userId={userId}
+              customer={transaction?.client?.user}
             />
           )}
           {(canUpdateEstimation || canCreateEstimation) && (
@@ -232,3 +254,10 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
     </div>
   );
 }
+
+TransactionList.propTypes = {
+  status: PropTypes,
+  userFilter: PropTypes,
+  searchKey: PropTypes,
+  debouncedSearchValue: PropTypes,
+};

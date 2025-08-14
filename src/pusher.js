@@ -17,18 +17,18 @@ export const usePusherNotifications = (userId) => {
     });
 
     const channelName = `notifications.${userId}`;
-    console.log("🔔 Subscribing to public channel:", channelName);
+    // console.log("🔔 Subscribing to public channel:", channelName);
 
     const channel = pusher.subscribe(channelName);
 
     // Debug subscription events
     channel.bind("pusher:subscription_succeeded", () => {
-      console.log("✅ Successfully subscribed to", channelName);
+      // console.log("✅ Successfully subscribed to", channelName);
     });
 
     // Handle notifications
     channel.bind(".new-notification", (data) => {
-      console.log("📩 Notification received:", data);
+      // console.log("📩 Notification received:", data);
 
       // Show browser notification if permission granted
       if (Notification.permission === "granted") {
@@ -41,7 +41,7 @@ export const usePusherNotifications = (userId) => {
 
     // Cleanup
     return () => {
-      console.log("🔕 Unsubscribing from", channelName);
+      // console.log("🔕 Unsubscribing from", channelName);
       channel.unbind_all();
       pusher.unsubscribe(channelName);
     };

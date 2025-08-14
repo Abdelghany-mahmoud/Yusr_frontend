@@ -27,5 +27,5 @@ export const roleFields = [
   { id: "legal_supervisor_id", label: "legal_supervisor" },
   { id: "quality_assurance_officer_id", label: "quality_assurance_officer" },
   { id: "bank_liaison_officer_id", label: "bank_liaison_officer" },
-  { id: "client_id", label: "Client" },
+  { id: "client_id", label: "client" },
 ];

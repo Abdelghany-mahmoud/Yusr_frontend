@@ -8,11 +8,10 @@ import { FcCancel } from "react-icons/fc";
 
 export const RejectGlobal = ({
   endpoint,
-  queryKey,
+  // queryKey,
   text,
   tooltipText,
   rejectTitle,
-  id,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [reason, setReason] = useState("");
@@ -21,7 +20,7 @@ export const RejectGlobal = ({
   const { mutate, isPending } = useMutate({
     method: "POST",
     endpoint: `${endpoint}`, // e.g., /customers/123/reject
-    queryKeysToInvalidate: [queryKey],
+    // queryKeysToInvalidate: [queryKey],
   });
 
   const rejectHandler = () => {
@@ -33,7 +32,7 @@ export const RejectGlobal = ({
     }
 
     mutate(
-      { message: reason, current_status: "Cancelled"  },
+      { message: reason, current_status: "Cancelled" },
       {
         onSuccess: (data) => {
           toast.success(data?.message || t("rejected_successfully"));
@@ -66,12 +65,12 @@ export const RejectGlobal = ({
       >
         <p className="text-2xl font-bold mb-2">{rejectTitle}</p>
         <p className="text-lg mb-3">
-          {t("reject_message") || t("Are_you_sure_you_want_to_reject")} {text}?
+          {t("Are_you_sure_you_want_to_reject")} {text}
         </p>
 
         <textarea
           rows={4}
-          placeholder={t("rejection_reason") || "Enter rejection reason..."}
+          placeholder={t("rejection_reason")}
           className="textarea textarea-bordered w-full mb-3"
           value={reason}
           onChange={(e) => setReason(e.target.value)}

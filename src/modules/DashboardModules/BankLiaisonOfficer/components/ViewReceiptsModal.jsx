@@ -10,7 +10,7 @@ const ViewReceiptsModal = ({ transaction }) => {
 
   const receipts = transaction?.payment_receipts?.[0] || {};
 
-  console.log(receipts, "receipts");
+  // console.log(receipts, "receipts");
 
   return (
     <Modal

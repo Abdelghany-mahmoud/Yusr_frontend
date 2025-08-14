@@ -23,7 +23,8 @@ function Customers() {
   const { currentPage } = useGetURLParam();
   const { t } = useTranslation("layout");
   const [token, setToken] = useRecoilState(tokenAtom);
-  const canViewRoles = token?.user?.roles[0]?.name == "SuperAdmin" || token?.user?.roles[0]?.name == "Executive Director";
+  const roleNames = token?.user?.roles?.map(role => role.name) || [];
+  const canViewRoles = roleNames.includes("SuperAdmin") || roleNames.includes("Executive Director");
   const [selectedRole, setSelectedRole] = useState("");
   const [selectedRoleDisplay, setSelectedRoleDisplay] = useState("");
   const [selectedUserId, setSelectedUserId] = useState("");

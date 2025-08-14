@@ -17,7 +17,7 @@ const NotificationListener = () => {
     requestNotificationPermission();
   }, []);
   const push = usePusherNotifications(userId, token);
-  console.log(push, "handler");
+  // console.log(push, "handler");
 
   return null;
 };

@@ -8,26 +8,21 @@ import { useMutate } from "../../../../../hooks/useMatute";
 import { Form, Formik } from "formik";
 import { FiCornerDownRight } from "react-icons/fi";
 
-function CustomerNotes({ senderId, receiverId, transaction }) {
+function CustomerNotes({ userId, customer }) {
   const [isOpen, setIsOpen] = useState(false);
   const [replyingNoteId, setReplyingNoteId] = useState(null);
   const [activeTab, setActiveTab] = useState("sent");
   const { t } = useTranslation("layout");
-  console.log(receiverId, "receiverId");
   // Two requests: one for received notes, one for sent notes
   const { data: receivedNotesData, isLoading: isReceivedLoading } = useGetData({
-    endpoint: `notes?${
-      transaction?.id ? `transaction_id=${transaction?.id}&` : ""
-    }receiver_id=${receiverId}`,
-    queryKey: ["received-notes", receiverId, transaction?.id],
+    endpoint: `notes?receiver_id=${userId}&sender_id=${customer.id}`,
+    queryKey: ["received-notes", userId , customer.id],
     enabledKey: isOpen && activeTab === "received",
   });
 
   const { data: sentNotesData, isLoading: isSentLoading } = useGetData({
-    endpoint: `notes?${
-      transaction?.id ? `transaction_id=${transaction?.id}&` : ""
-    }sender_id=${receiverId}`,
-    queryKey: ["sent-notes", receiverId, transaction?.id],
+    endpoint: `notes?receiver_id=${customer.id}&sender_id=${userId}`,
+    queryKey: ["sent-notes", customer.id, userId],
     enabledKey: isOpen && activeTab === "sent",
   });
 
@@ -48,18 +43,17 @@ function CustomerNotes({ senderId, receiverId, transaction }) {
   // Recursive NoteThread component
   const NoteThread = ({ note, level = 0 }) => {
     // Determine if this note is sent by the current user (senderId) or not
-    const isMine = note.sender?.id === senderId;
+    const isMine = note.sender?.id === userId;
     return (
       <div
         className={`flex ${isMine ? "justify-end" : "justify-start"} w-full`}
         style={{ marginTop: level ? 8 : 0 }}
       >
         <div
-          className={`relative mb-3  max-w-[80%] min-w-[90%] ${
-            isMine
+          className={`relative mb-3  max-w-[80%] min-w-[90%] ${isMine
               ? "bg-blue-100 border-blue-300"
               : "bg-gray-100 border-gray-300"
-          } rounded-xl shadow-sm p-3 border`}
+            } rounded-xl shadow-sm p-3 border`}
           style={{
             marginLeft: !isMine && level ? level * 18 : 0,
             marginRight: isMine && level ? level * 18 : 0,
@@ -68,9 +62,8 @@ function CustomerNotes({ senderId, receiverId, transaction }) {
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-2">
               <span
-                className={`font-semibold text-sm ${
-                  isMine ? "text-blue-700" : "text-gray-700"
-                }`}
+                className={`font-semibold text-sm ${isMine ? "text-blue-700" : "text-gray-700"
+                  }`}
               >
                 {note?.sender?.name}
               </span>
@@ -95,9 +88,8 @@ function CustomerNotes({ senderId, receiverId, transaction }) {
             </div>
           </div>
           <div
-            className={`text-[15px] ${
-              isMine ? "text-blue-900" : "text-gray-900"
-            } break-words`}
+            className={`text-[15px] ${isMine ? "text-blue-900" : "text-gray-900"
+              } break-words`}
           >
             {note.note}
           </div>
@@ -107,7 +99,7 @@ function CustomerNotes({ senderId, receiverId, transaction }) {
                 initialValues={{ note: "" }}
                 onSubmit={(values, { resetForm }) => {
                   sendNoteReply({
-                    transaction_id: transaction?.id,
+                    client_id: customer.id,
                     parent_id: note.id,
                     note: values.note,
                     receiver_id: note.sender?.id,
@@ -149,6 +141,10 @@ function CustomerNotes({ senderId, receiverId, transaction }) {
       </div>
     );
   };
+  NoteThread.propTypes = {
+    note: PropTypes.object.isRequired,
+    level: PropTypes.number,
+  }
   return (
     <Modal
       isOpen={isOpen}
@@ -169,21 +165,19 @@ function CustomerNotes({ senderId, receiverId, transaction }) {
       <div className="flex space-x-4 mb-4 gap-3">
         <button
           onClick={() => setActiveTab("received")}
-          className={`px-4 py-2 rounded-lg ${
-            activeTab === "received"
+          className={`px-4 py-2 rounded-lg ${activeTab === "received"
               ? "bg-[var(--primary-color)] text-[var(--secondary-color)]"
               : "bg-[var(--secondary-color)] text-[var(--main-text-color)] border border-[var(--border-color)]"
-          }`}
+            }`}
         >
           {t("received_notes")}
         </button>
         <button
           onClick={() => setActiveTab("sent")}
-          className={`px-4 py-2 rounded-lg ${
-            activeTab === "sent"
+          className={`px-4 py-2 rounded-lg ${activeTab === "sent"
               ? "bg-[var(--primary-color)] text-[var(--secondary-color)]"
               : "bg-[var(--secondary-color)] text-[var(--main-text-color)] border border-[var(--border-color)]"
-          }`}
+            }`}
         >
           {t("sent_notes")}
         </button>
@@ -206,10 +200,10 @@ function CustomerNotes({ senderId, receiverId, transaction }) {
 }
 
 CustomerNotes.propTypes = {
-  senderId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-    .isRequired,
-  receiverId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-    .isRequired,
+  userId: PropTypes.number.isRequired,
+  customer: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+  })
 };
 
 export default CustomerNotes;

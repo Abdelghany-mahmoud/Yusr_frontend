@@ -15,7 +15,7 @@ import { processRoleFields } from "../../../../Helpers/Helpers";
 import { FaFilter } from "react-icons/fa";
 import { toast } from "react-toastify";
 
-function CustomerTransaction({ transaction, customer }) {
+function CustomerTransaction({ customer }) {
   const [token, setToken] = useRecoilState(tokenAtom);
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation("layout");
@@ -49,9 +49,7 @@ function CustomerTransaction({ transaction, customer }) {
   const lastPage = officersData?.data?.last_page || 1;
 
   const { mutate, isPending } = useMutate({
-    endpoint: transaction
-      ? `transactions/update/${transaction?.id}`
-      : "transactions",
+    endpoint: `clients/update/${customer?.id}`,
     method: "post",
     onSuccess: () => {
       setIsOpen(false);
@@ -100,7 +98,7 @@ function CustomerTransaction({ transaction, customer }) {
       [selectedRole]: values.officers_id?.value ?? "",
     };
 
-    console.log(cleanedValues, "clean val");
+    // console.log(cleanedValues, "clean val");
     mutate(cleanedValues, {
       onSuccess: (data) => {
         setIsOpen(false);
@@ -145,7 +143,6 @@ function CustomerTransaction({ transaction, customer }) {
           handleSubmit,
           setFieldValue,
           setFieldTouched,
-          isSubmitting,
         }) => (
           <form onSubmit={handleSubmit} className="space-y-4">
             <h2 className="text-center text-2xl">{t("transaction")}</h2>
@@ -260,10 +257,10 @@ function CustomerTransaction({ transaction, customer }) {
                 type="submit"
                 className="btn btn-primary"
                 disabled={
-                  isPending || clientsLoading || officersLoading || isSubmitting
+                  isPending || clientsLoading || officersLoading 
                 }
               >
-                {isPending ? <Loading size="sm" /> : t("save")}
+                {isPending ? <Loading size="w-5 h-5" /> : t("save")}
               </button>
             </div>
           </form>

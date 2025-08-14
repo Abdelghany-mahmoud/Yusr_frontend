@@ -12,7 +12,7 @@ function ActivityLog({ customer }) {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation("layout");
   const [token] = useRecoilState(tokenAtom);
-  console.log(token?.user?.id, "token");
+  // console.log(token?.user?.id, "token");
   const { data, isLoading } = useGetData({
     endpoint: `users/activity-logs?user_id=${customer?.user_id}&causer_id=${token?.user?.id}&page=${page}`,
     queryKey: ["activity-log", customer?.user_id, page],

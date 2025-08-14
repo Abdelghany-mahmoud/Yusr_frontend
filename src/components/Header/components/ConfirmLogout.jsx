@@ -16,9 +16,9 @@ export const ConfirmLogout = () => {
     toast.success("Logout successfully!");
   };
 
-  console.log("Modal:", Modal); // يجب أن تكون function
-  console.log("Button:", Button); // يجب أن تكون function
-  console.log("t(sure):", t("sure")); // لا يجب أن تكون undefined
+  // console.log("Modal:", Modal); // يجب أن تكون function
+  // console.log("Button:", Button); // يجب أن تكون function
+  // console.log("t(sure):", t("sure")); // لا يجب أن تكون undefined
 
   return (
     <Modal

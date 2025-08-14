@@ -23,6 +23,9 @@ import { useRecoilValue } from "recoil";
 import { tokenAtom } from "../../../store/tokenAtom/tokenAtom";
 import SendNoteForEmployee from "./SendNoteForEmployee";
 import CustomerNotes from "../Customer/Components/CustomerNotes/CustomerNotes";
+import { toast } from "react-toastify";
+import { useAxios } from "../../../Config/axiosConfig/axiosConfig";
+import { useQueryClient } from "@tanstack/react-query";
 
 function Employees() {
   const { currentPage } = useGetURLParam();
@@ -32,13 +35,16 @@ function Employees() {
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearchValue, setDebouncedSearchValue] = useState("");
   const [selectedRole, setSelectedRole] = useState("Main Case Handler");
-  const [selectedRoleDisplay, setSelectedRoleDisplay] =
-    useState("Main Case Handler");
+  const [selectedRoleDisplay, setSelectedRoleDisplay] = useState("Main Case Handler");
   const canUpdateEmployee = useHasPermission("update-users");
   const canDeleteEmployee = useHasPermission("delete-users");
   const canCreateEmployee = useHasPermission("create-users");
   const isSuperAdmin = token?.user?.roles[0]?.name == "SuperAdmin";
   const userId = token?.user?.id;
+  const axiosInstance = useAxios();
+  const queryClient = useQueryClient();
+  const [togglingId, setTogglingId] = useState(null);
+
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchValue(searchValue);
@@ -53,9 +59,26 @@ function Employees() {
     t("country_code"),
     t("phone"),
     t("email"),
+    t('receive_requests'),
     t("role"),
     t("actions"),
   ];
+
+  const handleToggleStatus = async (id) => {
+    setTogglingId(id);
+    try {
+      await axiosInstance.post(`/users/${id}/receive-requests`);
+      toast.success(t("status_updated_successfully"));
+      await queryClient.invalidateQueries({
+        queryKey: ["employees"],
+        refetchType: "active",
+      });
+    } catch (err) {
+      toast.error(err?.response?.data?.message || t("error"));
+    } finally {
+      setTogglingId(null);
+    }
+  };
 
   const { data, isLoading, isError, error } = useGetData({
     endpoint: `users?role=${selectedRoleDisplay}&${searchKey}=${debouncedSearchValue}&page=${currentPage}`,
@@ -85,8 +108,8 @@ function Employees() {
           selectedValue={t(
             selectedRole
               ? processRoleFields(roleFields).find(
-                  (role) => role.id === selectedRole
-                )?.displayLabel
+                (role) => role.id === selectedRole
+              )?.displayLabel
               : null
           )}
         >
@@ -94,9 +117,8 @@ function Employees() {
             onClick={() => {
               setSelectedRole("");
             }}
-            className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${
-              selectedRole === "" ? "bg-[var(--bg-hover)]" : ""
-            }`}
+            className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === "" ? "bg-[var(--bg-hover)]" : ""
+              }`}
           >
             {t("choose_role")}
           </li>
@@ -109,9 +131,8 @@ function Employees() {
                   setSelectedRole(role.id);
                   setSelectedRoleDisplay(role.displayLabel);
                 }}
-                className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${
-                  selectedRole === role.id ? "bg-[var(--bg-hover)]" : ""
-                }`}
+                className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === role.id ? "bg-[var(--bg-hover)]" : ""
+                  }`}
               >
                 {t(role.displayLabel)}
               </li>
@@ -163,11 +184,30 @@ function Employees() {
                 <td className="p-3 ">{employee.country_code}</td>
                 <td className="p-3 ">{employee.phone}</td>
                 <td className="p-3 ">{employee.email}</td>
-                <td className="p-3 ">{t(employee.roles[0]?.name)}</td>
+                <td
+                  onClick={() => handleToggleStatus(employee.id)}
+                  className="cursor-pointer"
+                  title={t("click_to_toggle_status")}
+                >
+                  {togglingId === employee.id ? (
+                    <Loading size="w-11 h-11" height="100%" />
+                  ) : employee.active ? (
+                    <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full">
+                      {t("yes")}
+                    </span>
+                  ) : (
+                    <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full">
+                      {t("no")}
+                    </span>
+                  )}
+                </td>
+                <td className="p-3">
+                  {employee.roles.map((role) => t(role.name)).join(' | ')}
+                </td>
                 <td className="flex gap-2 items-center p-3 mt-2">
                   {/* Add your action buttons here */}
                   <SendNoteForEmployee userId={employee?.id} />
-                  <CustomerNotes receiverId={userId} senderId={employee?.id} />
+                  <CustomerNotes userId={userId} customer={employee} />
                   {canUpdateEmployee && <UpdateEmployee userAdmin={employee} />}
                   {isSuperAdmin && <AssignRole userAdmin={employee} />}
                   {canDeleteEmployee && (

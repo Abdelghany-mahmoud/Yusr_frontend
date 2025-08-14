@@ -29,21 +29,21 @@ function useFirebaseMessaging() {
         })
           .then((currentToken) => {
             if (currentToken) {
-              console.log("FCM token:", currentToken);
+              // console.log("FCM token:", currentToken);
               // Send this token to your server to send push notifications later
             } else {
-              console.log("No registration token available.");
+              // console.log("No registration token available.");
             }
           })
           .catch((err) => {
-            console.log("An error occurred while retrieving token.", err);
+            // console.log("An error occurred while retrieving token.", err);
           });
       }
     });
 
     // Foreground message handler
     onMessage(messaging, (payload) => {
-      console.log("Message received. ", payload);
+      // console.log("Message received. ", payload);
       // You can show a notification or update UI here
     });
   }, []);

@@ -21,11 +21,11 @@ export const TransactionCard = ({ transaction, index, id, page, refetch }) => {
     >
       <td className="p-3 max-w-2">{index + 1}</td>
       <td className="p-3">#{transaction.id}</td>
-      <td className="p-3">{transaction.current_status}</td>
+      <td className="p-3">{t(transaction.current_status)}</td>
       <td className="p-3">
         {new Date(transaction.created_at).toLocaleString()}
       </td>
-      <td className="p-3">{transaction?.client?.financing_type || "-"}</td>
+      <td className="p-3">{t(transaction?.client?.financing_type) || "-"}</td>
       <td className="p-3">{transaction?.client?.user?.name || "-"}</td>
       <td className="p-3">{transaction?.client?.national_id || "-"}</td>
       <td className="p-3">{transaction?.client?.user?.phone || "-"}</td>

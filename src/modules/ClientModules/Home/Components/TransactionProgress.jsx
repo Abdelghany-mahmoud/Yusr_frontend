@@ -7,8 +7,9 @@ import {
   InputField,
   Pagination,
 } from "../../../../components";
+import PropTypes from 'prop-types';
 import { useLocation } from "react-router-dom";
-import { FaFileUpload, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { useMutate } from "../../../../hooks/useMatute";
 import { useGetData } from "../../../../hooks/useGetData";
 import * as Yup from "yup";
@@ -32,31 +33,25 @@ function TransactionProgress({ transaction, userId }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
 
   const { data: notesFromEmployee, isLoading: notesLoading } = useGetData({
-    endpoint: `notes?transaction_id=${transaction?.id}&sender_id=${
-      transaction[selectedRole?.key]
-    }&receiver_id=${userId}&transaction_id=${
-      transaction?.id
-    }&page=${employeeNotesPage}`,
+    endpoint: `notes?transaction_id=${transaction?.id}&sender_id=${transaction[selectedRole?.key]
+      }&receiver_id=${userId}&transaction_id=${transaction?.id
+      }&page=${employeeNotesPage}`,
     queryKey: [
-      `client-noteFromEmp-${userId}-${
-        transaction[selectedRole?.key]
+      `client-noteFromEmp-${userId}-${transaction[selectedRole?.key]
       }-${employeeNotesPage}-${transaction?.id}`,
     ],
     enabledKey: !!transaction[selectedRole?.key],
   });
 
   const { data: notesFromClient, isLoading: notesClientLoading } = useGetData({
-    endpoint: `notes?transaction_id=${transaction?.id}&receiver_id=${
-      transaction[selectedRole?.key]
-    }&sender_id=${userId}&transaction_id=${
-      transaction?.id
-    }&page=${clientNotesPage}`,
+    endpoint: `notes?transaction_id=${transaction?.id}&receiver_id=${transaction.client[selectedRole?.key]
+      }&sender_id=${userId}&transaction_id=${transaction?.id
+      }&page=${clientNotesPage}`,
     queryKey: [
-      `client-notes-${userId}-${
-        transaction[selectedRole?.key]
+      `client-notes-${userId}-${transaction.client[selectedRole?.key]
       }-${clientNotesPage}-${transaction?.id}`,
     ],
-    enabledKey: !!transaction[selectedRole?.key],
+    enabledKey: !!transaction.client[selectedRole?.key],
   });
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -75,7 +70,7 @@ function TransactionProgress({ transaction, userId }) {
     if (notesFromEmployee?.data?.last_page <= employeeNotesPage) {
       setHasMoreEmployeeNotes(false);
     }
-  }, [notesFromClient, notesFromEmployee]);
+  }, [notesFromClient, notesFromEmployee, clientNotesPage, employeeNotesPage]);
 
   const loadMoreNotes = () => {
     if (hasMoreEmployeeNotes) {
@@ -99,37 +94,20 @@ function TransactionProgress({ transaction, userId }) {
   });
 
   const roles = [
-    {
-      id: "frontline",
-      name: "Frontline Liaison Officer",
-      key: "frontline_liaison_officer_id",
-    },
+    { id: "frontline", name: "Frontline Liaison Officer", key: "frontline_liaison_officer_id", },
     { id: "main_case", name: "Main Case Handler", key: "main_case_handler_id" },
     { id: "financial", name: "Financial Officer", key: "financial_officer_id" },
-    {
-      id: "executive",
-      name: "Executive Director",
-      key: "executive_director_id",
-    },
+    { id: "executive", name: "Executive Director", key: "executive_director_id", },
     { id: "legal", name: "Legal Supervisor", key: "legal_supervisor_id" },
-    {
-      id: "quality",
-      name: "Quality Assurance Officer",
-      key: "quality_assurance_officer_id",
-    },
-    {
-      id: "bank",
-      name: "Bank Liaison Officer",
-      key: "bank_liaison_officer_id",
-    },
+    { id: "quality", name: "Quality Assurance Officer", key: "quality_assurance_officer_id", },
+    { id: "bank", name: "Bank Liaison Officer", key: "bank_liaison_officer_id", },
   ];
 
   const getRoleStatus = (role) => {
     if (!transaction) return "Pending";
 
     const statusHistory = transaction.status_history || [];
-    const roleId = transaction[role.key];
-
+    const roleId = transaction.client[role.key];
     if (roleId) return "Approved"; // If assigned, considered approved
 
     const roleStatuses = statusHistory.filter((sh) => {
@@ -149,7 +127,7 @@ function TransactionProgress({ transaction, userId }) {
   };
 
   const handleRoleClick = (role) => {
-    const roleId = transaction[role.key];
+    const roleId = transaction.client[role.key];
     setSelectedRole({ ...role, id: roleId || role.id });
     setIsModalOpen(true);
   };
@@ -160,7 +138,7 @@ function TransactionProgress({ transaction, userId }) {
     sendNote(
       {
         note,
-        receiver_id: transaction[selectedRole?.key],
+        receiver_id: transaction.client[selectedRole?.key],
         transaction_id: transaction?.id,
       },
       {
@@ -240,8 +218,8 @@ function TransactionProgress({ transaction, userId }) {
     selectedRole?.name === "Bank Liaison Officer" &&
     transaction.payment_receipts.length > 0;
 
-  console.log(transaction, "transaction");
-  console.log(selectedRole, "selectedRole?.id");
+  // console.log(transaction, "transaction");
+  // console.log(selectedRole, "selectedRole?.id");
   return (
     <div className="relative">
       {/* Progress Line */}
@@ -286,28 +264,25 @@ function TransactionProgress({ transaction, userId }) {
           {/* Tabs */}
           <div className="flex space-x-4 border-b">
             <button
-              className={`py-2 px-4 ${
-                activeTab === "notes" ? "border-b-2 border-blue-500" : ""
-              }`}
+              className={`py-2 px-4 ${activeTab === "notes" ? "border-b-2 border-blue-500" : ""
+                }`}
               onClick={() => setActiveTab("notes")}
             >
               {t("notes")}
             </button>
             <button
-              className={`py-2 px-4 ${
-                activeTab === "documents" ? "border-b-2 border-blue-500" : ""
-              }`}
+              className={`py-2 px-4 ${activeTab === "documents" ? "border-b-2 border-blue-500" : ""
+                }`}
               onClick={() => setActiveTab("documents")}
             >
               {t("documents")}
             </button>
             {showPaymentReceiptsTab && (
               <button
-                className={`py-2 px-4 ${
-                  activeTab === "payment_receipts"
-                    ? "border-b-2 border-blue-500"
-                    : ""
-                }`}
+                className={`py-2 px-4 ${activeTab === "payment_receipts"
+                  ? "border-b-2 border-blue-500"
+                  : ""
+                  }`}
                 onClick={() => setActiveTab("payment_receipts")}
               >
                 {t("payment_receipts")}
@@ -332,9 +307,8 @@ function TransactionProgress({ transaction, userId }) {
                       return (
                         <div
                           key={note.id}
-                          className={`p-4 rounded-lg max-w-[80%] ${
-                            isCurrentUser ? "ml-auto bg-blue-100" : "bg-gray-50"
-                          }`}
+                          className={`p-4 rounded-lg max-w-[80%] ${isCurrentUser ? "ml-auto bg-blue-100" : "bg-gray-50"
+                            }`}
                         >
                           <div className="flex justify-between items-start mb-2">
                             <div>
@@ -422,9 +396,8 @@ function TransactionProgress({ transaction, userId }) {
                         <InputField
                           key={`fileName-${index}`}
                           name={`fileNames.${index}`}
-                          label={`${
-                            file.type.startsWith("image/") ? "Image" : "PDF"
-                          } ${index + 1} Name`}
+                          label={`${file.type.startsWith("image/") ? "Image" : "PDF"
+                            } ${index + 1} Name`}
                           placeholder={`Enter name for ${file.name}`}
                           type="text"
                         />
@@ -558,5 +531,10 @@ function TransactionProgress({ transaction, userId }) {
     </div>
   );
 }
+
+TransactionProgress.propTypes = {
+  transaction: PropTypes.object.isRequired, // Or shape({ ... }) for stricter validation
+  userId: PropTypes.number.isRequired,      // Or PropTypes.number, depending on type
+};
 
 export default TransactionProgress;

@@ -9,7 +9,6 @@ import { VscGitPullRequestNewChanges } from "react-icons/vsc";
 import { useRecoilValue } from "recoil";
 import { languageState } from "../../store/langAtom/languageAtom";
 import { useTranslation } from "react-i18next";
-import { IoNotifications } from "react-icons/io5";
 import { MdAdminPanelSettings, MdOutlineSwapHoriz } from "react-icons/md";
 import { Users } from "lucide-react";
 import { FaTasks, FaUser, FaUsers, FaUniversity } from "react-icons/fa";
@@ -24,20 +23,17 @@ export const AsideMenu = ({ open, handleCloseAside }) => {
   const { t } = useTranslation("layout");
   const { theme } = useTheme();
   const token = useRecoilValue(tokenAtom);
-  const userRole = token?.user?.roles[0]?.name;
+  const userRoles = token?.user?.roles.map((role) => role.name);
   const canViewTransactions = useHasPermission("read-transactions");
   const canViewClients = useHasPermission("read-clients");
-  const canViewNotifications = useHasPermission("read-notification");
   const canReadBankTransactions = useHasPermission("read-payment-receipts");
   const canViewTransferred = useHasPermission("read-transferred-transaction");
   const canViewStatuses = useHasPermission("read-status");
   const canCreateStatuses = useHasPermission("create-status");
   const canViewEmployees = useHasPermission("read-users");
-  const isSuperAdmin = token?.user?.roles[0]?.name == "SuperAdmin";
-  const canViewRoles =
-    token?.user?.roles[0]?.name == "SuperAdmin" ||
-    token?.user?.roles[0]?.name == "Executive Director";
-  const legalRole = token?.user?.roles[0]?.name == "Legal Supervisor";
+  const isSuperAdmin = userRoles.includes("SuperAdmin");
+  const canViewRoles = isSuperAdmin || userRoles.includes("Executive Director");
+  const legalRole = userRoles.includes("Legal Supervisor");
   const links = [
     isSuperAdmin && {
       name: t("home"),
@@ -49,11 +45,11 @@ export const AsideMenu = ({ open, handleCloseAside }) => {
       to: "/dashboard/transactions?page=1",
       icon: MdOutlineSwapHoriz,
     },
-    canViewClients && {
-      name: t("New_customer_requests"),
-      to: "new-customer-requests?page=1",
-      icon: VscGitPullRequestNewChanges,
-    },
+    // canViewClients && {
+    //   name: t("New_customer_requests"),
+    //   to: "new-customer-requests?page=1",
+    //   icon: VscGitPullRequestNewChanges,
+    // },
     canViewClients && {
       name: t("customers"),
       to: "customers?page=1",
@@ -69,11 +65,11 @@ export const AsideMenu = ({ open, handleCloseAside }) => {
       to: "/dashboard/roles",
       icon: MdAdminPanelSettings,
     },
-    canViewTransferred && {
-      name: t("Transactions_transferred_to_you"),
-      to: "/dashboard/Transactions-transferred?page=1",
-      icon: MdOutlineSwapHoriz,
-    },
+    // canViewTransferred && {
+    //   name: t("Transactions_transferred_to_you"),
+    //   to: "/dashboard/Transactions-transferred?page=1",
+    //   icon: MdOutlineSwapHoriz,
+    // },
     canViewEmployees && {
       name: t("employees"),
       to: "/dashboard/employees?page=1",
@@ -180,7 +176,7 @@ export const AsideMenu = ({ open, handleCloseAside }) => {
         </Link>
       </div>
       <ul className="list-none p-0 mt-5">
-        {userRole == "Client"
+        {userRoles.includes("Client")
           ? clientLinks.map((item, index) => (
               <li key={index}>
                 <NavLinkAside

@@ -38,7 +38,7 @@ function ClosedTransactions() {
   if (isError) {
     return <Error errorMassage={error?.response?.data?.message} />;
   }
-  console.log(data?.data, "Closed Transactions Data");
+  // console.log(data?.data, "Closed Transactions Data");
   return (
     <>
       <PageTitle title={t("closed_transactions")} />

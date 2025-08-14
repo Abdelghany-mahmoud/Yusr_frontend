@@ -18,7 +18,8 @@ export function DashboardLayout() {
   const lang = useRecoilValue(languageState);
   const token = useRecoilValue(tokenAtom);
   const setCurrentRole = useSetRecoilState(currentRole);
-  const isSuperAdmin = token?.user?.roles[0]?.name == "SuperAdmin";
+  console.log(useRecoilValue(currentRole), "currentRole");
+  const isSuperAdmin =  token?.user?.roles.map((role) => role.name).includes("SuperAdmin");
   const location = useLocation();
   const scrollToTop = () => {
     window.scrollTo({
@@ -36,10 +37,10 @@ export function DashboardLayout() {
     if (userPermissions?.data && !isLoading) {
       setCurrentRole({
         userPermissions: userPermissions?.data,
-        role: token?.user?.roles[0]?.name,
+        roles: token?.user?.roles.map((role) => role.name),
       });
     }
-  }, [userPermissions, setCurrentRole, token?.role, isLoading]);
+  }, [userPermissions, setCurrentRole, token, isLoading]);
   useEffect(() => {
     scrollToTop();
   }, [location.pathname, currentPage]);

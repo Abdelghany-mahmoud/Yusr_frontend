@@ -11,12 +11,9 @@ import { usePusherNotifications } from "../../pusher";
 const ChatWidget = ({ receiverId }) => {
   const token = useRecoilValue(tokenAtom);
   const userId = token?.user?.id;
-  const userName = token?.user?.name;
-  const userRole = token?.user?.role;
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [channel, setChannel] = useState(null);
 
   const sendMessageMutation = useMutate({
     method: "post",
@@ -26,7 +23,7 @@ const ChatWidget = ({ receiverId }) => {
   // 🔔 Hook into notification system
   usePusherNotifications(userId, (data) => {
     // Optional: Toast or visual alert
-    console.log("🔔 Custom notification callback:", data);
+    // console.log("🔔 Custom notification callback:", data);
   });
 
   useEffect(() => {
@@ -39,7 +36,7 @@ const ChatWidget = ({ receiverId }) => {
 
     const channelName = `messages/sender/${userId}/receiver/${receiverId}`;
     const chatChannel = pusher.subscribe(channelName);
-    setChannel(chatChannel);
+    // setChannel(chatChannel);
 
     chatChannel.bind(".message.sent", (data) => {
       setMessages((prev) => [...prev, data]);
@@ -94,9 +91,7 @@ const ChatWidget = ({ receiverId }) => {
             {messages.map((msg, index) => (
               <div
                 key={index}
-                className={`${styles.message} ${
-                  msg.sender_id === userId ? styles.outgoing : styles.incoming
-                }`}
+                className={`${styles.message} ${msg.sender_id === userId ? styles.outgoing : styles.incoming}`}
               >
                 <div className={styles.messageContent}>
                   <p className={styles.messageText}>{msg.text}</p>

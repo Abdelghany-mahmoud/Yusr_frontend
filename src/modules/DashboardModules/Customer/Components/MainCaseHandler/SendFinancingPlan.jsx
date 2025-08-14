@@ -14,14 +14,14 @@ function SendFinancingPlan({ transaction }) {
   const { t } = useTranslation("layout");
   const token = useRecoilValue(tokenAtom);
   const userRole = token?.user?.roles || [];
-  console.log(transaction, "transaction");
+  // console.log(transaction, "transaction");
 
   // Check if user has role "Main Case Handler"
   const isMainCaseHandler = userRole.some(
     (role) => role.name === "Main Case Handler"
   );
-  console.log(isMainCaseHandler, "isMainCaseHandler");
-  console.log(transaction?.isEvaluationAssign, "isEvaluationAssign");
+  // console.log(isMainCaseHandler, "isMainCaseHandler");
+  // console.log(transaction?.isEvaluationAssign, "isEvaluationAssign");
 
   const { mutate, isPending } = useMutate({
     endpoint:
@@ -47,7 +47,7 @@ function SendFinancingPlan({ transaction }) {
       [statusKey]: values?.[statusKey]?.value,
     };
 
-    console.log(updatedValues, "updatedValues");
+    // console.log(updatedValues, "updatedValues");
 
     mutate(updatedValues, {
       onSuccess: () => {
@@ -60,6 +60,7 @@ function SendFinancingPlan({ transaction }) {
               isMainCaseHandler && !transaction?.isEvaluationAssign
                 ? `تمت تحديد خطة التمويل الاولية لك `
                 : `تم تعديل خطة التمويل الاولية`,
+            client_id: transaction?.client?.id
           },
           {
             onSuccess: (data) => {

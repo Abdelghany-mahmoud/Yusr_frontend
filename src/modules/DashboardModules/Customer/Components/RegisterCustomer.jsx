@@ -97,7 +97,7 @@ function RegisterCustomer({ employee }) {
                   errors[validationError.path] = validationError.message;
                 });
               }
-              console.log("Validation Errors:", errors); // 🔥 LOG THE ERRORS
+              // console.log("Validation Errors:", errors); // 🔥 LOG THE ERRORS
               return errors;
             }
           }}
