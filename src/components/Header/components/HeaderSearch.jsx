@@ -9,6 +9,7 @@ import { useSearchHandler } from "../../../hooks/useSearchHandler";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { languageState } from "../../../store/langAtom/languageAtom";
+import { useNavigate } from "react-router-dom";
 
 export const HeaderSearch = () => {
   const [searchValue, setSearchValue] = useRecoilState(searchAtom);
@@ -17,6 +18,7 @@ export const HeaderSearch = () => {
   const { isSearchInCurrentPage } = useSearchHandler();
   const searchInputRef = useRef();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   const timeoutRef = useRef(null);
   const handleSearch = (e) => {
@@ -28,7 +30,12 @@ export const HeaderSearch = () => {
 
     timeoutRef.current = setTimeout(() => {
       setSearchValue((prev) => ({ ...prev, searchValue: value }));
-    }, 1000);
+
+      // always redirect to transactions if not already there
+      if (value && pathname !== "/dashboard/transactions") {
+        navigate("/dashboard/transactions");
+      }
+    }, 500); // faster debounce, 500ms
   };
 
   const clearSearch = () => {
@@ -39,7 +46,7 @@ export const HeaderSearch = () => {
   };
 
   useEffect(() => {
-    if (pathname) {
+    if (pathname !== "/dashboard/transactions") {
       clearSearch();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -53,9 +60,8 @@ export const HeaderSearch = () => {
       />
 
       <span
-        className={`absolute w-fit z-40 ${
-          lang == "ar" ? "right-1" : "left-1"
-        } left-1 -translate-y-1/2 top-1/2 p-1`}
+        className={`absolute w-fit z-40 ${lang == "ar" ? "right-1" : "left-1"
+          } left-1 -translate-y-1/2 top-1/2 p-1`}
       >
         <span className="text-[var(--main-text-color)] text-xl">
           <CiSearch />
@@ -81,11 +87,9 @@ export const HeaderSearch = () => {
       <button
         type="button"
         onClick={clearSearch}
-        className={`text-xl z-50 bg-[var(--primary-color)] text-[var(--secondary-color)] absolute rounded-full shadow-md ${
-          lang == "ar" ? "left-[140px] md:left-56" : "right-[140px] md:right-56"
-        } -translate-y-1/2 top-1/2 p-1 ${
-          searchValue?.value == null ? "hidden" : "flex"
-        }`}
+        className={`text-xl z-50 bg-[var(--primary-color)] text-[var(--secondary-color)] absolute rounded-full shadow-md ${lang == "ar" ? "left-[140px] md:left-56" : "right-[140px] md:right-56"
+          } -translate-y-1/2 top-1/2 p-1 ${searchValue?.value == null ? "hidden" : "flex"
+          }`}
       >
         <IoMdClose />
       </button>

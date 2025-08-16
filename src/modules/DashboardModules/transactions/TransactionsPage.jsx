@@ -57,6 +57,7 @@ export default function TransactionsPage() {
                 >
                   <option value="phone">{t("phone")}</option>
                   <option value="transaction_id">{t("transaction_id")}</option>
+                  <option value="name">{t("name")}</option>
                 </select>
                 <input
                   type="text"

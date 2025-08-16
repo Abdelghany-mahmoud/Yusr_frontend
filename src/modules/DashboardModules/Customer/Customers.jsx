@@ -93,6 +93,8 @@ function Customers() {
                   <option value="religion">{t("religion")}</option> */}
                   {/* <option value="job">{t("job")}</option> */}
                   <option value="phone">{t("phone")}</option>
+                  <option value="name">{t("name")}</option>
+                  <option value="transaction_id">{t("transaction_id")}</option>
                 </select>
                 <input
                   type="text"

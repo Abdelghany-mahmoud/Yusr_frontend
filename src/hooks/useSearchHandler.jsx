@@ -21,13 +21,13 @@ export const useSearchHandler = () => {
     : "";
   const filterValue = searchValue?.searchValue;
   useEffect(() => {
-    if (pathname == "/dashboard/transactions") {
-      setSearchKeys([{ key: "id", value: t("transaction_id") }]);
-      setIsSearchInCurrentPage(true);
-    } else {
-      setSearchKeys([]);
-      setIsSearchInCurrentPage(false);
-    }
+    setSearchKeys([
+      { key: "transaction_id", value: t("transaction_id") },
+      { key: "name", value: t("name") },
+      { key: "phone", value: t("phone_number") },
+    ]);
+
+    setIsSearchInCurrentPage(true); // always allow search
   }, [pathname, setSearchKeys, t]);
   return { searchKeys, isSearchInCurrentPage, filterValue, filterQuery };
 };
