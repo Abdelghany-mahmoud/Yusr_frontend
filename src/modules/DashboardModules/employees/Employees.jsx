@@ -16,7 +16,7 @@ import { processRoleFields } from "../../../Helpers/Helpers";
 import { roleFields } from "../../../constant/customerType";
 import { FaFilter } from "react-icons/fa";
 import { AssignRole } from "./AssignRole";
-import RegisterCustomer from "../Customer/Components/RegisterCustomer";
+import RegisterEmployee from "./RegisterEmployee";
 import UpdateEmployee from "./UpdateEmployee";
 import { useHasPermission } from "../../../hooks/useHasPermission";
 import { useRecoilValue } from "recoil";
@@ -34,8 +34,8 @@ function Employees() {
   const [searchKey, setSearchKey] = useState("phone");
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearchValue, setDebouncedSearchValue] = useState("");
-  const [selectedRole, setSelectedRole] = useState("Main Case Handler");
-  const [selectedRoleDisplay, setSelectedRoleDisplay] = useState("Main Case Handler");
+  const [selectedRole, setSelectedRole] = useState("");
+  const [selectedRoleDisplay, setSelectedRoleDisplay] = useState("");
   const canUpdateEmployee = useHasPermission("update-users");
   const canDeleteEmployee = useHasPermission("delete-users");
   const canCreateEmployee = useHasPermission("create-users");
@@ -98,7 +98,7 @@ function Employees() {
     <div className="p-4">
       <div className="flex flex-col md:flex-row items-center justify-between  ">
         <PageTitle title={t("employees")} />
-        {canCreateEmployee && <RegisterCustomer employee={true} />}
+        {canCreateEmployee && <RegisterEmployee/>}
       </div>
       <div className="mt-4 flex flex-col md:flex-row items-center justify-start gap-4">
         <DropDownMenu
@@ -116,11 +116,11 @@ function Employees() {
           <li
             onClick={() => {
               setSelectedRole("");
+              setSelectedRoleDisplay("");
             }}
-            className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === "" ? "bg-[var(--bg-hover)]" : ""
-              }`}
+            className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === "" ? "bg-[var(--bg-hover)]" : ""}`}
           >
-            {t("choose_role")}
+            {t("all")}
           </li>
           {processRoleFields(roleFields)
             .filter((role) => role.displayLabel !== "Client")
@@ -131,8 +131,7 @@ function Employees() {
                   setSelectedRole(role.id);
                   setSelectedRoleDisplay(role.displayLabel);
                 }}
-                className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === role.id ? "bg-[var(--bg-hover)]" : ""
-                  }`}
+                className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === role.id ? "bg-[var(--bg-hover)]" : ""}`}
               >
                 {t(role.displayLabel)}
               </li>

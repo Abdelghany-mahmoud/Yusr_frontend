@@ -26,35 +26,36 @@ function UpdateCustomer({ customer }) {
 
   const initialValues = {
     user_id: customer.id || "",
+    name: customer.user.name || "",
+    country_code: customer.user.country_code || "",
+    phone: customer.user.phone || "",
+    email: customer.user.email || "",
+    password: "",
+    password_confirmation: "",
     address: customer.address || "",
     financing_type: customer.financing_type || "",
     job: customer.job || "",
     salary: customer.salary || "",
     work_nature: customer.work_nature || "",
+    nationality: customer.nationality || "",
     other_income_sources: customer.other_income_sources || "",
-    // nationality: customer.nationality || "",
-    // religion: customer.religion || "",
-    // gender: customer.gender || "",
+    religion: customer.religion || "",
+    gender: customer.gender || "",
     national_id: customer.national_id || "",
-    has_previous_loan:
-      customer.previous_loan_name || customer.previous_loan_value ? 1 : 0,
+    has_previous_loan: customer.previous_loan_name || customer.previous_loan_value ? 1 : 0,
     previous_loan_name: customer.previous_loan_name || "",
     previous_loan_value: customer.previous_loan_value || "",
   };
 
   const validationSchema = Yup.object().shape({
-    user_id: Yup.string().required(t("required")),
-    address: Yup.string().required(t("required")),
-    financing_type: Yup.string().required(t("required")),
-    job: Yup.string().required(t("required")),
-    salary: Yup.number()
-      .transform((value, originalValue) =>
-        originalValue === "" ? undefined : value
-      )
-      .required(t("required")),
+    user_id: Yup.string(),
+    address: Yup.string(),
+    financing_type: Yup.string(),
+    job: Yup.string(),
+    salary: Yup.number().transform((value, originalValue) => originalValue === "" ? undefined : value),
     work_nature: Yup.string(),
     other_income_sources: Yup.string(),
-    national_id: Yup.string().required(t("required")),
+    national_id: Yup.string(),
     has_previous_loan: Yup.boolean(),
     previous_loan_name: Yup.string().when("has_previous_loan", {
       is: 1,
@@ -136,6 +137,7 @@ function UpdateCustomer({ customer }) {
               // isUpdate={true}
               customer={customer}
               submitButtonText="save"
+              initialValues={initialValues}
               errors={errors}
             />
           )}

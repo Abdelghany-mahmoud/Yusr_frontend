@@ -18,7 +18,6 @@ export function DashboardLayout() {
   const lang = useRecoilValue(languageState);
   const token = useRecoilValue(tokenAtom);
   const setCurrentRole = useSetRecoilState(currentRole);
-  console.log(useRecoilValue(currentRole), "currentRole");
   const isSuperAdmin =  token?.user?.roles.map((role) => role.name).includes("SuperAdmin");
   const location = useLocation();
   const scrollToTop = () => {

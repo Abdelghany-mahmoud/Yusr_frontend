@@ -42,7 +42,7 @@ export const Button = memo(
 Button.displayName = "Button";
 
 Button.propTypes = {
-  text: PropTypes.PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  text: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   style: PropTypes.object,
   className: PropTypes.string,
   type: PropTypes.string,

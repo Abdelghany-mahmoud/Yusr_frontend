@@ -54,7 +54,7 @@ export default function TransactionDetails({ transaction, onClose }) {
     {
       key: "financing_type",
       label: t("financing_type"),
-      value: transactionData.client?.financing_type,
+      value: t(transactionData.client?.financing_type),
     },
     { key: "job", label: t("job"), value: transactionData.client?.job },
     {
@@ -118,11 +118,7 @@ export default function TransactionDetails({ transaction, onClose }) {
               {t("transaction")} #{transactionData.id}
             </h2>
             <div className="flex items-center gap-2 mt-1">
-              <span
-                className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(
-                  transactionData.current_status
-                )}`}
-              >
+              <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(transactionData.current_status)}`}>
                 {t(transactionData.current_status)}
               </span>
               <span className="text-sm text-[var(--secondary-text-color)]">

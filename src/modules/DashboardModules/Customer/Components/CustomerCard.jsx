@@ -10,7 +10,7 @@ import { DeleteGlobal } from "../../../../components";
 import ActivityLog from "./ActivityLog";
 import CustomerTransaction from "./CustomerTransaction";
 import NoteForSpecificClient from "./NoteForSpecificClient";
-import AutoTransaction from "./AutoTransaction";
+// import AutoTransaction from "./AutoTransaction";
 import { useLocation } from "react-router-dom";
 import AddDocs from "./ClientDocs/AddDocs";
 import Transactions from "./transactions/Transactions";
@@ -30,7 +30,6 @@ export const CustomerCard = ({ customer,/* index */}) => {
   const userId = token?.user?.id;
   const canUpdateClients = useHasPermission("update-clients");
   const canDeleteClients = useHasPermission("delete-clients");
-  // const canCreateNotification = useHasPermission("create-notification");
   const canCreateStatus = useHasPermission("create-status");
   const canUpdateStatus = useHasPermission("update-status");
   const canCreateDocuments = useHasPermission("create-documents");
@@ -38,9 +37,9 @@ export const CustomerCard = ({ customer,/* index */}) => {
   const canViewNote = useHasPermission("read-notes");
   const canViewTransactions = useHasPermission("read-transactions");
   const canCreateTransactions = useHasPermission("create-transactions");
-  const isSuperAdmin = token?.user?.roles[0]?.name == "SuperAdmin";
+  const isSuperAdmin = token?.user?.roles.map((role) => role.name).includes("SuperAdmin");
   const [selected, setSelected] = useState(null);
-  const isLegalSupervisor = token?.user?.roles[0]?.name == "Legal Supervisor";
+  const isLegalSupervisor = token?.user?.roles.map((role) => role.name).includes("Legal Supervisor");
   return (
     <tr
       key={customer.id}
@@ -67,7 +66,7 @@ export const CustomerCard = ({ customer,/* index */}) => {
         <td className="p-3">{t(customer?.financing_type || "-")}</td>
       )}
       <td className="p-3">
-        {t(customer?.user?.status?.name || t(customer?.status?.name) || "-")}
+        {t(customer?.status?.name || t(customer?.status?.name) || "-")}
       </td>
       {/* {customer.job && <td className="p-3">{t(customer.job || "-")}</td>} */}
       {/* {customer.national_id && (
@@ -76,15 +75,6 @@ export const CustomerCard = ({ customer,/* index */}) => {
 
       <td className="flex gap-2 items-center justify-center p-3 mt-2">
         {
-          location?.pathname.includes("new-customer-requests") ?
-            (
-              <>
-                {canUpdateClients && <UpdateCustomer customer={customer} />}
-                <NoteForSpecificClient customer={customer} />
-                {(canCreateStatus || canUpdateStatus) && (<CustomerStatus userId={customer?.id} />)}
-              </>
-            )
-            :
             (
               <>
                 {" "}
@@ -92,7 +82,7 @@ export const CustomerCard = ({ customer,/* index */}) => {
                 {(canCreateStatus || canUpdateStatus) && (<CustomerStatus userId={customer?.user?.id} />)}
                 {canUpdateClients && <UpdateCustomer customer={customer} />}
                 {<CustomerTransaction customer={customer} />}
-                {canCreateTransactions && !isSuperAdmin && (<AutoTransaction customer={customer} />)}
+                {/* {canCreateTransactions && !isSuperAdmin && (<AutoTransaction customer={customer} />)} */}
                 {canViewTransactions && <Transactions id={customer.user.id} />}
                 {canViewNote && (<CustomerNotes userId={userId} customer={customer.user} />)}
                 {canCreateNote && <NoteForSpecificClient client={customer} />}

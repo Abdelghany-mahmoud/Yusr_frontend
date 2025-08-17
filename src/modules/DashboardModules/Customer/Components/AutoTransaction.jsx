@@ -15,25 +15,27 @@ function AutoTransaction({ customer, transaction }) {
   const { t } = useTranslation("layout");
   const [token] = useRecoilState(tokenAtom);
   const [transferTo, setTransferTo] = useState("");
-  const roleNameToId = roleNameToFieldId(token?.user?.roles?.[0]?.name);
 
   useEffect(() => {
-    const role = token?.user?.roles?.[0]?.name;
-    if (role === "Frontline Liaison Officer") {
+    const roles = token?.user?.roles?.map((role) => role.name);
+
+    if (roles.includes("Frontline Liaison Officer")) {
       setTransferTo("main_case_handler_id");
-    } else if (role === "Main Case Handler") {
+    } else if (roles.includes("Main Case Handler")) {
       setTransferTo("financial_officer_id");
-    } else if (role === "Financial Officer") {
+    } else if (roles.includes("Financial Officer")) {
       setTransferTo("bank_liaison_officer_id");
     }
-    // else if (role === "Executive Director") {
+    // else if (roles.includes("Executive Director")) {
     //   setTransferTo("legal_supervisor_id");
-    // } else if (role === "Legal Supervisor") {
+    // } else if (roles.includes("Legal Supervisor")) {
     //   setTransferTo("quality_assurance_officer_id");
-    // } else if (role === "Quality Assurance Officer") {
+    // } else if (roles.includes("Quality Assurance Officer")) {
     //   setTransferTo("bank_liaison_officer_id");
     // }
   }, [token]);
+
+  console.log(transferTo, "transferTo");
 
   const { data, isLoading } = useGetData({
     endpoint: `transactions/available-users/${transferTo}`,

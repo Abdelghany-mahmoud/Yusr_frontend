@@ -49,7 +49,7 @@ function CustomerTransaction({ customer }) {
   const lastPage = officersData?.data?.last_page || 1;
 
   const { mutate, isPending } = useMutate({
-    endpoint: `clients/update/${customer?.id}`,
+    endpoint: `clients/transfer-client/${customer?.id}`,
     method: "post",
     onSuccess: () => {
       setIsOpen(false);

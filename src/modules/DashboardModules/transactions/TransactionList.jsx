@@ -9,7 +9,7 @@ import SendFinancingPlan from "../Customer/Components/MainCaseHandler/SendFinanc
 import { useLocation } from "react-router-dom";
 import NoteForSpecificClient from "../Customer/Components/NoteForSpecificClient";
 import AddDocs from "../Customer/Components/ClientDocs/AddDocs";
-import AutoTransaction from "../Customer/Components/AutoTransaction";
+// import AutoTransaction from "../Customer/Components/AutoTransaction";
 import CustomerNotes from "../Customer/Components/CustomerNotes/CustomerNotes";
 import { useRecoilValue } from "recoil";
 import { tokenAtom } from "../../../store/tokenAtom/tokenAtom";
@@ -157,7 +157,7 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
           <ShowCustomer customer={transaction?.client} />
           {canUpdateClients && <UpdateCustomer customer={transaction?.client} />}
           {canCreateDocuments && <AddDocs customer={transaction?.client} />}
-          {(((canCreateTransactions || canUdateTransactions) &&
+          {/* {(((canCreateTransactions || canUdateTransactions) &&
             !isFrontlineLiaisonOfficer) ||
             !isMainCaseHandler ||
             !isSuperAdmin ||
@@ -167,7 +167,7 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
                 customer={transaction?.client}
                 transaction={transaction}
               />
-            )}
+            )} */}
 
           {!isLegalSupervisor && !isQualityOfficer && (
             <CustomerTransaction

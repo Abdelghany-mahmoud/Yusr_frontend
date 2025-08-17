@@ -1,23 +1,45 @@
 import { Form, useFormikContext } from "formik";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { InputField } from "../../../../components/InputField/InputField";
-import { Button, DropDownMenu, SelectField } from "../../../../components";
-import { FaFilter } from "react-icons/fa";
+import { Button, MultipleSelectionField, SelectField } from "../../../../components";
 import { processRoleFields } from "../../../../Helpers/Helpers";
-import { customerTypeOptions, roleFields } from "../../../../constant/customerType";
+import { customerTypeOptions, } from "../../../../constant/customerType";
+import { roleFields } from "../../../../constant/customerType";
 
 function RegisterForm({
   isSubmitting,
   submitButtonText,
   employee,
-  selectedRole,
-  setSelectedRole,
-  selectedRoleDisplay,
-  setSelectedRoleDisplay,
+  values
 }) {
   const { t } = useTranslation("layout");
   const { setFieldValue } = useFormikContext();
+  const selectedRoles = useMemo(
+    () =>
+      ([]).map((role) => ({
+        value: role.name,
+        label: t(role.name),
+      })),
+    [t]
+  );
+
+  const allRoles = useMemo(
+    () =>
+      processRoleFields(roleFields).map((role) => ({
+        value: role.displayLabel,
+        label: t(role.displayLabel),
+      })),
+    [t]
+  );
+
+  const filteredRoles = useMemo(() => {
+    const selectedValues = selectedRoles.map((r) => r.value);
+    return allRoles.filter(
+      (role) => role.value !== "Client" && !selectedValues.includes(role.value)
+    );
+  }, [allRoles, selectedRoles]);
 
   return (
     <Form className="space-y-4">
@@ -27,13 +49,6 @@ function RegisterForm({
         type="text"
         placeholder={t("enter_name")}
       />
-
-      {/* <InputField
-        name="email"
-        label={t("email")}
-        type="email"
-        placeholder={t("enter_email")}
-      /> */}
 
       <div className="grid grid-cols-2 gap-4">
         <InputField
@@ -51,66 +66,41 @@ function RegisterForm({
         />
       </div>
 
-      <SelectField
-        name="financing_type"
-        label={t("financing_type")}
-        options={customerTypeOptions}
-      />
-
-      {/* <InputField
-        name="password"
-        label={t("password")}
-        type="password"
-        placeholder={t("enter_password")}
-      />
-
-      <InputField
-        name="password_confirmation"
-        label={t("password_confirmation")}
-        type="password"
-        placeholder={t("enter_password_confirmation")}
-      /> */}
-
       {/* Roles Dropdown */}
-      {employee && (
-        <>
-          <input type="hidden" name="role" />
-          <DropDownMenu
-            menuTitle={t("choose_role")}
-            MenuIcon={<FaFilter />}
-            className="px-4 py-2 rounded-md w-full"
-            selectedValue={t(selectedRoleDisplay)}
-          >
-            <li
-              onClick={() => {
-                setSelectedRole("");
-                setSelectedRoleDisplay(t("all"));
-                setFieldValue("role", ""); // ✅ Sync with Formik
-              }}
-              className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === "" ? "bg-[var(--bg-hover)]" : ""
-                }`}
-            >
-              {t("all")}
-            </li>
-            {processRoleFields(roleFields)
-              .filter((role) => role.displayLabel !== "Client")
-              .map((role) => (
-                <li
-                  key={role.id}
-                  onClick={() => {
-                    setSelectedRole(role.displayLabel);
-                    setSelectedRoleDisplay(role.displayLabel);
-                    setFieldValue("role", role.displayLabel); // ✅ Sync with Formik
-                  }}
-                  className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === role.id ? "bg-[var(--bg-hover)]" : ""
-                    }`}
-                >
-                  {t(role.displayLabel)}
-                </li>
-              ))}
-          </DropDownMenu>
-        </>
-      )}
+      {employee ?
+        (
+          <>
+            <InputField
+              name="password"
+              label={t("password")}
+              type="password"
+              placeholder={t("enter_password")}
+            />
+
+            <InputField
+              name="password_confirmation"
+              label={t("password_confirmation")}
+              type="password"
+              placeholder={t("enter_password_confirmation")}
+            />
+
+            <MultipleSelectionField
+              options={filteredRoles}
+              values={values.roles}
+              name="roles"
+              setFieldValue={setFieldValue}
+              totalPages={1}
+              label={t("permissions")}
+            />
+          </>
+        )
+        :
+        <SelectField
+          name="financing_type"
+          label={t("financing_type")}
+          options={customerTypeOptions}
+        />
+      }
 
       <Button
         type="submit"
@@ -131,6 +121,7 @@ RegisterForm.propTypes = {
   setSelectedRole: PropTypes.func,
   selectedRoleDisplay: PropTypes.string,
   setSelectedRoleDisplay: PropTypes.func,
+  values: PropTypes.object.isRequired,
 };
 
 export default RegisterForm;

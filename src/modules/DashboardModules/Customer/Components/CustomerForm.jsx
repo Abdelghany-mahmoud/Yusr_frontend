@@ -2,7 +2,6 @@ import { Form, useFormikContext, useField } from "formik";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { customerTypeOptions } from "../../../../constant/customerType";
-import UserDropdownWithPagination from "./UserDropdownWithPagination";
 import { InputField, SelectField } from "../../../../components";
 
 const CheckboxField = ({ name, label }) => {
@@ -31,6 +30,11 @@ const CheckboxField = ({ name, label }) => {
   );
 };
 
+CheckboxField.propTypes = {
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+};
+
 const ShowIfPreviousLoan = () => {
   const { values } = useFormikContext();
   const { t } = useTranslation("layout");
@@ -39,52 +43,34 @@ const ShowIfPreviousLoan = () => {
 
   return (
     <>
-      <InputField
-        name="previous_loan_name"
-        label={t("Previous_Loan_Name")}
-        placeholder="Enter name"
-      />
-      <InputField
-        name="previous_loan_value"
-        label={t("Previous_Loan_Value")}
-        placeholder="Enter value"
-        type="number"
-      />
+      <InputField name="previous_loan_name" label={t("Previous_Loan_Name")} placeholder="Enter name" />
+      <InputField name="previous_loan_value" label={t("Previous_Loan_Value")} placeholder="Enter value" type="number" />
     </>
   );
 };
 
-export const CustomerForm = ({
-  submitButtonText = "save",
-  isUpdate,
-  isSubmitting,
-  errors,
-  customer,
-}) => {
+export const CustomerForm = ({ submitButtonText = "save", isSubmitting, initialValues }) => {
   const { t } = useTranslation("layout");
 
   return (
-    <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {/* {!isUpdate || !customer ? (
-        <div className="col-span-2">
-          <UserDropdownWithPagination name="user_id" />
-        </div>
-      ) : null} */}
+    <Form className="space-y-4">
+
+      <div className="grid grid-cols-2 gap-4">
+        <InputField name="name" label={t("name")} type="text" value={initialValues?.name} placeholder={t("enter_name")} />
+        <InputField name="country_code" label={t("country_code")} type="text" placeholder="+2" />
+        <InputField name="phone" label={t("phone")} type="tel" placeholder={t("enter_phone")} />
+        <InputField name="email" label={t("email")} type="email" placeholder={t("enter_email")} />
+        <InputField name="password" label={t("password")} type="password" placeholder={t("enter_password")} />
+        <InputField name="password_confirmation" label={t("password_confirmation")} type="password" placeholder={t("enter_password_confirmation")} />
+      </div>
 
       <InputField name="address" label={t("address")} type="text" />
+      <InputField name="nationality" label={t("nationality")} type="text" />
       <InputField name="job" label={t("job")} type="text" />
       <InputField name="salary" label={t("salary")} type="number" />
       <InputField name="work_nature" label={t("work_nature")} type="text" />
-      <SelectField
-        name="financing_type"
-        label={t("financing_type")}
-        options={customerTypeOptions}
-      />
-      <InputField
-        name="other_income_sources"
-        label={t("other_income_sources")}
-        type="text"
-      />
+      <SelectField name="financing_type" label={t("financing_type")} options={customerTypeOptions} />
+      <InputField name="other_income_sources" label={t("other_income_sources")} type="text" />
       <InputField name="national_id" label={t("national_id")} type="text" />
       <CheckboxField name="has_previous_loan" label={t("has_previous_loan")} />
       <ShowIfPreviousLoan />
