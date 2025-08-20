@@ -48,7 +48,7 @@ function UpdateEmployee({ userAdmin }) {
     user_id: userAdmin?.id || "",
     name: userAdmin?.name || "",
     email: userAdmin?.email || "",
-    country_code: userAdmin?.country_code || "",
+    country_code: userAdmin?.country_code || 966,
     phone: userAdmin?.phone || "",
     password: "",
     password_confirmation: "",
@@ -57,18 +57,11 @@ function UpdateEmployee({ userAdmin }) {
 
   const validationSchema = Yup.object({
     name: Yup.string().required(t("name_required")),
-    email: Yup.string()
-      .email(t("invalid_email"))
-      .required(t("email_required")),
-    country_code: Yup.string().required(t("country_code_required")),
-    phone: Yup.string()
-      .required(t("phone_required"))
-      .matches(/^5\d{8}$/, t("invalid_phone")),
+    email: Yup.string().email(t("invalid_email")),
+    country_code: Yup.string(),
+    phone: Yup.string().required(t("phone_required")).matches(/^5\d{8}$/, t("invalid_phone")),
     password: Yup.string(),
-    password_confirmation: Yup.string().oneOf(
-      [Yup.ref("password"), null],
-      t("passwords_must_match")
-    ),
+    password_confirmation: Yup.string().oneOf([Yup.ref("password"), null],t("passwords_must_match")),
     roles: Yup.array().min(1, t("role_required")),
   });
 

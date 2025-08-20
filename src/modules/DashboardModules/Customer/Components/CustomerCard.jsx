@@ -66,7 +66,7 @@ export const CustomerCard = ({ customer,/* index */}) => {
         <td className="p-3">{t(customer?.financing_type || "-")}</td>
       )}
       <td className="p-3">
-        {t(customer?.status?.name || t(customer?.status?.name) || "-")}
+        {(canCreateStatus || canUpdateStatus) && (<CustomerStatus userId={customer?.user?.id} customerStatus={t(customer?.status?.name)} />)}
       </td>
       {/* {customer.job && <td className="p-3">{t(customer.job || "-")}</td>} */}
       {/* {customer.national_id && (
@@ -79,7 +79,7 @@ export const CustomerCard = ({ customer,/* index */}) => {
               <>
                 {" "}
                 <ShowCustomer customer={customer} />
-                {(canCreateStatus || canUpdateStatus) && (<CustomerStatus userId={customer?.user?.id} />)}
+                {/* {(canCreateStatus || canUpdateStatus) && (<CustomerStatus userId={customer?.user?.id} customerStatus={t(customer?.status?.name)} />)} */}
                 {canUpdateClients && <UpdateCustomer customer={customer} />}
                 {<CustomerTransaction customer={customer} />}
                 {/* {canCreateTransactions && !isSuperAdmin && (<AutoTransaction customer={customer} />)} */}

@@ -21,6 +21,7 @@ import AcceptTransaction from "../Customer/Components/AcceptTransaction";
 import { useSearchHandler } from "../../../hooks/useSearchHandler";
 import { roleNameToFieldId } from "../../../Helpers/Helpers";
 import UpdateCustomer from "../Customer/Components/UpdateCustomer";
+import TransactionStatus from "./TransactionStatus";
 import PropTypes from "prop-types";
 
 export default function TransactionList({ status = "", userFilter = "", searchKey = "", debouncedSearchValue = "" }) {
@@ -33,9 +34,9 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
   const roleNames = token?.user?.roles?.map(role => role.name) || [];
   const isSuperAdmin = roleNames.includes("SuperAdmin") || roleNames.includes("Executive Director");
   const isQualityOfficer = roleNames.includes("Quality Assurance Officer");
-  const isFrontlineLiaisonOfficer = roleNames.includes("Frontline Liaison Officer");
-  const isMainCaseHandler = roleNames.includes("Main Case Handler");
-  const isExecutiveDirector = roleNames.includes("Executive Director");
+  // const isFrontlineLiaisonOfficer = roleNames.includes("Frontline Liaison Officer");
+  // const isMainCaseHandler = roleNames.includes("Main Case Handler");
+  // const isExecutiveDirector = roleNames.includes("Executive Director");
   const isLegalSupervisor = roleNames.includes("Legal Supervisor");
 
   const userId = token?.user?.id;
@@ -51,8 +52,8 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
   const canCreateDocuments = useHasPermission("create-documents");
   const canCreateNote = useHasPermission("create-notes");
   const canViewNote = useHasPermission("read-notes");
-  const canCreateTransactions = useHasPermission("create-transactions");
-  const canUdateTransactions = useHasPermission("update-transactions");
+  // const canCreateTransactions = useHasPermission("create-transactions");
+  // const canUdateTransactions = useHasPermission("update-transactions");
   const canCreateEstimation = useHasPermission("create-estimation-transactions");
   const canUpdateEstimation = useHasPermission("update-estimation-transactions");
 
@@ -117,7 +118,8 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
       >
         <td className="p-3 max-w-2">{index + 1}</td>
         <td className="p-3">#{transaction.id}</td>
-        <td className="p-3">{t(transaction.current_status)}</td>
+        {/* <td className="p-3">{t(transaction.current_status)}</td> */}
+        <td className="p-3"><TransactionStatus transactionId={transaction.id} status={t(transaction.current_status)} /></td>
         <td className="p-3">
           {new Date(transaction.created_at).toLocaleString()}
         </td>

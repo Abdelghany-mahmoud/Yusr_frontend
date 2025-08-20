@@ -287,7 +287,7 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
             onBlur={handleBlur}
             options={statusOptions?.map((status) => ({
               value: status.id,
-              label: status.name,
+              label: t(status.name),
             }))}
             setFieldValue={setFieldValue}
             setFieldTouched={setFieldTouched}

@@ -270,6 +270,7 @@
   "total_debt": "إجمالي الديون",
   "evaluation_notes": "الاستفسارات التقييم",
   "has_violations": "يوجد مخالفات",
+  "select_status": "اختر حالة",
   "evaluation_status": "حالة التقييم",
   "add_estimation_days": "أضف أيام المعاملة",
   "estimation_days": "أيام المعاملة",

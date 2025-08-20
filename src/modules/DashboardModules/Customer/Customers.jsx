@@ -36,9 +36,20 @@ function Customers() {
     enabledKey: !!selectedRoleDisplay,
   });
 
+  const { data: statusData , isLoading: statusLoading } = useGetData({
+    endpoint: `statuses?page=${page}`,
+    queryKey: ["statuses", page],
+  });
+
+  const statusOptions = statusData?.data.data.map(status => ({
+    label: status.name,
+    value: status.id,
+  })) || [];
+
   const [searchKey, setSearchKey] = useState("national_id");
   const [searchValue, setSearchValue] = useState("");
   const [financingType, setFinancingType] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
   const [debouncedSearchValue, setDebouncedSearchValue] = useState("");
 
   useEffect(() => {
@@ -66,8 +77,9 @@ function Customers() {
   ];
 
   const { data, isLoading, isError, error } = useGetData({
-    endpoint: `clients?${searchKey}=${debouncedSearchValue}${financingType ? `&financing_type=${financingType}` : ""}${selectedUserId ? `&user_id=${selectedUserId}` : ""}${selectedRole ? `&role=${selectedRole}` : ""}`,
-    queryKey: ["customers", searchKey, debouncedSearchValue, financingType, selectedUserId, selectedRole],
+    endpoint: `clients?${searchKey}=${debouncedSearchValue}${financingType ? `&financing_type=${financingType}` : ""}
+    ${selectedUserId ? `&user_id=${selectedUserId}` : ""}${selectedRole ? `&role=${selectedRole}` : ""}${selectedStatus ? `&status=${selectedStatus}` : ""}`,
+    queryKey: ["customers", searchKey, debouncedSearchValue, financingType, selectedUserId, selectedRole , selectedStatus],
   });
 
   if (isError) {
@@ -162,8 +174,7 @@ function Customers() {
                           setSelectedUserId("");
                           setSelectedRoleDisplay(role.displayLabel);
                         }}
-                        className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === role.id ? "bg-[var(--bg-hover)]" : ""
-                          }`}
+                        className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === role.id ? "bg-[var(--bg-hover)]" : ""}`}
                       >
                         {t(role.displayLabel)}
                       </li>
@@ -201,6 +212,34 @@ function Customers() {
                   )}
                 </>
               )}
+
+              {/* Status Dropdown */}
+              <DropDownMenu
+                menuTitle={t("select_status")}
+                MenuIcon={<FaFilter />}
+                className="px-4 py-2 rounded-md"
+                selectedValue={
+                  selectedStatus
+                    ? t(statusOptions.find((opt) => opt.value === selectedStatus)?.label)
+                    : null
+                }
+              >
+                <li
+                  className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedStatus === "" ? "bg-[var(--bg-hover)]" : ""}`}
+                  onClick={() => setSelectedStatus("")}
+                >
+                  {t("all")}
+                </li>
+                {statusOptions.map((option) => (
+                  <li
+                    key={option.value}
+                    className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedStatus === option.value ? "bg-[var(--bg-hover)]" : ""}`}
+                    onClick={() => setSelectedStatus(option.value)}
+                  >
+                    {t(option.label)}
+                  </li>
+                ))}
+              </DropDownMenu>
             </div>
           </div>
         </div>
