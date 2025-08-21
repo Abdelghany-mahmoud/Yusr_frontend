@@ -18,7 +18,7 @@ function NoteForSpecificClient({ client }) {
   const [selectedRole, setSelectedRole] = useState("");
   const { t } = useTranslation("layout");
   const { mutate: sendWhatsapp } = useSendToWhatsapp();
-
+  console.log(client, "client");
   const { data: roles, isLoading: rolesLoading } = useGetData({
     endpoint: "roles",
     queryKey: ["roles"],
@@ -60,7 +60,8 @@ function NoteForSpecificClient({ client }) {
         value: Yup.string().required(t("required")),
         label: Yup.string().required(),
       }).required(t("required"))
-      : Yup.string().required(t("required")),
+      // : Yup.string().required(t("required")),
+      : "",
   });
 
   const handleSubmit = (values, { resetForm }) => {
@@ -118,18 +119,10 @@ function NoteForSpecificClient({ client }) {
       title={t("add_note")}
     >
       <div className="mb-4 flex border-b">
-        <button
-          className={`px - 4 py - 2 font - medium ${tab === "employee" ? "border-b-2 border-blue-500" : ""
-            } `}
-          onClick={() => setTab("employee")}
-        >
+        <button className={`px-4 py-2 font-medium ${tab === "employee" ? "border-b-2 border-blue-500" : ""} `} onClick={() => setTab("employee")} >
           {t("to_employee")}
         </button>
-        <button
-          className={`px - 4 py - 2 font - medium ${tab === "client" ? "border-b-2 border-blue-500" : ""
-            } `}
-          onClick={() => setTab("client")}
-        >
+        <button className={`px-4 py-2 font-medium ${tab === "client" ? "border-b-2 border-blue-500" : ""} `} onClick={() => setTab("client")}>
           {t("to_client")}
         </button>
       </div>

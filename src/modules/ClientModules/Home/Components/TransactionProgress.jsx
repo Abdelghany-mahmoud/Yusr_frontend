@@ -32,15 +32,15 @@ function TransactionProgress({ transaction, userId }) {
   const [hasMoreClientNotes, setHasMoreClientNotes] = useState(true);
   const [selectedFiles, setSelectedFiles] = useState([]);
 
+  console.log(transaction.client[selectedRole?.key], "transaction");
+
   const { data: notesFromEmployee, isLoading: notesLoading } = useGetData({
-    endpoint: `notes?transaction_id=${transaction?.id}&sender_id=${transaction[selectedRole?.key]
-      }&receiver_id=${userId}&transaction_id=${transaction?.id
-      }&page=${employeeNotesPage}`,
+    endpoint: `notes?&sender_id=${transaction.client[selectedRole?.key]}&receiver_id=${userId}&transaction_id=${transaction?.id}&page=${employeeNotesPage}`,
     queryKey: [
-      `client-noteFromEmp-${userId}-${transaction[selectedRole?.key]
+      `client-noteFromEmp-${userId}-${transaction.client[selectedRole?.key]
       }-${employeeNotesPage}-${transaction?.id}`,
     ],
-    enabledKey: !!transaction[selectedRole?.key],
+    enabledKey: !!transaction.client[selectedRole?.key],
   });
 
   const { data: notesFromClient, isLoading: notesClientLoading } = useGetData({

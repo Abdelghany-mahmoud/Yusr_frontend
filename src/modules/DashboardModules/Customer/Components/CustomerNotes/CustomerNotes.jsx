@@ -13,6 +13,7 @@ function CustomerNotes({ userId, customer }) {
   const [replyingNoteId, setReplyingNoteId] = useState(null);
   const [activeTab, setActiveTab] = useState("sent");
   const { t } = useTranslation("layout");
+  console.log(customer, "customer");
   // Two requests: one for received notes, one for sent notes
   const { data: receivedNotesData, isLoading: isReceivedLoading } = useGetData({
     endpoint: `notes?receiver_id=${userId}&sender_id=${customer.id}`,
@@ -21,7 +22,7 @@ function CustomerNotes({ userId, customer }) {
   });
 
   const { data: sentNotesData, isLoading: isSentLoading } = useGetData({
-    endpoint: `notes?receiver_id=${customer.id}&sender_id=${userId}`,
+    endpoint: `notes?receiver_id=${customer.id}&sender_id=${userId}&client_id=${customer.id}`,
     queryKey: ["sent-notes", customer.id, userId],
     enabledKey: isOpen && activeTab === "sent",
   });
@@ -203,6 +204,7 @@ CustomerNotes.propTypes = {
   userId: PropTypes.number.isRequired,
   customer: PropTypes.shape({
     id: PropTypes.number.isRequired,
+    client: PropTypes.object,
   })
 };
 
