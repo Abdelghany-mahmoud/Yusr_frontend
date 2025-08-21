@@ -34,11 +34,13 @@ export const Login = () => {
       onSuccess: async (response) => {
         toast.success(response?.message);
         setToken(response?.data);
-        // console.log(response?.data, "response?.data");
         if (response?.data?.token && response?.data?.user?.roles.map((role) => role.name).includes("Client")) {
           navigate("/client");
+        }
+        else if (response?.data?.token && response?.data?.user?.roles.map((role) => role.name).includes("Bank Liaison Officer")) {
+          navigate("/dashboard/transactions");
         } else {
-            navigate("/dashboard/customers");
+          navigate("/dashboard/customers");
         }
       },
       onError: (error) => {
@@ -85,9 +87,8 @@ export const Login = () => {
                       placeholder={t("enter_password")}
                     />
                     <Button
-                      className={`absolute top-9 ${
-                        lang == "ar" ? "left-3" : "right-3"
-                      } text-lg`}
+                      className={`absolute top-9 ${lang == "ar" ? "left-3" : "right-3"
+                        } text-lg`}
                       type="button"
                       text={showPassword ? <PiEye /> : <FaRegEyeSlash />}
                       onClick={() => setShowPassword((priv) => !priv)}
