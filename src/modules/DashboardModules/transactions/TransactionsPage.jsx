@@ -37,9 +37,10 @@ export default function TransactionsPage() {
 
   const [token, setToken] = useRecoilState(tokenAtom);
 
-  const canViewRoles =
-    token?.user?.roles[0]?.name == "SuperAdmin" ||
-    token?.user?.roles[0]?.name == "Executive Director";
+  const userRoles = token?.user?.roles.map((role) => role.name);
+  const isSuperAdmin = userRoles.includes("SuperAdmin");
+  const isExecutiveDirector = userRoles.includes("Executive Director");
+  const canViewRoles = isSuperAdmin || isExecutiveDirector;
 
   return (
     <div>

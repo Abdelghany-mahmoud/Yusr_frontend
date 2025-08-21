@@ -23,7 +23,7 @@ import { useHasPermission } from "../../../../hooks/useHasPermission";
 import { useState } from "react";
 import TransactionDetails from "../../transactions/TransactionDetails";
 
-export const CustomerCard = ({ customer,/* index */}) => {
+export const CustomerCard = ({ customer,/* index */ }) => {
   const { t } = useTranslation("layout");
   const location = useLocation();
   const token = useRecoilValue(tokenAtom);
@@ -37,7 +37,9 @@ export const CustomerCard = ({ customer,/* index */}) => {
   const canViewNote = useHasPermission("read-notes");
   const canViewTransactions = useHasPermission("read-transactions");
   const canCreateTransactions = useHasPermission("create-transactions");
-  const isSuperAdmin = token?.user?.roles.map((role) => role.name).includes("SuperAdmin");
+  const userRoles = token?.user?.roles.map((role) => role.name);
+  const isSuperAdmin = userRoles.includes("SuperAdmin");
+  const isExecutiveDirector = userRoles.includes("Executive Director");
   const [selected, setSelected] = useState(null);
   const isLegalSupervisor = token?.user?.roles.map((role) => role.name).includes("Legal Supervisor");
   return (
@@ -75,45 +77,45 @@ export const CustomerCard = ({ customer,/* index */}) => {
 
       <td className="flex gap-2 items-center justify-center p-3 mt-2">
         {
-            (
-              <>
-                {" "}
-                <ShowCustomer customer={customer} />
-                {/* {(canCreateStatus || canUpdateStatus) && (<CustomerStatus userId={customer?.user?.id} customerStatus={t(customer?.status?.name)} />)} */}
-                {canUpdateClients && <UpdateCustomer customer={customer} />}
-                {<CustomerTransaction customer={customer} />}
-                {/* {canCreateTransactions && !isSuperAdmin && (<AutoTransaction customer={customer} />)} */}
-                {canViewTransactions && <Transactions id={customer.user.id} />}
-                {canViewNote && (<CustomerNotes userId={userId} customer={customer.user} />)}
-                {canCreateNote && <NoteForSpecificClient client={customer} />}
-                {isSuperAdmin && <ActivityLog customer={customer} />}
-                {canCreateDocuments && <AddDocs customer={customer} />}
-                {canDeleteClients && (
-                  <DeleteGlobal
-                    endpoint={`clients/${customer?.id}`}
-                    queryKey={[`customers`]}
-                    text={t("delete_customer")}
-                    tooltipText={t("delete_customer")}
-                    deleteTitle={t("delete_customer")}
-                  />
-                )}
-                {!isLegalSupervisor && (
-                  <button
-                    // onClick={() => // console.log(customer.transactions[0])}
-                    onClick={() => setSelected(customer.transactions[0])}
-                    className="btn btn-info btn-sm"
-                  >
-                    {t("details")}
-                  </button>
-                )}
-                {selected && (
-                  <TransactionDetails
-                    transaction={selected}
-                    onClose={() => setSelected(null)}
-                  />
-                )}
-              </>
-            )
+          (
+            <>
+              {" "}
+              <ShowCustomer customer={customer} />
+              {/* {(canCreateStatus || canUpdateStatus) && (<CustomerStatus userId={customer?.user?.id} customerStatus={t(customer?.status?.name)} />)} */}
+              {canUpdateClients && <UpdateCustomer customer={customer} />}
+              {<CustomerTransaction customer={customer} />}
+              {/* {canCreateTransactions && !isSuperAdmin && (<AutoTransaction customer={customer} />)} */}
+              {canViewTransactions && <Transactions id={customer.user.id} />}
+              {canViewNote && (<CustomerNotes userId={userId} customer={customer.user} />)}
+              {canCreateNote && <NoteForSpecificClient client={customer} />}
+              {isSuperAdmin || isExecutiveDirector && <ActivityLog customer={customer} />}
+              {canCreateDocuments && <AddDocs customer={customer} />}
+              {canDeleteClients && (
+                <DeleteGlobal
+                  endpoint={`clients/${customer?.id}`}
+                  queryKey={[`customers`]}
+                  text={t("delete_customer")}
+                  tooltipText={t("delete_customer")}
+                  deleteTitle={t("delete_customer")}
+                />
+              )}
+              {!isLegalSupervisor && (
+                <button
+                  // onClick={() => // console.log(customer.transactions[0])}
+                  onClick={() => setSelected(customer.transactions[0])}
+                  className="btn btn-info btn-sm"
+                >
+                  {t("details")}
+                </button>
+              )}
+              {selected && (
+                <TransactionDetails
+                  transaction={selected}
+                  onClose={() => setSelected(null)}
+                />
+              )}
+            </>
+          )
         }
         {/* <RejectGlobal
           endpoint="/customers"

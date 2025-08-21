@@ -39,7 +39,7 @@ function Employees() {
   const canUpdateEmployee = useHasPermission("update-users");
   const canDeleteEmployee = useHasPermission("delete-users");
   const canCreateEmployee = useHasPermission("create-users");
-  const isSuperAdmin = token?.user?.roles[0]?.name == "SuperAdmin";
+  const isSuperAdmin = token?.user?.roles.map((role) => role.name).includes("SuperAdmin");
   const userId = token?.user?.id;
   const axiosInstance = useAxios();
   const queryClient = useQueryClient();

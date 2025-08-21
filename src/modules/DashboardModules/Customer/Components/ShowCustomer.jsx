@@ -12,7 +12,7 @@ function ShowCustomer({ customer }) {
   const [isOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(1);
   const token = useRecoilValue(tokenAtom);
-  const isLegalSupervisor = token?.user?.roles[0]?.name == "Legal Supervisor";
+  const isLegalSupervisor = token?.user?.roles.map((role) => role.name).includes("Legal Supervisor");
   const { data, isLoading, isError, error } = useGetData({
     endpoint: `clients/${customer?.id}`,
     queryKey: ["show-customer", customer?.id],

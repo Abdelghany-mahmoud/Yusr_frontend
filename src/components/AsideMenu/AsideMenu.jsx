@@ -32,10 +32,11 @@ export const AsideMenu = ({ open, handleCloseAside }) => {
   const canCreateStatuses = useHasPermission("create-status");
   const canViewEmployees = useHasPermission("read-users");
   const isSuperAdmin = userRoles.includes("SuperAdmin");
-  const canViewRoles = isSuperAdmin || userRoles.includes("Executive Director");
+  const isExecutiveDirector = userRoles.includes("Executive Director");
+  const canViewRoles = isSuperAdmin || isExecutiveDirector;
   const legalRole = userRoles.includes("Legal Supervisor");
   const links = [
-    isSuperAdmin && {
+    (isSuperAdmin || isExecutiveDirector) && {
       name: t("home"),
       to: "/dashboard",
       icon: FaBarsProgress,

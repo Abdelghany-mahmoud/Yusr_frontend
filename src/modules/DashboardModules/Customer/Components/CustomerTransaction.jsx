@@ -24,8 +24,9 @@ function CustomerTransaction({ customer }) {
   const [selectedRole, setSelectedRole] = useState("");
   const [selectedRoleDisplay, setSelectedRoleDisplay] = useState("");
   const [userId, setUserId] = useState(customer?.id);
-  const isSuperAdmin = token?.user?.roles[0]?.name == "SuperAdmin";
-  const isExecutiveDirector = token?.user?.roles[0]?.name == "Executive Director";
+  const userRoles = token?.user?.roles.map((role) => role.name);
+  const isSuperAdmin = userRoles.includes("SuperAdmin");
+  const isExecutiveDirector = userRoles.includes("Executive Director");
   const { data: clientsData, isLoading: clientsLoading } = useGetData({
     endpoint: `users?role=Client&page=${clientPage}`,
     queryKey: ["clients", clientPage],
@@ -184,8 +185,8 @@ function CustomerTransaction({ customer }) {
               }
             >
               <li
-                onClick = {() => { setSelectedRole(""); }}
-                className = {`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === "" ? "bg-[var(--bg-hover)]" : ""}`}
+                onClick={() => { setSelectedRole(""); }}
+                className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === "" ? "bg-[var(--bg-hover)]" : ""}`}
               >
                 {t("all")}
               </li>
@@ -257,7 +258,7 @@ function CustomerTransaction({ customer }) {
                 type="submit"
                 className="btn btn-primary"
                 disabled={
-                  isPending || clientsLoading || officersLoading 
+                  isPending || clientsLoading || officersLoading
                 }
               >
                 {isPending ? <Loading size="w-5 h-5" /> : t("save")}
