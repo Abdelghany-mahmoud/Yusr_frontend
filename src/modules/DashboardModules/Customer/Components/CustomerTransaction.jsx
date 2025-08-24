@@ -94,7 +94,7 @@ function CustomerTransaction({ customer }) {
 
   const handleSubmit = (values, { resetForm }) => {
     const cleanedValues = {
-      client_id: userId || values.client_id?.value || "",
+      // client_id: userId || values.client_id?.value || "",
       current_status: values.current_status?.value,
       [selectedRole]: values.officers_id?.value ?? "",
     };

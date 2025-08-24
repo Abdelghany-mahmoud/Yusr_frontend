@@ -4,9 +4,16 @@ import { useTranslation } from "react-i18next";
 import { DeleteGlobal, IsEmpty } from "../../../../../components";
 import { UpdateRole } from "../UpdateRole/UpdateRole";
 import { AssignPermissions } from "../AssignPermissions/AssignPermissions";
+import { tokenAtom } from "../../../../../store/tokenAtom/tokenAtom";
+import { useRecoilValue } from "recoil";
 
 export const RolePermissionsCard = ({ roleData }) => {
   const { t } = useTranslation("layout");
+  const token = useRecoilValue(tokenAtom);
+  const userRoles = token?.user?.roles.map((role) => role.name);
+  const isSuperAdmin = userRoles.includes("SuperAdmin");
+  const isExecutiveDirector = userRoles.includes("Executive Director");
+  const canUpdateRoles = isSuperAdmin || isExecutiveDirector;
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -93,10 +100,10 @@ export const RolePermissionsCard = ({ roleData }) => {
               deleteTitle={t("delete_role")}
             /> */}
             {/* <UpdateRole role={roleData} /> */}
-            <AssignPermissions
+            {canUpdateRoles && <AssignPermissions
               role={roleData}
               permissionsSet={roleData?.permissions}
-            />
+            />}
           </div>
         </div>
 

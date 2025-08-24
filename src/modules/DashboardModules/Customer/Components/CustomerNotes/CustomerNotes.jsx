@@ -5,10 +5,13 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { MdNotes } from "react-icons/md";
 import { useMutate } from "../../../../../hooks/useMatute";
+import { useSendToWhatsapp } from "../../../../../hooks/useSendToWhatsapp";
 import { Form, Formik } from "formik";
 import { FiCornerDownRight } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 function CustomerNotes({ userId, customer }) {
+  const { mutate: sendWhatsapp } = useSendToWhatsapp();
   const [isOpen, setIsOpen] = useState(false);
   const [replyingNoteId, setReplyingNoteId] = useState(null);
   const [activeTab, setActiveTab] = useState("sent");
@@ -17,7 +20,7 @@ function CustomerNotes({ userId, customer }) {
   // Two requests: one for received notes, one for sent notes
   const { data: receivedNotesData, isLoading: isReceivedLoading } = useGetData({
     endpoint: `notes?receiver_id=${userId}&sender_id=${customer.id}`,
-    queryKey: ["received-notes", userId , customer.id],
+    queryKey: ["received-notes", userId, customer.id],
     enabledKey: isOpen && activeTab === "received",
   });
 
@@ -52,8 +55,8 @@ function CustomerNotes({ userId, customer }) {
       >
         <div
           className={`relative mb-3  max-w-[80%] min-w-[90%] ${isMine
-              ? "bg-blue-100 border-blue-300"
-              : "bg-gray-100 border-gray-300"
+            ? "bg-blue-100 border-blue-300"
+            : "bg-gray-100 border-gray-300"
             } rounded-xl shadow-sm p-3 border`}
           style={{
             marginLeft: !isMine && level ? level * 18 : 0,
@@ -100,11 +103,25 @@ function CustomerNotes({ userId, customer }) {
                 initialValues={{ note: "" }}
                 onSubmit={(values, { resetForm }) => {
                   sendNoteReply({
-                    client_id: customer.id,
+                    client_id: customer.id || null,
                     parent_id: note.id,
                     note: values.note,
                     receiver_id: note.sender?.id,
-                  });
+                  }, sendWhatsapp(
+                    {
+                      user_id: note.sender?.id,
+                      message: `${values.note}`,
+                      client_id: customer.id || null
+                    },
+                    {
+                      onSuccess: (data) => {
+                        toast.success(data?.message);
+                      },
+                      onError: (error) => {
+                        toast.error(error?.response?.data?.message);
+                      },
+                    }
+                  ));
                   resetForm();
                   setReplyingNoteId(null);
                 }}
@@ -167,8 +184,8 @@ function CustomerNotes({ userId, customer }) {
         <button
           onClick={() => setActiveTab("received")}
           className={`px-4 py-2 rounded-lg ${activeTab === "received"
-              ? "bg-[var(--primary-color)] text-[var(--secondary-color)]"
-              : "bg-[var(--secondary-color)] text-[var(--main-text-color)] border border-[var(--border-color)]"
+            ? "bg-[var(--primary-color)] text-[var(--secondary-color)]"
+            : "bg-[var(--secondary-color)] text-[var(--main-text-color)] border border-[var(--border-color)]"
             }`}
         >
           {t("received_notes")}
@@ -176,8 +193,8 @@ function CustomerNotes({ userId, customer }) {
         <button
           onClick={() => setActiveTab("sent")}
           className={`px-4 py-2 rounded-lg ${activeTab === "sent"
-              ? "bg-[var(--primary-color)] text-[var(--secondary-color)]"
-              : "bg-[var(--secondary-color)] text-[var(--main-text-color)] border border-[var(--border-color)]"
+            ? "bg-[var(--primary-color)] text-[var(--secondary-color)]"
+            : "bg-[var(--secondary-color)] text-[var(--main-text-color)] border border-[var(--border-color)]"
             }`}
         >
           {t("sent_notes")}

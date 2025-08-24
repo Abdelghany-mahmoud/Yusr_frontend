@@ -1,6 +1,6 @@
 import { useRecoilState, useRecoilValue } from "recoil";
 import { tokenAtom } from "../../../store/tokenAtom/tokenAtom";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Formik, Form } from "formik";
 import { loginValidationSchema } from "./Validation/loginValidation";
@@ -13,7 +13,6 @@ import { PiEye } from "react-icons/pi";
 import { languageState } from "../../../store/langAtom/languageAtom";
 import { useTranslation } from "react-i18next";
 export const Login = () => {
-  const param = useLocation();
   const [token, setToken] = useRecoilState(tokenAtom);
   const [showPassword, setShowPassword] = useState(false);
   const lang = useRecoilValue(languageState);

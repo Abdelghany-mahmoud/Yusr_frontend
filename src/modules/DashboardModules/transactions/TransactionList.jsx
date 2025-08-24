@@ -88,6 +88,7 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
 
   const tableHead = [
     "#",
+    t("name"),
     t("transaction_id"),
     t("status"),
     t("created_at"),
@@ -117,6 +118,7 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
         className={`text-center transition-all hover:text-[var(--primary-bg-color)]  hover:bg-[var(--secondary-bg-color)] duration-300 border-b last:border-0 font-semibold select-none ${rowBgColor}`}
       >
         <td className="p-3 max-w-2">{index + 1}</td>
+        <td className="p-3">{transaction.client.user.name}</td>
         <td className="p-3">#{transaction.id}</td>
         {/* <td className="p-3">{t(transaction.current_status)}</td> */}
         <td className="p-3"><TransactionStatus transactionId={transaction.id} status={t(transaction.current_status)} /></td>
