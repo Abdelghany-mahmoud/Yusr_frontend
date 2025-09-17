@@ -21,8 +21,8 @@ import UpdateEmployee from "./UpdateEmployee";
 import { useHasPermission } from "../../../hooks/useHasPermission";
 import { useRecoilValue } from "recoil";
 import { tokenAtom } from "../../../store/tokenAtom/tokenAtom";
-import SendNoteForEmployee from "./SendNoteForEmployee";
-import CustomerNotes from "../Customer/Components/CustomerNotes/CustomerNotes";
+// import SendNoteForEmployee from "./SendNoteForEmployee";
+// import CustomerNotes from "../Customer/Components/CustomerNotes/CustomerNotes";
 import { toast } from "react-toastify";
 import { useAxios } from "../../../Config/axiosConfig/axiosConfig";
 import { useQueryClient } from "@tanstack/react-query";
@@ -40,7 +40,7 @@ function Employees() {
   const canDeleteEmployee = useHasPermission("delete-users");
   const canCreateEmployee = useHasPermission("create-users");
   const isSuperAdmin = token?.user?.roles.map((role) => role.name).includes("SuperAdmin");
-  const userId = token?.user?.id;
+  // const userId = token?.user?.id;
   const axiosInstance = useAxios();
   const queryClient = useQueryClient();
   const [togglingId, setTogglingId] = useState(null);
@@ -205,8 +205,8 @@ function Employees() {
                 </td>
                 <td className="flex gap-2 items-center p-3 mt-2">
                   {/* Add your action buttons here */}
-                  <SendNoteForEmployee userId={employee?.id} />
-                  <CustomerNotes userId={userId} customer={employee} />
+                  {/* <SendNoteForEmployee userId={employee?.id} /> */}
+                  {/* <CustomerNotes userId={userId} customer={employee} /> */}
                   {canUpdateEmployee && <UpdateEmployee userAdmin={employee} />}
                   {isSuperAdmin && <AssignRole userAdmin={employee} />}
                   {canDeleteEmployee && (

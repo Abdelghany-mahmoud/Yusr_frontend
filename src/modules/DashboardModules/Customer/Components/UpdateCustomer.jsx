@@ -148,7 +148,7 @@ function UpdateCustomer({ customer }) {
 }
 
 UpdateCustomer.propTypes = {
-  customer: PropTypes.object.isRequired,
+  customer: PropTypes.object,
 };
 
 export default UpdateCustomer;

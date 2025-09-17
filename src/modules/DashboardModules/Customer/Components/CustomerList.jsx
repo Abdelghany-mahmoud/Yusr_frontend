@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { CustomerCard } from './CustomerCard';
 
 export const CustomerList = ({ customers }) => {
+  console.log(customers, "customers");
   return (
     <>
       {customers?.map((customer, index) => {

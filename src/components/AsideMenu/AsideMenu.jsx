@@ -5,7 +5,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { PropTypes } from "prop-types";
 import { NavLinkAside } from "../NavLinkAside/NavLinkAside";
 import { Link } from "react-router-dom";
-import { VscGitPullRequestNewChanges } from "react-icons/vsc";
+// import { VscGitPullRequestNewChanges } from "react-icons/vsc";
 import { useRecoilValue } from "recoil";
 import { languageState } from "../../store/langAtom/languageAtom";
 import { useTranslation } from "react-i18next";
@@ -14,7 +14,7 @@ import { Users } from "lucide-react";
 import { FaTasks, FaUser, FaUsers, FaUniversity } from "react-icons/fa";
 import { GrStatusDisabled } from "react-icons/gr";
 import { tokenAtom } from "../../store/tokenAtom/tokenAtom";
-import { FaBarsProgress } from "react-icons/fa6";
+import { FaBarsProgress, FaMessage } from "react-icons/fa6";
 import { useHasPermission } from "../../hooks/useHasPermission";
 import { useTheme } from "../../hooks/useTheme";
 
@@ -27,7 +27,7 @@ export const AsideMenu = ({ open, handleCloseAside }) => {
   const canViewTransactions = useHasPermission("read-transactions");
   const canViewClients = useHasPermission("read-clients");
   const canReadBankTransactions = useHasPermission("read-payment-receipts");
-  const canViewTransferred = useHasPermission("read-transferred-transaction");
+  // const canViewTransferred = useHasPermission("read-transferred-transaction");
   const canViewStatuses = useHasPermission("read-status");
   const canCreateStatuses = useHasPermission("create-status");
   const canViewEmployees = useHasPermission("read-users");
@@ -77,11 +77,11 @@ export const AsideMenu = ({ open, handleCloseAside }) => {
       icon: FaUsers,
     },
     canViewStatuses &&
-      canCreateStatuses && {
-        name: t("statuses"),
-        to: "/dashboard/statuses?page=1",
-        icon: GrStatusDisabled,
-      },
+    canCreateStatuses && {
+      name: t("statuses"),
+      to: "/dashboard/statuses?page=1",
+      icon: GrStatusDisabled,
+    },
     legalRole && {
       name: t("LegalTasks"),
       to: "/dashboard/Legal-tasks?page=1",
@@ -97,12 +97,17 @@ export const AsideMenu = ({ open, handleCloseAside }) => {
       to: "/dashboard/closed_transactions?page=1",
       icon: FaUniversity,
     },
+    {
+      name: t("chats"),
+      to: "/dashboard/chats",
+      icon: FaMessage,
+    }
   ].filter(Boolean); // remove falsy entries
 
   const clientLinks = [
     {
       name: t("home"),
-      to: "/client/",
+      to: "/client",
       icon: FaBarsProgress,
     },
     // {
@@ -115,13 +120,17 @@ export const AsideMenu = ({ open, handleCloseAside }) => {
       to: "/client/profile",
       icon: FaUser,
     },
+    {
+      name: t("chats"),
+      to: "/client/chats",
+      icon: FaMessage,
+    }
   ];
 
   return (
     <aside
-      className={`${lang == "ar" ? "right-0" : "left-0"} ${styles.aside_nav} ${
-        open ? styles.open : styles.close
-      } shadow-xl bg-[var(--secondary-color)] overflow-hidden`}
+      className={`${lang == "ar" ? "right-0" : "left-0"} ${styles.aside_nav} ${open ? styles.open : styles.close
+        } shadow-xl bg-[var(--secondary-color)] overflow-hidden`}
       style={{
         borderRadius:
           lang == "en"
@@ -130,9 +139,8 @@ export const AsideMenu = ({ open, handleCloseAside }) => {
       }}
     >
       <div
-        className={` ${lang == "ar" ? "left-0" : "right-0"} ${
-          styles.aside_nav_back
-        }`}
+        className={` ${lang == "ar" ? "left-0" : "right-0"} ${styles.aside_nav_back
+          }`}
         style={{
           borderRadius:
             lang == "en"
@@ -143,23 +151,21 @@ export const AsideMenu = ({ open, handleCloseAside }) => {
       >
         <IoIosArrowBack
           size={"24px"}
-          className={`${styles.aside_nav_back_icon} ${
-            open
-              ? lang == "ar"
-                ? styles.aside_nav_icon_open && "rotate-180"
-                : "rotate-0"
-              : lang == "en"
+          className={`${styles.aside_nav_back_icon} ${open
+            ? lang == "ar"
+              ? styles.aside_nav_icon_open && "rotate-180"
+              : "rotate-0"
+            : lang == "en"
               ? "rotate-180"
               : "rotate-0"
-          }`}
+            }`}
         />
       </div>
       <div className="flex items-center justify-center">
         <Link
           to={""}
-          className={` ${
-            open ? styles.aside_nav_logo_large : styles.aside_nav_logo_small
-          } pb-5 mt-8 flex items-center justify-center border-b-[1px] border-[var(--secondary-text-color)]`}
+          className={` ${open ? styles.aside_nav_logo_large : styles.aside_nav_logo_small
+            } pb-5 mt-8 flex items-center justify-center border-b-[1px] border-[var(--secondary-text-color)]`}
         >
           <img
             style={{ width: open ? "130px" : "30px" }}
@@ -169,8 +175,8 @@ export const AsideMenu = ({ open, handleCloseAside }) => {
                   ? darkLogo
                   : logo
                 : theme == "light"
-                ? darkLogo
-                : logo
+                  ? darkLogo
+                  : logo
             }
             alt="Logo"
           />
@@ -179,25 +185,25 @@ export const AsideMenu = ({ open, handleCloseAside }) => {
       <ul className="list-none p-0 mt-5">
         {userRoles.includes("Client")
           ? clientLinks.map((item, index) => (
-              <li key={index}>
-                <NavLinkAside
-                  Icon={item.icon}
-                  open={open}
-                  linkName={item.name}
-                  linkTo={item.to}
-                />
-              </li>
-            ))
+            <li key={index}>
+              <NavLinkAside
+                Icon={item.icon}
+                open={open}
+                linkName={item.name}
+                linkTo={item.to}
+              />
+            </li>
+          ))
           : links.map((item, index) => (
-              <li key={index}>
-                <NavLinkAside
-                  Icon={item.icon}
-                  open={open}
-                  linkName={item.name}
-                  linkTo={item.to}
-                />
-              </li>
-            ))}
+            <li key={index}>
+              <NavLinkAside
+                Icon={item.icon}
+                open={open}
+                linkName={item.name}
+                linkTo={item.to}
+              />
+            </li>
+          ))}
       </ul>
     </aside>
   );

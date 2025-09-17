@@ -59,7 +59,7 @@ function BankLiaisonOfficer() {
       className="text-center transition-all hover:bg-[var(--secondary-bg-color)] duration-300 border-b last:border-0 font-semibold select-none"
     >
       <td className="p-3 max-w-2">{index + 1}</td>
-      <td className="p-3">#{transaction.id}</td>
+      <td className="p-3">#{transaction.transaction_code}</td>
       <td className="p-3">{transaction?.client?.user?.name || "-"}</td>
       <td className="p-3">{transaction?.amount || "-"}</td>
       <td className="p-3">

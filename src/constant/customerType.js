@@ -1,10 +1,14 @@
 export const customerTypeOptions = [
-  { id: "Personal_Financing_Solutions", name: "Personal_Financing_Solutions" },
-  { id: "Real_Estate_Financing_Solutions", name: "Real_Estate_Financing_Solutions" },
-  { id: "Mortgage_Solutions", name: "Mortgage_Solutions" },
-  { id: "Self_Construction_Solutions", name: "Self_Construction_Solutions" },
-  { id: "Corporate_Institution_Financing_Solutions", name: "Corporate_Institution_Financing_Solutions" },
-  { id: "Debt_Buyout_Solutions", name: "Debt_Buyout_Solutions" },
+  // { id: "Personal_Financing_Solutions", name: "Personal_Financing_Solutions" },
+  // { id: "Real_Estate_Financing_Solutions", name: "Real_Estate_Financing_Solutions" },
+  // { id: "Mortgage_Solutions", name: "Mortgage_Solutions" },
+  // { id: "Self_Construction_Solutions", name: "Self_Construction_Solutions" },
+  // { id: "Corporate_Institution_Financing_Solutions", name: "Corporate_Institution_Financing_Solutions" },
+  // { id: "Debt_Buyout_Solutions", name: "Debt_Buyout_Solutions" },
+  { id: "inquiries", name: "inquiries" },
+  { id: "payment", name: "payment" },
+  { id: "mortgage", name: "mortgage" },
+  { id: "purchase", name: "purchase" },
   { id: "Undetermined", name: "Undetermined" },
 ];
 

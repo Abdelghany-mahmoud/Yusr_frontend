@@ -9,12 +9,12 @@ import UpdateCustomer from "./UpdateCustomer";
 import { DeleteGlobal } from "../../../../components";
 import ActivityLog from "./ActivityLog";
 import CustomerTransaction from "./CustomerTransaction";
-import NoteForSpecificClient from "./NoteForSpecificClient";
+// import NoteForSpecificClient from "./NoteForSpecificClient";
 // import AutoTransaction from "./AutoTransaction";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import AddDocs from "./ClientDocs/AddDocs";
 import Transactions from "./transactions/Transactions";
-import CustomerNotes from "./CustomerNotes/CustomerNotes";
+// import CustomerNotes from "./CustomerNotes/CustomerNotes";
 import { useRecoilValue } from "recoil";
 import { tokenAtom } from "../../../../store/tokenAtom/tokenAtom";
 import { format } from "date-fns";
@@ -22,21 +22,23 @@ import CustomerStatus from "./CustomerStatus";
 import { useHasPermission } from "../../../../hooks/useHasPermission";
 import { useState } from "react";
 import TransactionDetails from "../../transactions/TransactionDetails";
+import { Link } from "react-router-dom";
+import { FaMessage } from "react-icons/fa6";
 
 export const CustomerCard = ({ customer,/* index */ }) => {
   const { t } = useTranslation("layout");
-  const location = useLocation();
+  // const location = useLocation();
   const token = useRecoilValue(tokenAtom);
-  const userId = token?.user?.id;
+  // const userId = token?.user?.id;
   const canUpdateClients = useHasPermission("update-clients");
   const canDeleteClients = useHasPermission("delete-clients");
   const canCreateStatus = useHasPermission("create-status");
   const canUpdateStatus = useHasPermission("update-status");
   const canCreateDocuments = useHasPermission("create-documents");
-  const canCreateNote = useHasPermission("create-notes");
-  const canViewNote = useHasPermission("read-notes");
+  // const canCreateNote = useHasPermission("create-notes");
+  // const canViewNote = useHasPermission("read-notes");
   const canViewTransactions = useHasPermission("read-transactions");
-  const canCreateTransactions = useHasPermission("create-transactions");
+  // const canCreateTransactions = useHasPermission("create-transactions");
   const userRoles = token?.user?.roles.map((role) => role.name);
   const isSuperAdmin = userRoles.includes("SuperAdmin");
   const isExecutiveDirector = userRoles.includes("Executive Director");
@@ -48,6 +50,7 @@ export const CustomerCard = ({ customer,/* index */ }) => {
       className="text-center transition-all hover:bg-[var(--secondary-bg-color)] duration-300 border-b last:border-0 font-semibold select-none"
     >
       <td className="p-3 max-w-2">{customer?.id}</td>
+      <td className="p-3 max-w-2">#{customer.transactions[0].transaction_code}</td>
       <td className="p-3">{customer?.name || customer?.user?.name || "-"}</td>
       <td className="p-3">
         {format(customer?.created_at, "yyyy-MM-dd hh:mm") || "-"}
@@ -86,8 +89,21 @@ export const CustomerCard = ({ customer,/* index */ }) => {
               {<CustomerTransaction customer={customer} />}
               {/* {canCreateTransactions && !isSuperAdmin && (<AutoTransaction customer={customer} />)} */}
               {canViewTransactions && <Transactions id={customer.user.id} />}
-              {canViewNote && (<CustomerNotes userId={userId} customer={customer.user} />)}
-              {canCreateNote && <NoteForSpecificClient client={customer} />}
+              {/* {canViewNote && (<CustomerNotes userId={userId} customer={customer.user} />)} */}
+              {/* {canCreateNote && <NoteForSpecificClient client={customer} />} */}
+              <Link to={`/dashboard/chats/${customer?.id}`}>
+                <button
+                  type="button"
+                  className={"btn text-xl btn-circle bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-gray-300 hover:scale-[1.07] btn-sm flex items-center justify-center"}
+                >
+                  <div
+                    className={"tooltip tooltip-info top"}
+                    data-tip={t("chats")}
+                  >
+                    <FaMessage/>
+                  </div>
+                </button>
+              </Link>
               {isSuperAdmin || isExecutiveDirector && <ActivityLog customer={customer} />}
               {canCreateDocuments && <AddDocs customer={customer} />}
               {canDeleteClients && (

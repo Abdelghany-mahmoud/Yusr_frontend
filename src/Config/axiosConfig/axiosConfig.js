@@ -30,7 +30,7 @@ export function useAxios() {
       (response) => response,
       (error) => {
         if (error.response && error.response.status === 401) {
-          sessionStorage.removeItem("yusr");
+          localStorage.removeItem("yusr");
           setToken("");
           navigate("/login");
         }

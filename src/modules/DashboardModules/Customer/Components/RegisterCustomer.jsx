@@ -24,7 +24,7 @@ function RegisterCustomer() {
     name: Yup.string().required("الاسم مطلوب"),
     country_code: Yup.string().required("رمز الدولة مطلوب"),
     phone: Yup.string().required("رقم الهاتف مطلوب").matches(/^5\d{8}$/, "رقم الجوال السعودي يجب أن يبدأ بـ 5 ويتكون من 9 أرقام"),
-    financing_type: Yup.string().required("نوع التمويل مطلوب"),
+    financing_type: Yup.string().required("التصنيف مطلوب"),
   });
 
   const { mutate, isPending } = useMutate({

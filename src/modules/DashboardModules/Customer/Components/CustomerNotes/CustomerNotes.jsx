@@ -16,7 +16,7 @@ function CustomerNotes({ userId, customer }) {
   const [replyingNoteId, setReplyingNoteId] = useState(null);
   const [activeTab, setActiveTab] = useState("sent");
   const { t } = useTranslation("layout");
-  console.log(customer, "customer");
+  // console.log(customer, "customer");
   // Two requests: one for received notes, one for sent notes
   const { data: receivedNotesData, isLoading: isReceivedLoading } = useGetData({
     endpoint: `notes?receiver_id=${userId}&sender_id=${customer.id}`,

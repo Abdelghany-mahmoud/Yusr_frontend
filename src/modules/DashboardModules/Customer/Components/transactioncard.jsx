@@ -22,7 +22,7 @@ export const TransactionCard = ({ transaction, index, id, page, refetch }) => {
       className="text-center transition-all hover:bg-[var(--secondary-bg-color)] duration-300 border-b last:border-0 font-semibold select-none"
     >
       <td className="p-3 max-w-2">{index + 1}</td>
-      <td className="p-3">#{transaction.id}</td>
+      <td className="p-3">#{transaction.transaction_code}</td>
       <td className="p-3">{t(transaction.current_status)}</td>
       <td className="p-3">
         {new Date(transaction.created_at).toLocaleString()}
@@ -56,7 +56,7 @@ export const TransactionCard = ({ transaction, index, id, page, refetch }) => {
                 <RejectGlobal
                   endpoint={`transactions/update/${transaction.id}`}
                   queryKey={["transactions", id, page]}
-                  text={`Transaction #${transaction.id}`}
+                  text={`Transaction #${transaction.transaction_code}`}
                   tooltipText="reject_transaction"
                   rejectTitle={t("reject_transaction")}
                   id={transaction.id}

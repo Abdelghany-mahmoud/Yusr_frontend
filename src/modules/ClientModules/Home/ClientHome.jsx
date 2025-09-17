@@ -34,7 +34,7 @@ function ClientHome() {
             <div className="flex justify-between items-start">
               <div>
                 <h2 className="text-xl font-semibold">
-                  {t("transaction")} #{transaction.id}
+                  {t("transaction")} #{transaction.transaction_code}
                 </h2>
                 <p className="text-gray-600">
                   {t("created_at")}: {dateFormatHandler(transaction.created_at)}

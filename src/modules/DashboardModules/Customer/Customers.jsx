@@ -62,6 +62,7 @@ function Customers() {
 
   const tableHead = [
     t("id"),
+    t("رقم المعاملة"),
     t("name"),
     t("created_at"),
     // t("country_code"),

@@ -250,7 +250,7 @@ export const DashHome = () => {
           value={formatNumber(stats?.clients?.by_gender?.female)}
         />
       </div>
-      <PageTitle title="العملاء حسب نوع التمويل" fontSize="text-xl" />
+      <PageTitle title="العملاء حسب التصنيف" fontSize="text-xl" />
       <div className=" mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         {stats?.clients?.by_financing_type &&
           stats.clients.by_financing_type.map((item, idx) => (

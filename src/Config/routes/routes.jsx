@@ -24,6 +24,7 @@ import LegalTasks from "../../modules/DashboardModules/LegalTasks/LegalTasks";
 import ClosedTransactions from "../../modules/DashboardModules/transactions/ClosedTransactions";
 import { ArchiveLayout } from "../../layouts/ArchiveLayout/ArchiveLayout";
 import { ArchiveTransactions } from "../../modules/Archive/ArchiveTransactions";
+import { ChatsPage } from "../../modules/Chat/index";
 
 export const Routes = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ export const Routes = createBrowserRouter([
       {
         path: "transactions",
         element: <ClientTransactions />,
+      },
+      {
+        path: "chats/:chatId?",
+        element: <ChatsPage {...{ basePath: "/client" }}/>,
       },
     ],
   },
@@ -101,6 +106,10 @@ export const Routes = createBrowserRouter([
       {
         path: "closed_transactions",
         element: <ClosedTransactions />,
+      },
+      {
+        path: "chats/:chatId?",
+        element: <ChatsPage {...{ basePath: "/dashboard" }}/>,
       },
     ],
   },

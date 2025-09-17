@@ -9,7 +9,7 @@ import { statusOptions } from "../../../constant/status";
 import PropTypes from "prop-types";
 
 function TransactionStatus({ transactionId, status }) {
-  console.log(statusOptions, "statusOptions");
+  // console.log(statusOptions, "statusOptions");
   const { t } = useTranslation("layout");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(null);

@@ -25,7 +25,7 @@ function ClientTransactions({ clientId }) {
       <div className="flex justify-between items-start">
         <div>
           <h4 className="font-semibold text-[var(--main-text-color)]">
-            {t("transaction")} #{transaction.id}
+            {t("transaction")} #{transaction.transaction_code}
           </h4>
           <p className="text-sm text-[var(--secondary-text-color)]">
             {t("current_status")}: {transaction.current_status}

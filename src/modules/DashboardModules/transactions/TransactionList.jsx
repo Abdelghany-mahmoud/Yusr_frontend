@@ -6,11 +6,11 @@ import TransactionDetails from "./TransactionDetails";
 import { Loading, Table, IsEmpty, Pagination } from "../../../components";
 import { RejectGlobal } from "../../../components/RejectGlobal/RejectGlobal";
 import SendFinancingPlan from "../Customer/Components/MainCaseHandler/SendFinancingPlan";
-import { useLocation } from "react-router-dom";
-import NoteForSpecificClient from "../Customer/Components/NoteForSpecificClient";
+import { Link, useLocation } from "react-router-dom";
+// import NoteForSpecificClient from "../Customer/Components/NoteForSpecificClient";
 import AddDocs from "../Customer/Components/ClientDocs/AddDocs";
 // import AutoTransaction from "../Customer/Components/AutoTransaction";
-import CustomerNotes from "../Customer/Components/CustomerNotes/CustomerNotes";
+// import CustomerNotes from "../Customer/Components/CustomerNotes/CustomerNotes";
 import { useRecoilValue } from "recoil";
 import { tokenAtom } from "../../../store/tokenAtom/tokenAtom";
 import { useHasPermission } from "../../../hooks/useHasPermission";
@@ -23,6 +23,7 @@ import { roleNameToFieldId } from "../../../Helpers/Helpers";
 import UpdateCustomer from "../Customer/Components/UpdateCustomer";
 import TransactionStatus from "./TransactionStatus";
 import PropTypes from "prop-types";
+import { FaMessage } from "react-icons/fa6";
 
 export default function TransactionList({ status = "", userFilter = "", searchKey = "", debouncedSearchValue = "" }) {
   const canUpdateClients = useHasPermission("update-clients");
@@ -50,8 +51,8 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
   const createViewFinancialEvaluation = useHasPermission("create-financial-evaluation");
   const updateViewFinancialEvaluation = useHasPermission("update-financial-evaluation");
   const canCreateDocuments = useHasPermission("create-documents");
-  const canCreateNote = useHasPermission("create-notes");
-  const canViewNote = useHasPermission("read-notes");
+  // const canCreateNote = useHasPermission("create-notes");
+  // const canViewNote = useHasPermission("read-notes");
   // const canCreateTransactions = useHasPermission("create-transactions");
   // const canUdateTransactions = useHasPermission("update-transactions");
   const canCreateEstimation = useHasPermission("create-estimation-transactions");
@@ -119,7 +120,7 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
       >
         <td className="p-3 max-w-2">{index + 1}</td>
         <td className="p-3">{transaction.client.user.name}</td>
-        <td className="p-3">#{transaction.id}</td>
+        <td className="p-3">#{transaction.transaction_code}</td>
         {/* <td className="p-3">{t(transaction.current_status)}</td> */}
         <td className="p-3"><TransactionStatus transactionId={transaction.id} status={t(transaction.current_status)} /></td>
         <td className="p-3">
@@ -150,7 +151,7 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
                 //   status,
                 //   userFilter?.userId,
                 // ]}
-                text={`Transaction #${transaction.id}`}
+                text={`Transaction #${transaction.transaction_code}`}
                 tooltipText="reject_transaction"
                 rejectTitle={t("reject_transaction")}
                 id={transaction.id}
@@ -182,7 +183,7 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
           {(createViewFinancialEvaluation || updateViewFinancialEvaluation) && (
             <SendFinancingPlan transaction={transaction} />
           )}
-          {canCreateNote && (
+          {/* {canCreateNote && (
             <NoteForSpecificClient
               client={transaction?.client.user}
             />
@@ -195,7 +196,20 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
               userId={userId}
               customer={transaction?.client?.user}
             />
-          )}
+          )} */}
+          <Link to={`/dashboard/chats/${transaction?.client?.id}`}>
+            <button
+              type="button"
+              className={"btn text-xl btn-circle bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-gray-300 hover:scale-[1.07] btn-sm flex items-center justify-center"}
+            >
+              <div
+                className={"tooltip tooltip-info top"}
+                data-tip={t("chats")}
+              >
+                <FaMessage />
+              </div>
+            </button>
+          </Link>
           {(canUpdateEstimation || canCreateEstimation) && (
             <>
               <AddEstimation

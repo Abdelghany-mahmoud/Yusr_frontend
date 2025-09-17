@@ -58,7 +58,7 @@ export const CustomerForm = ({ submitButtonText = "save", isSubmitting, initialV
       <div className="grid grid-cols-2 gap-4">
         <InputField name="name" label={t("name")} type="text" value={initialValues?.name} placeholder={t("enter_name")} />
         <InputField name="country_code" label={t("country_code")} type="text" placeholder="+2" />
-        <InputField name="phone" label={t("phone")} type="tel" placeholder={t("enter_phone")} />
+        <InputField name="phone" label={t("phone")} type="tel" placeholder={t("enter_phone")} readOnly={true} />
         <InputField name="email" label={t("email")} type="email" placeholder={t("enter_email")} />
         <InputField name="password" label={t("password")} type="password" placeholder={t("enter_password")} />
         <InputField name="password_confirmation" label={t("password_confirmation")} type="password" placeholder={t("enter_password_confirmation")} />

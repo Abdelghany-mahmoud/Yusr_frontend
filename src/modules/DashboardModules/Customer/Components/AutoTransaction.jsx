@@ -35,7 +35,7 @@ function AutoTransaction({ customer, transaction }) {
     // }
   }, [token]);
 
-  console.log(transferTo, "transferTo");
+  // console.log(transferTo, "transferTo");
 
   const { data, isLoading } = useGetData({
     endpoint: `transactions/available-users/${transferTo}`,

@@ -18,7 +18,7 @@ function NoteForSpecificClient({ client }) {
   const [selectedRole, setSelectedRole] = useState("");
   const { t } = useTranslation("layout");
   const { mutate: sendWhatsapp } = useSendToWhatsapp();
-  console.log(client, "client");
+  // console.log(client, "client");
   const { data: roles, isLoading: rolesLoading } = useGetData({
     endpoint: "roles",
     queryKey: ["roles"],
