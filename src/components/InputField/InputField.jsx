@@ -1,7 +1,7 @@
 import { ErrorMessage, Field } from "formik";
 import { PropTypes } from "prop-types";
 
-export const  InputField = ({ name, label, type, placeholder, icon, readOnly=false}) => {
+export const InputField = ({ name, label, type, placeholder, icon, readOnly = false }) => {
   return (
     <>
       {label && (
@@ -24,13 +24,12 @@ export const  InputField = ({ name, label, type, placeholder, icon, readOnly=fal
             {icon}
           </div>
         )}
-      <ErrorMessage
-        name={name}
-        component="div"
-        className="text-[var(--danger-color)] text-base mt-1"
-      />
+        <ErrorMessage
+          name={name}
+          component="div"
+          className="text-[var(--danger-color)] text-base mt-1"
+        />
       </div>
-
     </>
   );
 };

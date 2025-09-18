@@ -8,6 +8,7 @@ import { useSendToWhatsapp } from "../../../../../hooks/useSendToWhatsapp";
 import FinancingPlanForm from "./FinancingPlanForm";
 import { tokenAtom } from "../../../../../store/tokenAtom/tokenAtom";
 import { useRecoilValue } from "recoil";
+import PropTypes from "prop-types";
 
 function SendFinancingPlan({ transaction }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +40,7 @@ function SendFinancingPlan({ transaction }) {
     const statusKey = values?.status ? "status" : "current_status";
 
     // Remove `message` if statusKey is "current_status"
-    const { message, ...restValues } = values;
+    const { ...restValues } = values;
 
     const updatedValues = {
       ...(statusKey === "current_status" ? restValues : values),
@@ -99,5 +100,19 @@ function SendFinancingPlan({ transaction }) {
     </Modal>
   );
 }
+
+SendFinancingPlan.propTypes = {
+  transaction: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    isEvaluationAssign: PropTypes.bool,
+    client: PropTypes.shape({
+      id: PropTypes.number,
+      user: PropTypes.shape({
+        id: PropTypes.number,
+      }),
+    }),
+    financial_evaluation: PropTypes.object, // can refine if needed
+  }).isRequired,
+};
 
 export default SendFinancingPlan;

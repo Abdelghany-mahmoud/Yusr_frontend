@@ -12,6 +12,8 @@ import { useMemo, useState } from "react";
 import { SingleSelectionField } from "../../../../../components/InputField/SingleSelectionField";
 import { useGetData } from "../../../../../hooks/useGetData";
 import { statusOptions } from "../../../../../constant/status";
+import PropTypes from "prop-types";
+import SolutionsForm from "./SolutionsForm";
 
 function FinancingPlanForm({ onSubmit, isPending, transaction }) {
   const [page, setPage] = useState(1);
@@ -41,8 +43,8 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
     personalLoan: transaction?.financial_evaluation?.personalLoan || "",
     totalDebt: transaction?.financial_evaluation?.totalDebt || "",
     evaluationNotes: transaction?.financial_evaluation?.evaluationNotes || "",
-    hasViolations:
-      transaction?.financial_evaluation?.hasViolations == false ? 0 : 1 || 0,
+    hasViolations: Number(!!transaction?.financial_evaluation?.hasViolations),
+    solutions: transaction?.financial_evaluation?.solutions || [],
   };
 
   const validationSchema = Yup.object({
@@ -300,15 +302,15 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
 
           {values[isEvaluationAssign ? "status" : "current_status"]?.value ===
             "Cancelled" && (
-            <TextArea
-              label={t("reason")}
-              name="message"
-              value={values.message}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.message && errors.message}
-            />
-          )}
+              <TextArea
+                label={t("reason")}
+                name="message"
+                value={values.message}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.message && errors.message}
+              />
+            )}
 
           {!isEvaluationAssign && (
             <SingleSelectionField
@@ -330,6 +332,11 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
             />
           )}
 
+          <SolutionsForm
+            solutions={values.solutions}
+            setSolutions={(newSolutions) => setFieldValue("solutions", newSolutions)}
+          />
+
           <div className="flex justify-end">
             <Button
               type="submit"
@@ -344,5 +351,59 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
     </Formik>
   );
 }
+
+FinancingPlanForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  isPending: PropTypes.bool,
+  transaction: PropTypes.shape({
+    id: PropTypes.number,
+    isEvaluationAssign: PropTypes.bool,
+    financial_evaluation: PropTypes.shape({
+      city: PropTypes.string,
+      netSalary: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      currentBank: PropTypes.string,
+      employer: PropTypes.string,
+      rank: PropTypes.string,
+      dateOfBirth: PropTypes.string,
+      paymentAmount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      interestRate: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      interestAmount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      procedureAmount: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]),
+      tradingAmount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      tax: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      totalProfit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      totalDue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      realEstateFundLoan: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]),
+      realEstateLoan: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      personalLoan: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      totalDebt: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      evaluationNotes: PropTypes.string,
+      hasViolations: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
+      solutions: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number,
+          entity_name: PropTypes.string,
+          real_estate_financing: PropTypes.number,
+          personal_financing_balance: PropTypes.number,
+          other_financing: PropTypes.number,
+          duration: PropTypes.number,
+          annual_rate: PropTypes.number,
+          bank_offer: PropTypes.string,
+          monthly_installment: PropTypes.number,
+          second_installment: PropTypes.number,
+          client_balance: PropTypes.number,
+          transaction_duration: PropTypes.number,
+          notes: PropTypes.string,
+        })
+      ),
+    }),
+  }).isRequired,
+};
 
 export default FinancingPlanForm;
