@@ -14,11 +14,12 @@ import ChatList from "./ChatList";
 import MessagesList from "./MessagesList";
 import MessageInput from "./MessageInput";
 import DocsModal from "./DocsModal";
-import { PropTypes } from "prop-types";
+import PropTypes from "prop-types";
 import { useParams, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { tokenAtom } from "../../store/tokenAtom/tokenAtom";
 import AddDocs from "../DashboardModules/Customer/Components/ClientDocs/AddDocs";
+import SendFinancingPlan from "../DashboardModules/Customer/Components/MainCaseHandler/SendFinancingPlan";
 
 function ChatsPage({ basePath }) {
   const token = useRecoilValue(tokenAtom);
@@ -27,6 +28,8 @@ function ChatsPage({ basePath }) {
   const canUpdateClients = useHasPermission("update-clients");
   const canViewTransactions = useHasPermission("read-transactions");
   const canCreateDocuments = useHasPermission("create-documents");
+  const createViewFinancialEvaluation = useHasPermission("create-financial-evaluation");
+  const updateViewFinancialEvaluation = useHasPermission("update-financial-evaluation");
   const { chatId } = useParams();
   const navigate = useNavigate();
   const [activeChat, setActiveChat] = useState(chatId || null);
@@ -181,6 +184,7 @@ function ChatsPage({ basePath }) {
               </div>
               <div className="flex gap-2">
                 <ShowCustomer customer={customer} />
+                {!isMessagesLoading && (createViewFinancialEvaluation || updateViewFinancialEvaluation) && (<SendFinancingPlan transaction={customer.transactions?.[0]} />)}
                 {!isMessagesLoading && canUpdateClients && <UpdateCustomer customer={customer} />}
                 {!isMessagesLoading && canUpdateClients && <CustomerTransaction customer={customer} />}
                 {!isMessagesLoading && canViewTransactions && (<Transactions id={customer?.user?.id} />)}
@@ -218,7 +222,5 @@ function ChatsPage({ basePath }) {
 export default ChatsPage;
 
 ChatsPage.propTypes = {
-  canViewTransactions: PropTypes.bool,
-  canUpdateClients: PropTypes.bool,
   basePath: PropTypes.string,
 };

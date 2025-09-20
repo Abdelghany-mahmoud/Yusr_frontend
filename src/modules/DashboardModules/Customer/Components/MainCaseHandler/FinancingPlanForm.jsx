@@ -18,10 +18,10 @@ import SolutionsForm from "./SolutionsForm";
 function FinancingPlanForm({ onSubmit, isPending, transaction }) {
   const [page, setPage] = useState(1);
   const { t } = useTranslation("layout");
-  const isEvaluationAssign = transaction?.isEvaluationAssign;
+  const is_evaluation_assign = transaction?.is_evaluation_assign;
 
   const initialValues = {
-    // [isEvaluationAssign ? "status " : "current_status"]: "",
+    // [is_evaluation_assign ? "status " : "current_status"]: "",
     message: "",
     city: transaction?.financial_evaluation?.city || "",
     netSalary: transaction?.financial_evaluation?.netSalary || "",
@@ -48,7 +48,7 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
   };
 
   const validationSchema = Yup.object({
-    [isEvaluationAssign ? "status" : "current_status"]: Yup.object()
+    [is_evaluation_assign ? "status" : "current_status"]: Yup.object()
       .shape({
         value: Yup.string().required(),
         label: Yup.string(),
@@ -282,9 +282,9 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
             />
           </div>
           <SingleSelectionField
-            name={isEvaluationAssign ? "status" : "current_status"}
+            name={is_evaluation_assign ? "status" : "current_status"}
             label={t("status")}
-            value={values[isEvaluationAssign ? "status" : "current_status"]}
+            value={values[is_evaluation_assign ? "status" : "current_status"]}
             onChange={handleChange}
             onBlur={handleBlur}
             options={statusOptions?.map((status) => ({
@@ -295,12 +295,12 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
             setFieldTouched={setFieldTouched}
             totalPages={1}
             error={
-              touched[isEvaluationAssign ? "status" : "current_status"] &&
-              errors[isEvaluationAssign ? "status" : "current_status"]
+              touched[is_evaluation_assign ? "status" : "current_status"] &&
+              errors[is_evaluation_assign ? "status" : "current_status"]
             }
           />
 
-          {values[isEvaluationAssign ? "status" : "current_status"]?.value ===
+          {values[is_evaluation_assign ? "status" : "current_status"]?.value ===
             "Cancelled" && (
               <TextArea
                 label={t("reason")}
@@ -312,7 +312,7 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
               />
             )}
 
-          {!isEvaluationAssign && (
+          {!is_evaluation_assign && (
             <SingleSelectionField
               name="financialOfficer"
               label={t("financial_officer")}
@@ -357,7 +357,7 @@ FinancingPlanForm.propTypes = {
   isPending: PropTypes.bool,
   transaction: PropTypes.shape({
     id: PropTypes.number,
-    isEvaluationAssign: PropTypes.bool,
+    is_evaluation_assign: PropTypes.bool,
     financial_evaluation: PropTypes.shape({
       city: PropTypes.string,
       netSalary: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

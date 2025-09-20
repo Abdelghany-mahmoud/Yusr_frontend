@@ -6,27 +6,27 @@ import { toast } from "react-toastify";
 import { useMutate } from "../../../../../hooks/useMatute";
 // import { useSendToWhatsapp } from "../../../../../hooks/useSendToWhatsapp";
 import FinancingPlanForm from "./FinancingPlanForm";
-import { tokenAtom } from "../../../../../store/tokenAtom/tokenAtom";
-import { useRecoilValue } from "recoil";
+// import { tokenAtom } from "../../../../../store/tokenAtom/tokenAtom";
+// import { useRecoilValue } from "recoil";
 import PropTypes from "prop-types";
 
 function SendFinancingPlan({ transaction }) {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation("layout");
-  const token = useRecoilValue(tokenAtom);
-  const userRole = token?.user?.roles || [];
+  // const token = useRecoilValue(tokenAtom);
+  // const userRole = token?.user?.roles || [];
   // console.log(transaction, "transaction");
 
   // Check if user has role "Main Case Handler"
-  const isMainCaseHandler = userRole.some(
-    (role) => role.name === "Main Case Handler"
-  );
+  // const isMainCaseHandler = userRole.some(
+  //   (role) => role.name === "Main Case Handler"
+  // );
   // console.log(isMainCaseHandler, "isMainCaseHandler");
-  // console.log(transaction?.isEvaluationAssign, "isEvaluationAssign");
+  // console.log(transaction?.is_evaluation_assign, "is_evaluation_assign");
 
   const { mutate, isPending } = useMutate({
     endpoint:
-      isMainCaseHandler && transaction?.isEvaluationAssign == false
+      transaction?.is_evaluation_assign === false
         ? `transactions/update/${transaction?.id}`
         : `transactions/${transaction?.id}/update-financial-evaluation`,
     method: "post",
@@ -59,7 +59,7 @@ function SendFinancingPlan({ transaction }) {
         //   {
         //     user_id: transaction?.client?.user?.id,
         //     message:
-        //       isMainCaseHandler && !transaction?.isEvaluationAssign
+        //       isMainCaseHandler && !transaction?.is_evaluation_assign
         //         ? `تمت تحديد خطة التمويل الاولية لك `
         //         : `تم تعديل خطة التمويل الاولية`,
         //     client_id: transaction?.client?.id
@@ -108,7 +108,7 @@ function SendFinancingPlan({ transaction }) {
 SendFinancingPlan.propTypes = {
   transaction: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    isEvaluationAssign: PropTypes.bool,
+    is_evaluation_assign: PropTypes.bool,
     client: PropTypes.shape({
       id: PropTypes.number,
       user: PropTypes.shape({
