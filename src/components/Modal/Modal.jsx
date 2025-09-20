@@ -15,6 +15,7 @@ export const Modal = memo(
     isOpen,
     setIsOpen,
     classNameModalStyle,
+    title,
   }) => {
     const { theme } = useTheme();
     const lang = useRecoilValue(languageState);
@@ -55,11 +56,9 @@ export const Modal = memo(
             onClick={closeModal}
           >
             <div
-              className={`${
-                theme === "dark" ? "text-white" : "text-black"
-              } absolute ${styles.modal_box} ${styles.animate_slide_up} ${
-                classNameModalStyle || "px-4 py-5"
-              }`}
+              className={`${theme === "dark" ? "text-white" : "text-black"
+                } absolute ${styles.modal_box} ${styles.animate_slide_up} ${classNameModalStyle || "px-4 py-5"
+                }`}
               onClick={(e) => e.stopPropagation()}
               style={{
                 backgroundColor: theme === "dark" ? "#141414" : "#fdfdfd",
@@ -69,16 +68,21 @@ export const Modal = memo(
               <button
                 type="button"
                 onClick={closeModal}
-                className={`btn z-50 text-3xl btn-circle btn-sm btn-ghost absolute ${
-                  lang === "ar" ? "left-3" : "right-3"
-                } top-3 hover:text-[${
-                  theme === "dark"
+                className={`btn z-50 text-3xl btn-circle btn-sm btn-ghost absolute ${lang === "ar" ? "left-3" : "right-3"
+                  } top-3 hover:text-[${theme === "dark"
                     ? "var(--secondary-color)"
                     : "var(--primary-color)"
-                }]`}
+                  }]`}
               >
                 <IoClose />
               </button>
+
+              {title && (
+                <h2 className="text-xl font-bold mb-4 border-b pb-2 text-center">
+                  {title}
+                </h2>
+              )}
+
               <div className="mt-6">{children}</div>
             </div>
           </div>
@@ -115,4 +119,5 @@ Modal.propTypes = {
     PropTypes.element,
     PropTypes.node,
   ]),
+  title: PropTypes.string,
 };

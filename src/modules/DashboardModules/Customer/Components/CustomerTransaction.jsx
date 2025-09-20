@@ -126,7 +126,7 @@ function CustomerTransaction({ customer }) {
       }
       btnClassName="btn text-2xl btn-circle bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-[var(--secondary-color)] hover:scale-[1.07] btn-sm flex items-center justify-center"
       classNameModalStyle="max-w-[650px] w-full p-3"
-      title={t("create_transaction")}
+      // title={t("create_transaction")}
     >
       <Formik
         initialValues={initialValues}

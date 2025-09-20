@@ -45,7 +45,7 @@ const AddEstimation = ({ transactionId, queryKeyToInvalidate = [] }) => {
         </div>
       }
     >
-      <h2 className="text-xl font-semibold mb-4">{t("add_estimation_days")}</h2>
+      {/* <h2 className="text-xl font-semibold mb-4">{t("add_estimation_days")}</h2> */}
       <Formik
         initialValues={{ estimation_days: "" }}
         validationSchema={validationSchema}

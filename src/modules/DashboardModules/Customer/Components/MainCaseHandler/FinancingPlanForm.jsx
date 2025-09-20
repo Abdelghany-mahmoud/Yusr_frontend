@@ -14,6 +14,8 @@ import { useGetData } from "../../../../../hooks/useGetData";
 import { statusOptions } from "../../../../../constant/status";
 import PropTypes from "prop-types";
 import SolutionsForm from "./SolutionsForm";
+import { Link } from "react-router-dom";
+import { FaMessage } from "react-icons/fa6";
 
 function FinancingPlanForm({ onSubmit, isPending, transaction }) {
   const [page, setPage] = useState(1);
@@ -87,268 +89,293 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
     [officersData]
   );
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={onSubmit}
-    >
-      {({
-        values,
-        errors,
-        touched,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        setFieldValue,
-        isValid,
-        setFieldTouched,
-      }) => (
-        <form onSubmit={handleSubmit} className="space-y-4 w-full">
-          <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
-            <InputField
-              label={t("city")}
-              name="city"
-              value={values.city}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.city && errors.city}
-            />
-            <InputField
-              label={t("net_salary")}
-              name="netSalary"
-              type="number"
-              value={values.netSalary}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.netSalary && errors.netSalary}
-            />
-            <InputField
-              label={t("current_bank")}
-              name="currentBank"
-              value={values.currentBank}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.currentBank && errors.currentBank}
-            />
-            <InputField
-              label={t("employer")}
-              name="employer"
-              value={values.employer}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.employer && errors.employer}
-            />
-            <InputField
-              label={t("rank")}
-              name="rank"
-              value={values.rank}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.rank && errors.rank}
-            />
-            <InputField
-              label={t("date_of_birth")}
-              name="dateOfBirth"
-              type="date"
-              value={values.dateOfBirth}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.dateOfBirth && errors.dateOfBirth}
-            />
-            <InputField
-              label={t("payment_amount")}
-              name="paymentAmount"
-              type="number"
-              value={values.paymentAmount}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.paymentAmount && errors.paymentAmount}
-            />
-            <InputField
-              label={t("interest_rate")}
-              name="interestRate"
-              type="number"
-              value={values.interestRate}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.interestRate && errors.interestRate}
-            />
-            <InputField
-              label={t("interest_amount")}
-              name="interestAmount"
-              type="number"
-              value={values.interestAmount}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.interestAmount && errors.interestAmount}
-            />
-            <InputField
-              label={t("procedure_amount")}
-              name="procedureAmount"
-              type="number"
-              value={values.procedureAmount}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.procedureAmount && errors.procedureAmount}
-            />
-            <InputField
-              label={t("trading_amount")}
-              name="tradingAmount"
-              type="number"
-              value={values.tradingAmount}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.tradingAmount && errors.tradingAmount}
-            />
-            <InputField
-              label={t("tax")}
-              name="tax"
-              type="number"
-              value={values.tax}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.tax && errors.tax}
-            />
-            <InputField
-              label={t("total_profit")}
-              name="totalProfit"
-              type="number"
-              value={values.totalProfit}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.totalProfit && errors.totalProfit}
-            />
-            <InputField
-              label={t("total_due")}
-              name="totalDue"
-              type="number"
-              value={values.totalDue}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.totalDue && errors.totalDue}
-            />
-            <InputField
-              label={t("real_estate_fund_loan")}
-              name="realEstateFundLoan"
-              type="number"
-              value={values.realEstateFundLoan}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.realEstateFundLoan && errors.realEstateFundLoan}
-            />
-            <InputField
-              label={t("real_estate_loan")}
-              name="realEstateLoan"
-              type="number"
-              value={values.realEstateLoan}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.realEstateLoan && errors.realEstateLoan}
-            />
-            <InputField
-              label={t("personal_loan")}
-              name="personalLoan"
-              type="number"
-              value={values.personalLoan}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.personalLoan && errors.personalLoan}
-            />
-            <InputField
-              label={t("total_debt")}
-              name="totalDebt"
-              type="number"
-              value={values.totalDebt}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.totalDebt && errors.totalDebt}
-            />
-          </div>
-
-          <div className="space-y-4">
-            <TextArea
-              label={t("evaluation_notes")}
-              name="evaluationNotes"
-              value={values.evaluationNotes}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.evaluationNotes && errors.evaluationNotes}
-            />
-            <SwitchField
-              label={t("has_violations")}
-              name="hasViolations"
-              checked={values.hasViolations}
-              onChange={(val) => setFieldValue("hasViolations", val)}
-            />
-          </div>
-          <SingleSelectionField
-            name={is_evaluation_assign ? "status" : "current_status"}
-            label={t("status")}
-            value={values[is_evaluation_assign ? "status" : "current_status"]}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            options={statusOptions?.map((status) => ({
-              value: status.id,
-              label: t(status.name),
-            }))}
-            setFieldValue={setFieldValue}
-            setFieldTouched={setFieldTouched}
-            totalPages={1}
-            error={
-              touched[is_evaluation_assign ? "status" : "current_status"] &&
-              errors[is_evaluation_assign ? "status" : "current_status"]
-            }
-          />
-
-          {values[is_evaluation_assign ? "status" : "current_status"]?.value ===
-            "Cancelled" && (
-              <TextArea
-                label={t("reason")}
-                name="message"
-                value={values.message}
+    <>
+      <div className="text-lg font-semibold mb-6 text-blue-400 flex justify-between">
+        <div className="flex items-center">
+          <span>
+            {t("customer_name")}: {transaction?.client?.user?.name}
+          </span>
+          <span className="mr-6">
+            {t("transaction_id")}: #{transaction?.transaction_code}
+          </span>
+        </div>
+        <Link to={`/dashboard/chats/${transaction?.client?.id}`}>
+          <button
+            type="button"
+            className={"btn text-xl btn-circle bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-gray-300 hover:scale-[1.07] btn-sm flex items-center justify-center"}
+          >
+            <div
+              className={"tooltip tooltip-info top"}
+              data-tip={t("chats")}
+            >
+              <FaMessage />
+            </div>
+          </button>
+        </Link>
+      </div>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          setFieldValue,
+          isValid,
+          setFieldTouched,
+        }) => (
+          <form onSubmit={handleSubmit} className="space-y-4 w-full">
+            <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+              <InputField
+                label={t("city")}
+                name="city"
+                value={values.city}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                error={touched.message && errors.message}
+                error={touched.city && errors.city}
+              />
+              <InputField
+                label={t("net_salary")}
+                name="netSalary"
+                type="number"
+                value={values.netSalary}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.netSalary && errors.netSalary}
+              />
+              <InputField
+                label={t("current_bank")}
+                name="currentBank"
+                value={values.currentBank}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.currentBank && errors.currentBank}
+              />
+              <InputField
+                label={t("employer")}
+                name="employer"
+                value={values.employer}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.employer && errors.employer}
+              />
+              <InputField
+                label={t("rank")}
+                name="rank"
+                value={values.rank}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.rank && errors.rank}
+              />
+              <InputField
+                label={t("date_of_birth")}
+                name="dateOfBirth"
+                type="date"
+                value={values.dateOfBirth}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.dateOfBirth && errors.dateOfBirth}
+              />
+              <InputField
+                label={t("payment_amount")}
+                name="paymentAmount"
+                type="number"
+                value={values.paymentAmount}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.paymentAmount && errors.paymentAmount}
+              />
+              <InputField
+                label={t("interest_rate")}
+                name="interestRate"
+                type="number"
+                value={values.interestRate}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.interestRate && errors.interestRate}
+              />
+              <InputField
+                label={t("interest_amount")}
+                name="interestAmount"
+                type="number"
+                value={values.interestAmount}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.interestAmount && errors.interestAmount}
+              />
+              <InputField
+                label={t("procedure_amount")}
+                name="procedureAmount"
+                type="number"
+                value={values.procedureAmount}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.procedureAmount && errors.procedureAmount}
+              />
+              <InputField
+                label={t("trading_amount")}
+                name="tradingAmount"
+                type="number"
+                value={values.tradingAmount}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.tradingAmount && errors.tradingAmount}
+              />
+              <InputField
+                label={t("tax")}
+                name="tax"
+                type="number"
+                value={values.tax}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.tax && errors.tax}
+              />
+              <InputField
+                label={t("total_profit")}
+                name="totalProfit"
+                type="number"
+                value={values.totalProfit}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.totalProfit && errors.totalProfit}
+              />
+              <InputField
+                label={t("total_due")}
+                name="totalDue"
+                type="number"
+                value={values.totalDue}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.totalDue && errors.totalDue}
+              />
+              <InputField
+                label={t("real_estate_fund_loan")}
+                name="realEstateFundLoan"
+                type="number"
+                value={values.realEstateFundLoan}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.realEstateFundLoan && errors.realEstateFundLoan}
+              />
+              <InputField
+                label={t("real_estate_loan")}
+                name="realEstateLoan"
+                type="number"
+                value={values.realEstateLoan}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.realEstateLoan && errors.realEstateLoan}
+              />
+              <InputField
+                label={t("personal_loan")}
+                name="personalLoan"
+                type="number"
+                value={values.personalLoan}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.personalLoan && errors.personalLoan}
+              />
+              <InputField
+                label={t("total_debt")}
+                name="totalDebt"
+                type="number"
+                value={values.totalDebt}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.totalDebt && errors.totalDebt}
+              />
+            </div>
+
+            <div className="space-y-4">
+              <TextArea
+                label={t("evaluation_notes")}
+                name="evaluationNotes"
+                value={values.evaluationNotes}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.evaluationNotes && errors.evaluationNotes}
+              />
+              <SwitchField
+                label={t("has_violations")}
+                name="hasViolations"
+                checked={values.hasViolations}
+                onChange={(val) => setFieldValue("hasViolations", val)}
+              />
+            </div>
+            <SingleSelectionField
+              name={is_evaluation_assign ? "status" : "current_status"}
+              label={t("status")}
+              value={values[is_evaluation_assign ? "status" : "current_status"]}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              options={statusOptions?.map((status) => ({
+                value: status.id,
+                label: t(status.name),
+              }))}
+              setFieldValue={setFieldValue}
+              setFieldTouched={setFieldTouched}
+              totalPages={1}
+              error={
+                touched[is_evaluation_assign ? "status" : "current_status"] &&
+                errors[is_evaluation_assign ? "status" : "current_status"]
+              }
+            />
+
+            {values[is_evaluation_assign ? "status" : "current_status"]?.value ===
+              "Cancelled" && (
+                <TextArea
+                  label={t("reason")}
+                  name="message"
+                  value={values.message}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={touched.message && errors.message}
+                />
+              )}
+
+            {!is_evaluation_assign && (
+              <SingleSelectionField
+                name="financialOfficer"
+                label={t("financial_officer")}
+                value={values.receiver_id}
+                setFieldValue={setFieldValue}
+                setFieldTouched={setFieldTouched}
+                options={officersOptions.map((user) => ({
+                  value: user.id,
+                  label: user.name,
+                }))}
+                isLoading={officersLoading}
+                currentPage={page}
+                onPageChange={setPage}
+                totalPages={officersData?.data?.last_page}
+                error={touched.financialOfficer && errors.financialOfficer}
+                disabled={!officersData}
               />
             )}
 
-          {!is_evaluation_assign && (
-            <SingleSelectionField
-              name="financialOfficer"
-              label={t("financial_officer")}
-              value={values.receiver_id}
-              setFieldValue={setFieldValue}
-              setFieldTouched={setFieldTouched}
-              options={officersOptions.map((user) => ({
-                value: user.id,
-                label: user.name,
-              }))}
-              isLoading={officersLoading}
-              currentPage={page}
-              onPageChange={setPage}
-              totalPages={officersData?.data?.last_page}
-              error={touched.financialOfficer && errors.financialOfficer}
-              disabled={!officersData}
+            <SolutionsForm
+              solutions={values.solutions}
+              setSolutions={(newSolutions) => setFieldValue("solutions", newSolutions)}
             />
-          )}
 
-          <SolutionsForm
-            solutions={values.solutions}
-            setSolutions={(newSolutions) => setFieldValue("solutions", newSolutions)}
-          />
-
-          <div className="flex justify-end">
-            <Button
-              type="submit"
-              text={isPending ? <Loading /> : t("submit")}
-              disabled={isPending || !isValid}
-              loading={isPending}
-              className="btn btn-primary"
-            />
-          </div>
-        </form>
-      )}
-    </Formik>
+            <div className="flex justify-end">
+              <Button
+                type="submit"
+                text={isPending ? <Loading /> : t("submit")}
+                disabled={isPending || !isValid}
+                loading={isPending}
+                className="btn btn-primary"
+              />
+            </div>
+          </form>
+        )}
+      </Formik>
+    </>
   );
 }
 
@@ -357,6 +384,13 @@ FinancingPlanForm.propTypes = {
   isPending: PropTypes.bool,
   transaction: PropTypes.shape({
     id: PropTypes.number,
+    transaction_code: PropTypes.string,
+    client: PropTypes.shape({
+      id: PropTypes.number,
+      user: PropTypes.shape({
+        name: PropTypes.string,
+      }),
+    }),
     is_evaluation_assign: PropTypes.bool,
     financial_evaluation: PropTypes.shape({
       city: PropTypes.string,

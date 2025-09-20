@@ -350,5 +350,6 @@
   "add_mention": "+ اضافة اشارة",
   "type_message": "اكتب رسالة",
   "remove": "حذف",
-  "all_employees_mentioned": "تم تحديد جميع الموظفين"
+  "all_employees_mentioned": "تم تحديد جميع الموظفين",
+  "create_transaction": "انشاء معاملة"
 }
