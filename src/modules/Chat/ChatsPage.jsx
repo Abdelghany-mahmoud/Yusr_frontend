@@ -51,7 +51,26 @@ function ChatsPage({ basePath }) {
     endpoint: "chats",
     queryKey: ["chats"],
   });
+
   const chats = useMemo(() => chatsResponse?.data || [], [chatsResponse]);
+
+  const sortedChats = useMemo(() => {
+    if (!chats) return [];
+
+    return [...chats].sort((a, b) => {
+      // If both have no lastMessage, keep original order
+      if (!a.lastMessage && !b.lastMessage) return 0;
+
+      // If only a has no lastMessage, push it down
+      if (!a.lastMessage) return 1;
+
+      // If only b has no lastMessage, push it down
+      if (!b.lastMessage) return -1;
+
+      // Both have lastMessage: sort by created_at descending
+      return new Date(b.lastMessage.created_at) - new Date(a.lastMessage.created_at);
+    });
+  }, [chats]);
 
   // Fetch employees
   const { data: employeesResponse } = useGetData({
@@ -137,7 +156,7 @@ function ChatsPage({ basePath }) {
     <div className="flex h-[calc(100vh-100px)] bg-gray-50">
       {/* Left: Chat list */}
       <ChatList
-        chats={chats}
+        chats={sortedChats}
         activeChat={activeChat}
         setActiveChat={handleSelectChat}
         isLoading={isChatsLoading}
@@ -164,7 +183,7 @@ function ChatsPage({ basePath }) {
                 <ShowCustomer customer={customer} />
                 {!isMessagesLoading && canUpdateClients && <UpdateCustomer customer={customer} />}
                 {!isMessagesLoading && canUpdateClients && <CustomerTransaction customer={customer} />}
-                {!isMessagesLoading && canViewTransactions && ( <Transactions id={customer?.user?.id} /> )}
+                {!isMessagesLoading && canViewTransactions && (<Transactions id={customer?.user?.id} />)}
                 {!isMessagesLoading && canCreateDocuments && <AddDocs customer={customer} />}
               </div>
             </div>

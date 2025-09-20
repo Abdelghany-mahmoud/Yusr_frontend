@@ -218,6 +218,8 @@ function TransactionProgress({ transaction, userId }) {
     selectedRole?.name === "Bank Liaison Officer" &&
     transaction.payment_receipts.length > 0;
 
+  const showNotesTab = false;
+
   // console.log(transaction, "transaction");
   // console.log(selectedRole, "selectedRole?.id");
   return (
@@ -263,13 +265,17 @@ function TransactionProgress({ transaction, userId }) {
         <div className="space-y-4">
           {/* Tabs */}
           <div className="flex space-x-4 border-b">
-            <button
-              className={`py-2 px-4 ${activeTab === "notes" ? "border-b-2 border-blue-500" : ""
-                }`}
-              onClick={() => setActiveTab("notes")}
-            >
-              {t("notes")}
-            </button>
+
+            {showNotesTab && (
+              <button
+                className={`py-2 px-4 ${activeTab === "notes" ? "border-b-2 border-blue-500" : ""
+                  }`}
+                onClick={() => setActiveTab("notes")}
+              >
+                {t("notes")}
+              </button>
+            )}
+
             <button
               className={`py-2 px-4 ${activeTab === "documents" ? "border-b-2 border-blue-500" : ""
                 }`}
@@ -277,6 +283,7 @@ function TransactionProgress({ transaction, userId }) {
             >
               {t("documents")}
             </button>
+
             {showPaymentReceiptsTab && (
               <button
                 className={`py-2 px-4 ${activeTab === "payment_receipts"
@@ -292,7 +299,7 @@ function TransactionProgress({ transaction, userId }) {
 
           {/* Tab Content */}
           <div className="p-4">
-            {activeTab === "notes" ? (
+            {activeTab === "notes" && showNotesTab ? (
               <div className="space-y-4">
                 <div className="space-y-4">
                   {[

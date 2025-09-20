@@ -14,28 +14,27 @@ import { useRecoilState } from "recoil";
 import { tokenAtom } from "../../../store/tokenAtom/tokenAtom";
 import ViewReceiptsModal from "./components/ViewReceiptsModal";
 import UploadReceiptModal from "./components/UploadReceiptModal";
-import NoteForSpecificClient from "../Customer/Components/NoteForSpecificClient";
+// import NoteForSpecificClient from "../Customer/Components/NoteForSpecificClient";
 import TransactionDetails from "../transactions/TransactionDetails";
 import { useHasPermission } from "../../../hooks/useHasPermission";
-import CustomerNotes from "../Customer/Components/CustomerNotes/CustomerNotes";
+// import CustomerNotes from "../Customer/Components/CustomerNotes/CustomerNotes";
 
 function BankLiaisonOfficer() {
   const { t } = useTranslation("layout");
   const { currentPage } = useGetURLParam();
   const [token, setToken] = useRecoilState(tokenAtom);
-  const userId = token?.user?.id;
+  // const userId = token?.user?.id;
   const [selected, setSelected] = useState(null);
   const canViewPaymentReceipts = useHasPermission("read-payment-receipts");
   const canCreatePaymentReceipts = useHasPermission("create-payment-receipts");
-  const canCreateNote = useHasPermission("create-notes");
-  const canViewNote = useHasPermission("read-notes");
+  // const canCreateNote = useHasPermission("create-notes");
+  // const canViewNote = useHasPermission("read-notes");
   // Fetch in-progress bank transactions
   const { data, isLoading, isError, error } = useGetData({
-    endpoint: `transactions?${
-      token?.user?.roles.map((role) => role.name).includes("Bank Liaison Officer")
+    endpoint: `transactions?${token?.user?.roles.map((role) => role.name).includes("Bank Liaison Officer")
         ? `bank_liaison_officer_id=${token?.user?.id}`
         : ""
-    }&page=${currentPage}`,
+      }&page=${currentPage}`,
     queryKey: ["bank-transactions", currentPage],
   });
 
@@ -83,7 +82,7 @@ function BankLiaisonOfficer() {
         {canViewPaymentReceipts && (
           <ViewReceiptsModal transaction={transaction} />
         )}
-        {canCreateNote && (
+        {/* {canCreateNote && (
           <NoteForSpecificClient
             client={transaction?.client}
           />
@@ -96,7 +95,7 @@ function BankLiaisonOfficer() {
             userId={userId}
             customer={transaction?.client?.user}
           />
-        )}
+        )} */}
         {/* <NotifyTeamModal transaction={transaction} /> */}
       </td>
     </tr>

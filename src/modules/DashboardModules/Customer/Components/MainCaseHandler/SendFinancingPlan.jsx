@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { FaHandHoldingUsd } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useMutate } from "../../../../../hooks/useMatute";
-import { useSendToWhatsapp } from "../../../../../hooks/useSendToWhatsapp";
+// import { useSendToWhatsapp } from "../../../../../hooks/useSendToWhatsapp";
 import FinancingPlanForm from "./FinancingPlanForm";
 import { tokenAtom } from "../../../../../store/tokenAtom/tokenAtom";
 import { useRecoilValue } from "recoil";
@@ -34,7 +34,7 @@ function SendFinancingPlan({ transaction }) {
     onSuccess: () => setIsOpen(false),
   });
 
-  const { mutate: sendWhatsapp } = useSendToWhatsapp();
+  // const { mutate: sendWhatsapp } = useSendToWhatsapp();
 
   const handleSubmit = async (values, { resetForm }) => {
     const statusKey = values?.status ? "status" : "current_status";
@@ -51,27 +51,31 @@ function SendFinancingPlan({ transaction }) {
     // console.log(updatedValues, "updatedValues");
 
     mutate(updatedValues, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         setIsOpen(false);
         resetForm();
-        sendWhatsapp(
-          {
-            user_id: transaction?.client?.user?.id,
-            message:
-              isMainCaseHandler && !transaction?.isEvaluationAssign
-                ? `تمت تحديد خطة التمويل الاولية لك `
-                : `تم تعديل خطة التمويل الاولية`,
-            client_id: transaction?.client?.id
-          },
-          {
-            onSuccess: (data) => {
-              toast.success(data?.message);
-            },
-            onError: (error) => {
-              toast.error(error?.response?.data?.message);
-            },
-          }
-        );
+        toast.success(data?.message);
+        // sendWhatsapp(
+        //   {
+        //     user_id: transaction?.client?.user?.id,
+        //     message:
+        //       isMainCaseHandler && !transaction?.isEvaluationAssign
+        //         ? `تمت تحديد خطة التمويل الاولية لك `
+        //         : `تم تعديل خطة التمويل الاولية`,
+        //     client_id: transaction?.client?.id
+        //   },
+        //   {
+        //     onSuccess: (data) => {
+        //       toast.success(data?.message);
+        //     },
+        //     onError: (error) => {
+        //       toast.error(error?.response?.data?.message);
+        //     },
+        //   }
+        // );
+      },
+      onError: (error) => {
+        toast.error(error?.response?.data?.message);
       },
     });
   };

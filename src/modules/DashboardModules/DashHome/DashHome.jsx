@@ -397,7 +397,7 @@ export const DashHome = () => {
       </div>
 
       {/* بطاقات الملاحظات */}
-      <PageTitle title="إحصائيات الاستفسارات" fontSize="text-xl" />
+      {/* <PageTitle title="إحصائيات الاستفسارات" fontSize="text-xl" />
       <div className="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 mt-2">
         <StatCard
           icon={<CheckCircle />}
@@ -409,8 +409,8 @@ export const DashHome = () => {
           label=" استفسارات جديدة"
           value={formatNumber(stats?.notes?.new_notes)}
         />
-      </div>
-      <div className="mt-5">
+      </div> */}
+      {/* <div className="mt-5">
         <PageTitle title="أكثر المرسلين نشاطاً" fontSize="text-xl" />
         <div className="mt-8">
           <Table
@@ -426,7 +426,7 @@ export const DashHome = () => {
             ))}
           />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
