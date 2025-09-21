@@ -7,6 +7,7 @@ import {
   SwitchField,
   Loading,
   Button,
+  MultipleSelectionField
 } from "../../../../../components";
 import { useMemo, useState } from "react";
 import { SingleSelectionField } from "../../../../../components/InputField/SingleSelectionField";
@@ -14,6 +15,7 @@ import { useGetData } from "../../../../../hooks/useGetData";
 import { statusOptions } from "../../../../../constant/status";
 import PropTypes from "prop-types";
 import SolutionsForm from "./SolutionsForm";
+import RequestEvaluation from "./RequestEvaluation";
 import { Link } from "react-router-dom";
 import { FaMessage } from "react-icons/fa6";
 
@@ -47,6 +49,7 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
     evaluationNotes: transaction?.financial_evaluation?.evaluationNotes || "",
     hasViolations: Number(!!transaction?.financial_evaluation?.hasViolations),
     solutions: transaction?.financial_evaluation?.solutions || [],
+    notifiedEmployees: [],
   };
 
   const validationSchema = Yup.object({
@@ -88,6 +91,15 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
     () => officersData?.data?.data || [],
     [officersData]
   );
+
+  // Fetch employees
+  const { data: employeesResponse } = useGetData({
+    endpoint: "users",
+    queryKey: ["employees"],
+  });
+
+  const employees = useMemo(() => employeesResponse?.data.data || [], [employeesResponse]);
+
   return (
     <>
       <div className="text-lg font-semibold mb-6 text-blue-400 flex justify-between">
@@ -134,6 +146,7 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
               <InputField
                 label={t("city")}
                 name="city"
+                type="text"
                 value={values.city}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -151,6 +164,7 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
               <InputField
                 label={t("current_bank")}
                 name="currentBank"
+                type="text"
                 value={values.currentBank}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -159,6 +173,7 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
               <InputField
                 label={t("employer")}
                 name="employer"
+                type="text"
                 value={values.employer}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -167,6 +182,7 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
               <InputField
                 label={t("rank")}
                 name="rank"
+                type="number"
                 value={values.rank}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -358,12 +374,41 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
               />
             )}
 
+            <MultipleSelectionField
+              options={employees.map((emp) => ({
+                value: emp.id,
+                label: `${emp.name} (${emp.roles?.map(r => r.name).join(", ")})`,
+              }))}
+              values={values.notifiedEmployees?.map((id) => {
+                const emp = employees.find((e) => e.id === id);
+                return emp
+                  ? {
+                    value: emp.id,
+                    label: `${emp.name} (${emp.roles?.map((r) => r.name).join(", ")})`,
+                  }
+                  : { value: id, label: id };
+              })}
+              name="notifiedEmployees"
+              setFieldValue={(field, selected) =>
+                setFieldValue(
+                  "notifiedEmployees",
+                  selected.map((s) => Number(s.value))
+                )
+              }
+              totalPages={1}
+              currentPage={1}
+              onPageChange={() => { }}
+              label={t("notify_employees")}
+            />
+
             <SolutionsForm
               solutions={values.solutions}
               setSolutions={(newSolutions) => setFieldValue("solutions", newSolutions)}
             />
 
-            <div className="flex justify-end">
+            <div className="flex items-center gap-4 justify-end">
+              <RequestEvaluation customer={transaction?.client} />
+
               <Button
                 type="submit"
                 text={isPending ? <Loading /> : t("submit")}
@@ -394,44 +439,44 @@ FinancingPlanForm.propTypes = {
     is_evaluation_assign: PropTypes.bool,
     financial_evaluation: PropTypes.shape({
       city: PropTypes.string,
-      netSalary: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      netSalary: PropTypes.oneOfType([PropTypes.string, PropTypes.string]),
       currentBank: PropTypes.string,
       employer: PropTypes.string,
       rank: PropTypes.string,
       dateOfBirth: PropTypes.string,
-      paymentAmount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      interestRate: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      interestAmount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      paymentAmount: PropTypes.oneOfType([PropTypes.string, PropTypes.string]),
+      interestRate: PropTypes.oneOfType([PropTypes.string, PropTypes.string]),
+      interestAmount: PropTypes.oneOfType([PropTypes.string, PropTypes.string]),
       procedureAmount: PropTypes.oneOfType([
         PropTypes.string,
-        PropTypes.number,
+        PropTypes.string,
       ]),
-      tradingAmount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      tax: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      totalProfit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      totalDue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      tradingAmount: PropTypes.oneOfType([PropTypes.string, PropTypes.string]),
+      tax: PropTypes.oneOfType([PropTypes.string, PropTypes.string]),
+      totalProfit: PropTypes.oneOfType([PropTypes.string, PropTypes.string]),
+      totalDue: PropTypes.oneOfType([PropTypes.string, PropTypes.string]),
       realEstateFundLoan: PropTypes.oneOfType([
         PropTypes.string,
-        PropTypes.number,
+        PropTypes.string,
       ]),
-      realEstateLoan: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      personalLoan: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      totalDebt: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      realEstateLoan: PropTypes.oneOfType([PropTypes.string, PropTypes.string]),
+      personalLoan: PropTypes.oneOfType([PropTypes.string, PropTypes.string]),
+      totalDebt: PropTypes.oneOfType([PropTypes.string, PropTypes.string]),
       evaluationNotes: PropTypes.string,
-      hasViolations: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
+      hasViolations: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
       solutions: PropTypes.arrayOf(
         PropTypes.shape({
           id: PropTypes.number,
           entity_name: PropTypes.string,
-          real_estate_financing: PropTypes.number,
-          personal_financing_balance: PropTypes.number,
-          other_financing: PropTypes.number,
+          real_estate_financing: PropTypes.string,
+          personal_financing_balance: PropTypes.string,
+          other_financing: PropTypes.string,
           duration: PropTypes.number,
-          annual_rate: PropTypes.number,
+          annual_rate: PropTypes.string,
           bank_offer: PropTypes.string,
-          monthly_installment: PropTypes.number,
-          second_installment: PropTypes.number,
-          client_balance: PropTypes.number,
+          monthly_installment: PropTypes.string,
+          second_installment: PropTypes.string,
+          client_balance: PropTypes.string,
           transaction_duration: PropTypes.number,
           notes: PropTypes.string,
         })

@@ -321,6 +321,9 @@
   "accept": "قبول المعاملة",
   "accept_transaction": "قبول المعاملة",
   "In Review": "قيد المراجعة",
+  "Evaluation Request": "طلب موافقة على تقييم",
+  "Evaluation_Request": "طلب موافقة على تقييم",
+  "request_evaluation": "طلب موافقة على تقييم",
   "On Hold": "معلق",
   "Islam": "مسلم",
   "Christianity": "مسيحي",
@@ -351,5 +354,7 @@
   "type_message": "اكتب رسالة",
   "remove": "حذف",
   "all_employees_mentioned": "تم تحديد جميع الموظفين",
-  "create_transaction": "انشاء معاملة"
+  "create_transaction": "انشاء معاملة",
+  "notify_employees": "ارسال اشعار الى الموظفين",
+  "select_permissions" : "اختر الصلاحيات"
 }

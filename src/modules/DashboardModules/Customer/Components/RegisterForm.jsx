@@ -90,7 +90,7 @@ function RegisterForm({
               name="roles"
               setFieldValue={setFieldValue}
               totalPages={1}
-              label={t("permissions")}
+              label={t("select_permissions")}
             />
           </>
         )

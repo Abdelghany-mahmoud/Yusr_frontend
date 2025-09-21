@@ -145,12 +145,12 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
             <>
               <RejectGlobal
                 endpoint={`transactions/update/${transaction.id}`}
-                // queryKey={[
-                //   "transactions",
-                //   currentPage,
-                //   status,
-                //   userFilter?.userId,
-                // ]}
+                queryKey={[
+                  "transactions",
+                  currentPage,
+                  status,
+                  userFilter?.userId,
+                ]}
                 text={`Transaction #${transaction.transaction_code}`}
                 tooltipText="reject_transaction"
                 rejectTitle={t("reject_transaction")}
@@ -274,8 +274,14 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
 }
 
 TransactionList.propTypes = {
-  status: PropTypes,
-  userFilter: PropTypes,
-  searchKey: PropTypes,
-  debouncedSearchValue: PropTypes,
+  status: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object, // because you pass full status object sometimes
+  ]),
+  userFilter: PropTypes.shape({
+    roleKey: PropTypes.string,
+    userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  }),
+  searchKey: PropTypes.string,
+  debouncedSearchValue: PropTypes.string,
 };

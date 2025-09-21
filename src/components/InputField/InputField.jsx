@@ -1,7 +1,7 @@
 import { ErrorMessage, Field } from "formik";
 import { PropTypes } from "prop-types";
 
-export const InputField = ({ name, label, type, placeholder, icon, readOnly = false }) => {
+export const InputField = ({ name, label, type = "text", placeholder, icon, readOnly = false }) => {
   return (
     <>
       {label && (
@@ -38,7 +38,7 @@ InputField.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
   icon: PropTypes.element,
   readOnly: PropTypes.bool
 };

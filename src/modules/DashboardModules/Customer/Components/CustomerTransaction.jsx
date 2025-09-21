@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useMemo, useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -16,14 +17,14 @@ import { FaFilter } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 function CustomerTransaction({ customer }) {
-  const [token, setToken] = useRecoilState(tokenAtom);
+  const [token] = useRecoilState(tokenAtom);
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation("layout");
   const [page, setPage] = useState(1);
   const [clientPage, setClientPage] = useState(1);
   const [selectedRole, setSelectedRole] = useState("");
   const [selectedRoleDisplay, setSelectedRoleDisplay] = useState("");
-  const [userId, setUserId] = useState(customer?.id);
+  const [userId] = useState(customer?.id);
   const userRoles = token?.user?.roles.map((role) => role.name);
   const isSuperAdmin = userRoles.includes("SuperAdmin");
   const isExecutiveDirector = userRoles.includes("Executive Director");
@@ -272,3 +273,7 @@ function CustomerTransaction({ customer }) {
 }
 
 export default CustomerTransaction;
+
+CustomerTransaction.propTypes = {
+  customer: PropTypes.object.isRequired,
+};

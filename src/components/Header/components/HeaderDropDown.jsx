@@ -32,7 +32,7 @@ export const HeaderDropDown = () => {
     };
   }, []);
   return (
-    <button
+    <div
       ref={menuRef}
       onClick={toggleMenu}
       className={`${styles.drop_downed_profile} ${open ? "bg-[var(--bg-hover)]" : ""
@@ -89,6 +89,6 @@ export const HeaderDropDown = () => {
           <ConfirmLogout />
         </li>
       </ul>
-    </button>
+    </div>
   );
 };

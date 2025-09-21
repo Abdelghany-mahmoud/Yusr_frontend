@@ -102,9 +102,14 @@ export const RejectGlobal = ({
 
 RejectGlobal.propTypes = {
   endpoint: PropTypes.string.isRequired, // e.g. "/customers"
-  queryKey: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired, // e.g. "Customer X"
+  queryKey: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.any)
+  ]).isRequired,
+  text: PropTypes.string.isRequired, // e.g. "Transaction #123"
   tooltipText: PropTypes.string.isRequired,
   rejectTitle: PropTypes.string.isRequired,
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  onSuccess: PropTypes.func, // since you're passing it sometimes
 };
+

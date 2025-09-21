@@ -149,15 +149,15 @@ export default function SolutionsForm({ solutions, setSolutions }) {
 
 const solutionShape = {
   entity_name: PropTypes.string,
-  real_estate_financing: PropTypes.number,
-  personal_financing_balance: PropTypes.number,
-  other_financing: PropTypes.number,
+  real_estate_financing: PropTypes.string,
+  personal_financing_balance: PropTypes.string,
+  other_financing: PropTypes.string,
   duration: PropTypes.number,
-  annual_rate: PropTypes.number,
+  annual_rate: PropTypes.string,
   bank_offer: PropTypes.string,
-  monthly_installment: PropTypes.number,
-  second_installment: PropTypes.number,
-  client_balance: PropTypes.number,
+  monthly_installment: PropTypes.string,
+  second_installment: PropTypes.string,
+  client_balance: PropTypes.string,
   transaction_duration: PropTypes.number,
   notes: PropTypes.string,
 };

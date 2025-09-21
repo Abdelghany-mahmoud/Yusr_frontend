@@ -1,4 +1,5 @@
 export const statusOptions = [
+  { id: "Evaluation_Request", name: "Evaluation_Request" },
   { id: "Pending", name: "Pending" },
   { id: "In_Review", name: "In Review" },
   { id: "Approved", name: "Approved" },

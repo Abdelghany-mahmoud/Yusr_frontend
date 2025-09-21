@@ -174,7 +174,7 @@ export default function TransactionsPage() {
         status={selectedStatus}
         userFilter={{ roleKey: selectedRole, userId: selectedUserId }}
         searchKey={searchKey}
-        searchValue={searchValue}
+        // searchValue={searchValue}
         debouncedSearchValue={debouncedSearchValue}
       />
     </div>

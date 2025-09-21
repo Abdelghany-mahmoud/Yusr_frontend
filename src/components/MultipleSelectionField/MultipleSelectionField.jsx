@@ -1,7 +1,6 @@
 import Select from "react-select";
 import { ModelPagination, Spinner } from "../index";
 import PropTypes from "prop-types";
-import { useTranslation } from "react-i18next";
 import { useTheme } from "../../hooks/useTheme";
 import { ErrorMessage } from "formik";
 
@@ -16,7 +15,6 @@ export const MultipleSelectionField = ({
   currentPage,
   onPageChange,
 }) => {
-  const { t } = useTranslation("layout");
   const { theme } = useTheme();
 
   const isDarkMode = theme == "dark";
@@ -69,7 +67,7 @@ export const MultipleSelectionField = ({
         className={`block text-lg font-medium mb-1 ${isDarkMode ? "text-white" : "text-black"
           }`}
       >
-        {t("select")} {label}
+        {label}
       </label>
       {isLoading ? (
         <div className="flex items-center justify-center">
@@ -81,9 +79,9 @@ export const MultipleSelectionField = ({
           styles={colorStyles}
           isMulti
           options={options}
-          value={values?.map((v) => ({ ...v, label: t(v.value) }))}
+          value={values}
           onChange={(selected) => setFieldValue(name, selected)}
-          placeholder={`${t("select")} ${label}...`}
+          placeholder={`${label}...`}
           theme={(selectTheme) => ({
             ...selectTheme,
             colors: {

@@ -33,8 +33,7 @@ export const DropDownSearch = ({ searchValue, setSearchValue }) => {
   return (
     <>
       {isSearchInCurrentPage && (
-        <button
-          type="button"
+        <div
           ref={menuRef}
           onClick={toggleMenu}
           className={`flex z-50 gap-1 text-sm md:text-base items-center justify-between absolute ${
@@ -81,7 +80,7 @@ export const DropDownSearch = ({ searchValue, setSearchValue }) => {
               })}
             </ul>
           </div>
-        </button>
+        </div>
       )}
     </>
   );
