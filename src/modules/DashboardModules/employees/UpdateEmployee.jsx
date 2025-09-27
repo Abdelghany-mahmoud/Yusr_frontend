@@ -65,7 +65,7 @@ function UpdateEmployee({ userAdmin }) {
 
   const { mutate, isPending } = useMutate({
     method: "POST",
-    endpoint: `users/update`,
+    endpoint: `employees/update`,
     queryKeysToInvalidate: ["employees"],
   });
 
