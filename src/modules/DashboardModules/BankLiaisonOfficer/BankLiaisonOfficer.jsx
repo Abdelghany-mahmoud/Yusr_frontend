@@ -14,24 +14,18 @@ import { useRecoilState } from "recoil";
 import { tokenAtom } from "../../../store/tokenAtom/tokenAtom";
 import ViewReceiptsModal from "./components/ViewReceiptsModal";
 import UploadReceiptModal from "./components/UploadReceiptModal";
-// import NoteForSpecificClient from "../Customer/Components/NoteForSpecificClient";
 import TransactionDetails from "../transactions/TransactionDetails";
 import { useHasPermission } from "../../../hooks/useHasPermission";
-// import CustomerNotes from "../Customer/Components/CustomerNotes/CustomerNotes";
 
 function BankLiaisonOfficer() {
   const { t } = useTranslation("layout");
   const { currentPage } = useGetURLParam();
-  const [token, setToken] = useRecoilState(tokenAtom);
-  // const userId = token?.user?.id;
+  const [token] = useRecoilState(tokenAtom);
   const [selected, setSelected] = useState(null);
   const canViewPaymentReceipts = useHasPermission("read-payment-receipts");
   const canCreatePaymentReceipts = useHasPermission("create-payment-receipts");
-  // const canCreateNote = useHasPermission("create-notes");
-  // const canViewNote = useHasPermission("read-notes");
-  // Fetch in-progress bank transactions
   const { data, isLoading, isError, error } = useGetData({
-    endpoint: `transactions?${token?.user?.roles.map((role) => role.name).includes("Bank Liaison Officer")
+    endpoint: `transactions?${token?.user?.roles.map((role) => role.name).includes("bank_liaison_officer")
         ? `bank_liaison_officer_id=${token?.user?.id}`
         : ""
       }&page=${currentPage}`,
@@ -41,7 +35,7 @@ function BankLiaisonOfficer() {
   const tableHead = [
     "#",
     t("transaction_id"),
-    t("customer_name"),
+    t("client_name"),
     t("amount"),
     t("date"),
     t("status"),
@@ -66,7 +60,7 @@ function BankLiaisonOfficer() {
       </td>
       <td className="p-3">
         <span className="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-          {transaction.current_status}
+          {transaction.status}
         </span>
       </td>
       <td className="flex gap-2 items-center justify-center p-3">
@@ -82,32 +76,17 @@ function BankLiaisonOfficer() {
         {canViewPaymentReceipts && (
           <ViewReceiptsModal transaction={transaction} />
         )}
-        {/* {canCreateNote && (
-          <NoteForSpecificClient
-            client={transaction?.client}
-          />
-        )}
-        {canViewNote && (
-          <CustomerNotes
-            // receiverId={userId}
-            // senderId={transaction?.client?.id}
-            // transaction={transaction}
-            userId={userId}
-            customer={transaction?.client?.user}
-          />
-        )} */}
-        {/* <NotifyTeamModal transaction={transaction} /> */}
       </td>
     </tr>
   );
 
   return (
     <div className="p-4">
-      <PageTitle title={t("Bank_transactions")} />
+      <PageTitle title={t("bank_transactions")} />
       {isLoading ? (
         <Loading />
       ) : data?.data?.data?.length === 0 ? (
-        <IsEmpty text={t("in_progress_transactions")} />
+        <IsEmpty text={t("no_transactions_found")} />
       ) : (
         <div className="section-padding">
           <Table

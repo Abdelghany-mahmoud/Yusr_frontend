@@ -1,19 +1,13 @@
 import PropTypes from "prop-types";
 import { Shield, Calendar, CheckCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { DeleteGlobal, IsEmpty } from "../../../../../components";
-import { UpdateRole } from "../UpdateRole/UpdateRole";
+import { IsEmpty } from "../../../../../components";
 import { AssignPermissions } from "../AssignPermissions/AssignPermissions";
-import { tokenAtom } from "../../../../../store/tokenAtom/tokenAtom";
-import { useRecoilValue } from "recoil";
+import { useHasPermission } from "../../../../../hooks/useHasPermission";
 
 export const RolePermissionsCard = ({ roleData }) => {
   const { t } = useTranslation("layout");
-  const token = useRecoilValue(tokenAtom);
-  const userRoles = token?.user?.roles.map((role) => role.name);
-  const isSuperAdmin = userRoles.includes("SuperAdmin");
-  const isExecutiveDirector = userRoles.includes("Executive Director");
-  const canUpdateRoles = isSuperAdmin || isExecutiveDirector;
+  const canUpdateRoles = useHasPermission("update-roles");
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -92,13 +86,6 @@ export const RolePermissionsCard = ({ roleData }) => {
             {t("detailed_permissions")}
           </h3>
           <div className="flex items-center justify-between gap-2">
-            {/* <DeleteGlobal
-              endpoint={`roles/${roleData?.id}`}
-              queryKey={["roles"]}
-              text={t("role")}
-              tooltipText={t("delete_role")}
-              deleteTitle={t("delete_role")}
-            /> */}
             {/* <UpdateRole role={roleData} /> */}
             {canUpdateRoles && <AssignPermissions
               role={roleData}
@@ -112,8 +99,7 @@ export const RolePermissionsCard = ({ roleData }) => {
         ) : (
           <div className="space-y-4">
             {Object.entries(groupedPermissions).map(
-              // eslint-disable-next-line no-unused-vars
-              ([_, permissions], index) => (
+              ([, permissions], index) => (
                 <div
                   key={index}
                   className="bg-[var(--secondary-bg-color)] rounded-lg p-4"
@@ -121,10 +107,6 @@ export const RolePermissionsCard = ({ roleData }) => {
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     {permissions.map((permission) => {
                       const action = permission.name.split("-")[0];
-                      const resource = permission.name
-                        .split("-")
-                        .slice(1)
-                        .join("-");
                       return (
                         <div
                           key={permission.id}

@@ -5,7 +5,6 @@ import { IoIosArrowBack } from "react-icons/io";
 import { PropTypes } from "prop-types";
 import { NavLinkAside } from "../NavLinkAside/NavLinkAside";
 import { Link } from "react-router-dom";
-// import { VscGitPullRequestNewChanges } from "react-icons/vsc";
 import { useRecoilValue } from "recoil";
 import { languageState } from "../../store/langAtom/languageAtom";
 import { useTranslation } from "react-i18next";
@@ -23,78 +22,61 @@ export const AsideMenu = ({ open, handleCloseAside }) => {
   const { t } = useTranslation("layout");
   const { theme } = useTheme();
   const token = useRecoilValue(tokenAtom);
-  const userRoles = token?.user?.roles.map((role) => role.name);
+  const userRoles = token?.user?.roles;
   const canViewTransactions = useHasPermission("read-transactions");
   const canViewClients = useHasPermission("read-clients");
   const canReadBankTransactions = useHasPermission("read-payment-receipts");
-  // const canViewTransferred = useHasPermission("read-transferred-transaction");
   const canViewStatuses = useHasPermission("read-status");
   const canCreateStatuses = useHasPermission("create-status");
-  const canViewEmployees = useHasPermission("read-users");
-  const isSuperAdmin = userRoles.includes("SuperAdmin");
-  const isExecutiveDirector = userRoles.includes("Executive Director");
-  const canViewRoles = isSuperAdmin || isExecutiveDirector;
-  const legalRole = userRoles.includes("Legal Supervisor");
+  const canViewEmployees = useHasPermission("read-employees");
+  const canViewStatistics = useHasPermission("read-statistics");
+  const canViewRoles = useHasPermission("read-roles");
+  const legalRole = userRoles.includes("legal_supervisor");
   const links = [
-    (isSuperAdmin || isExecutiveDirector) && {
+    canViewStatistics && {
       name: t("home"),
       to: "/dashboard",
       icon: FaBarsProgress,
     },
     canViewTransactions && {
       name: t("transactions"),
-      to: "/dashboard/transactions?page=1",
+      to: "/dashboard/transactions",
       icon: MdOutlineSwapHoriz,
     },
-    // canViewClients && {
-    //   name: t("New_customer_requests"),
-    //   to: "new-customer-requests?page=1",
-    //   icon: VscGitPullRequestNewChanges,
-    // },
     canViewClients && {
-      name: t("customers"),
-      to: "customers?page=1",
+      name: t("clients"),
+      to: "clients",
       icon: Users,
     },
-    // canViewNotifications && {
-    //   name: t("notifications"),
-    //   to: "/dashboard/notifications?page=1",
-    //   icon: IoNotifications,
-    // },
     canViewRoles && {
       name: t("roles"),
       to: "/dashboard/roles",
       icon: MdAdminPanelSettings,
     },
-    // canViewTransferred && {
-    //   name: t("Transactions_transferred_to_you"),
-    //   to: "/dashboard/Transactions-transferred?page=1",
-    //   icon: MdOutlineSwapHoriz,
-    // },
     canViewEmployees && {
       name: t("employees"),
-      to: "/dashboard/employees?page=1",
+      to: "/dashboard/employees",
       icon: FaUsers,
     },
     canViewStatuses &&
     canCreateStatuses && {
       name: t("statuses"),
-      to: "/dashboard/statuses?page=1",
+      to: "/dashboard/statuses",
       icon: GrStatusDisabled,
     },
     legalRole && {
       name: t("LegalTasks"),
-      to: "/dashboard/Legal-tasks?page=1",
+      to: "/dashboard/Legal-tasks",
       icon: FaTasks,
     },
     canReadBankTransactions && {
-      name: t("Bank_transactions"),
-      to: "/dashboard/bank-liaison-officer?page=1",
+      name: t("bank_transactions"),
+      to: "/dashboard/bank-liaison-officer",
       icon: FaUniversity,
     },
     canViewRoles && {
       name: t("closed_transactions"),
-      to: "/dashboard/closed_transactions?page=1",
+      to: "/dashboard/closed_transactions",
       icon: FaUniversity,
     },
     {
@@ -110,11 +92,6 @@ export const AsideMenu = ({ open, handleCloseAside }) => {
       to: "/client",
       icon: FaBarsProgress,
     },
-    // {
-    //   name: t("transactions"),
-    //   to: "/client/transactions?page=1",
-    //   icon: MdOutlineSwapHoriz,
-    // },
     {
       name: t("profile"),
       to: "/client/profile",
@@ -183,7 +160,7 @@ export const AsideMenu = ({ open, handleCloseAside }) => {
         </Link>
       </div>
       <ul className="list-none p-0 mt-5">
-        {userRoles.includes("Client")
+        {userRoles.includes("client")
           ? clientLinks.map((item, index) => (
             <li key={index}>
               <NavLinkAside

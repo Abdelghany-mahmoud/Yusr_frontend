@@ -37,7 +37,7 @@ export const StatusCard = ({ status, index, onEdit }) => {
         {canDeleteStatus && (
           <DeleteGlobal
             endpoint={`statuses/${status?.id}`}
-            queryKey={["statuses"]}
+            queryKey="statuses"
             text={t("delete_status")}
             tooltipText={t("delete_status")}
             deleteTitle={t("delete_status")}

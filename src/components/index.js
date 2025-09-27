@@ -24,7 +24,6 @@ import { ModelPagination } from "./ModelPagination/ModelPagination";
 import { SwitchField } from "./SwitchField/SwitchField";
 import { FileUploadField } from "./FileUploadField/FileUploadField";
 import { SelectField } from "./SelectField/SelectField";
-import ChatWidget from "./ChatWidget/ChatWidget";
 import { DeleteGlobal } from "./DeleteGlobal/DeleteGlobal";
 import { ModalShowImageAndPDF } from "./ModalShowImageAndPDF/ModalShowImageAndPDF";
 import { MultipleSelectionField } from "./MultipleSelectionField/MultipleSelectionField";
@@ -61,6 +60,5 @@ export {
   MultipleSelectionField,
   ModalShowImageAndPDF,
   DeleteGlobal,
-  ChatWidget,
   ArchiveAsideMenu
 };

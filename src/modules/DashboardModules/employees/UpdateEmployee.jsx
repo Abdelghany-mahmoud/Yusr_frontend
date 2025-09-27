@@ -12,8 +12,7 @@ import {
   InputField,
   MultipleSelectionField,
 } from "../../../components";
-import { processRoleFields } from "../../../Helpers/Helpers";
-import { roleFields } from "../../../constant/customerType";
+import { roleFields } from "../../../constant/clientType";
 
 function UpdateEmployee({ userAdmin }) {
   const { t } = useTranslation("layout");
@@ -29,10 +28,9 @@ function UpdateEmployee({ userAdmin }) {
   );
 
   const allRoles = useMemo(
-    () =>
-      processRoleFields(roleFields).map((role) => ({
-        value: role.displayLabel,
-        label: t(role.displayLabel),
+    () => roleFields.map((role) => ({
+        value: role.label,
+        label: t(role.label),
       })),
     [t]
   );
@@ -67,7 +65,7 @@ function UpdateEmployee({ userAdmin }) {
 
   const { mutate, isPending } = useMutate({
     method: "POST",
-    endpoint: `users/update-account`,
+    endpoint: `users/update`,
     queryKeysToInvalidate: ["employees"],
   });
 

@@ -5,22 +5,19 @@ import { useGetData } from "../../../hooks/useGetData";
 import TransactionDetails from "./TransactionDetails";
 import { Loading, Table, IsEmpty, Pagination } from "../../../components";
 import { RejectGlobal } from "../../../components/RejectGlobal/RejectGlobal";
-import SendFinancingPlan from "../Customer/Components/MainCaseHandler/SendFinancingPlan";
+import SendFinancingPlan from "../Client/Components/MainCaseHandler/SendFinancingPlan";
 import { Link, useLocation } from "react-router-dom";
-// import NoteForSpecificClient from "../Customer/Components/NoteForSpecificClient";
-import AddDocs from "../Customer/Components/ClientDocs/AddDocs";
-// import AutoTransaction from "../Customer/Components/AutoTransaction";
-// import CustomerNotes from "../Customer/Components/CustomerNotes/CustomerNotes";
+import AddDocs from "../Client/Components/ClientDocs/AddDocs";
 import { useRecoilValue } from "recoil";
 import { tokenAtom } from "../../../store/tokenAtom/tokenAtom";
 import { useHasPermission } from "../../../hooks/useHasPermission";
 import AddEstimation from "./AddEstimation";
-import CustomerTransaction from "../Customer/Components/CustomerTransaction";
-import ShowCustomer from "../Customer/Components/ShowCustomer";
-import AcceptTransaction from "../Customer/Components/AcceptTransaction";
+import ClientTransaction from "../Client/Components/ClientTransaction";
+import ShowClient from "../Client/Components/ShowClient";
+import AcceptTransaction from "../Client/Components/AcceptTransaction";
 import { useSearchHandler } from "../../../hooks/useSearchHandler";
 import { roleNameToFieldId } from "../../../Helpers/Helpers";
-import UpdateCustomer from "../Customer/Components/UpdateCustomer";
+import UpdateClient from "../Client/Components/UpdateClient";
 import TransactionStatus from "./TransactionStatus";
 import PropTypes from "prop-types";
 import { FaMessage } from "react-icons/fa6";
@@ -33,12 +30,9 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
   const location = useLocation();
   const token = useRecoilValue(tokenAtom);
   const roleNames = token?.user?.roles?.map(role => role.name) || [];
-  const isSuperAdmin = roleNames.includes("SuperAdmin") || roleNames.includes("Executive Director");
-  const isQualityOfficer = roleNames.includes("Quality Assurance Officer");
-  // const isFrontlineLiaisonOfficer = roleNames.includes("Frontline Liaison Officer");
-  // const isMainCaseHandler = roleNames.includes("Main Case Handler");
-  // const isExecutiveDirector = roleNames.includes("Executive Director");
-  const isLegalSupervisor = roleNames.includes("Legal Supervisor");
+  const isSuperAdmin = roleNames.includes("SuperAdmin") || roleNames.includes("executive_director");
+  const isQualityOfficer = roleNames.includes("quality_assurance_officer");
+  const isLegalSupervisor = roleNames.includes("legal_supervisor");
 
   const userId = token?.user?.id;
   const roleFilters = roleNames
@@ -48,13 +42,9 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
     })
     .join("&");
 
-  const createViewFinancialEvaluation = useHasPermission("create-financial-evaluation");
-  const updateViewFinancialEvaluation = useHasPermission("update-financial-evaluation");
+  const createViewFinancialEvaluation = useHasPermission("create-financial-evaluations");
+  const updateViewFinancialEvaluation = useHasPermission("update-financial-evaluations");
   const canCreateDocuments = useHasPermission("create-documents");
-  // const canCreateNote = useHasPermission("create-notes");
-  // const canViewNote = useHasPermission("read-notes");
-  // const canCreateTransactions = useHasPermission("create-transactions");
-  // const canUdateTransactions = useHasPermission("update-transactions");
   const canCreateEstimation = useHasPermission("create-estimation-transactions");
   const canUpdateEstimation = useHasPermission("update-estimation-transactions");
 
@@ -68,7 +58,7 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
       }&${searchKey}=${debouncedSearchValue
       }${filterQuery
       }${!isSuperAdmin ? `&${roleFilters}` : ""
-      }&current_status=${status?.id || ""
+      }&status=${status?.id || ""
       }${userFilter.roleKey && `&${userFilter.roleKey}=${userFilter.userId}` || ""
       }`,
 
@@ -108,9 +98,9 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
   const renderTransactionRow = (transaction, index) => {
     let rowBgColor = "";
 
-    if (transaction.current_status === "Cancelled") {
+    if (transaction.status === "Cancelled") {
       rowBgColor = "bg-red-200";
-    } else if (transaction.current_status === "Completed") {
+    } else if (transaction.status === "Completed") {
       rowBgColor = "bg-green-200 text-[var(--secondary-text-color)]";
     }
     return (
@@ -121,8 +111,8 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
         <td className="p-3 max-w-2">{index + 1}</td>
         <td className="p-3">{transaction.client.user.name}</td>
         <td className="p-3">#{transaction.transaction_code}</td>
-        {/* <td className="p-3">{t(transaction.current_status)}</td> */}
-        <td className="p-3"><TransactionStatus transactionId={transaction.id} status={t(transaction.current_status)} /></td>
+        {/* <td className="p-3">{t(transaction.status)}</td> */}
+        <td className="p-3"><TransactionStatus transactionId={transaction.id} status={t(transaction.status)} /></td>
         <td className="p-3">
           {new Date(transaction.created_at).toLocaleString()}
         </td>
@@ -141,7 +131,7 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
         </td>
 
         <td className="flex gap-2 items-center p-3 mt-2 justify-center">
-          {transaction.current_status !== "rejected" && (
+          {transaction.status !== "rejected" && (
             <>
               <RejectGlobal
                 endpoint={`transactions/update/${transaction.id}`}
@@ -159,44 +149,18 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
               />
             </>
           )}
-          <ShowCustomer customer={transaction?.client} />
-          {canUpdateClients && <UpdateCustomer customer={transaction?.client} />}
-          {canCreateDocuments && <AddDocs customer={transaction?.client} />}
-          {/* {(((canCreateTransactions || canUdateTransactions) &&
-            !isFrontlineLiaisonOfficer) ||
-            !isMainCaseHandler ||
-            !isSuperAdmin ||
-            !isExecutiveDirector ||
-            !isLegalSupervisor) && (
-              <AutoTransaction
-                customer={transaction?.client}
-                transaction={transaction}
-              />
-            )} */}
-
+          <ShowClient client={transaction?.client} />
+          {canUpdateClients && <UpdateClient client={transaction?.client} />}
+          {canCreateDocuments && <AddDocs client={transaction?.client} />}
           {!isLegalSupervisor && !isQualityOfficer && (
-            <CustomerTransaction
-              customer={transaction?.client}
+            <ClientTransaction
+              client={transaction?.client}
             />
           )}
 
           {(createViewFinancialEvaluation || updateViewFinancialEvaluation) && (
             <SendFinancingPlan transaction={transaction} />
           )}
-          {/* {canCreateNote && (
-            <NoteForSpecificClient
-              client={transaction?.client.user}
-            />
-          )}
-          {canViewNote && (
-            <CustomerNotes
-              // receiverId={userId}
-              // senderId={transaction?.client?.user?.id}
-              // transaction={transaction}
-              userId={userId}
-              customer={transaction?.client?.user}
-            />
-          )} */}
           <Link to={`/dashboard/chats/${transaction?.client?.id}`}>
             <button
               type="button"

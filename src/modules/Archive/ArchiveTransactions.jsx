@@ -9,7 +9,7 @@ import {
   Pagination,
   Table,
 } from "../../components";
-import { TransactionList } from "../DashboardModules/Customer/Components/transactionlist";
+import { TransactionList } from "../DashboardModules/Client/Components/transactionlist";
 
 export const ArchiveTransactions = () => {
   const { currentPage } = useGetURLParam();

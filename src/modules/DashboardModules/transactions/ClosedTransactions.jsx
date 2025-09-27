@@ -38,7 +38,6 @@ function ClosedTransactions() {
   if (isError) {
     return <Error errorMassage={error?.response?.data?.message} />;
   }
-  // console.log(data?.data, "Closed Transactions Data");
   return (
     <>
       <PageTitle title={t("closed_transactions")} />
@@ -60,7 +59,7 @@ function ClosedTransactions() {
                   >
                     <td className="p-3 max-w-2">{index + 1}</td>
                     <td className="p-3">#{transaction.transaction_code}</td>
-                    <td className="p-3">{t(transaction.current_status)}</td>
+                    <td className="p-3">{t(transaction.status)}</td>
                     <td className="p-3">
                       {new Date(transaction.created_at).toLocaleString()}
                     </td>
@@ -90,8 +89,8 @@ function ClosedTransactions() {
                         </button>
                         <DeleteGlobal
                           endpoint={`transactions/${transaction?.id}`}
-                          queryKey={["closedTransactions"]}
-                          text={transaction?.id}
+                          queryKey="closedTransactions"
+                          text={transaction?.transaction_code}
                           tooltipText={t("delete_transaction")}
                           deleteTitle={t("delete_transaction")}
                         />

@@ -8,7 +8,6 @@ import { FcCancel } from "react-icons/fc";
 
 export const RejectGlobal = ({
   endpoint,
-  // queryKey,
   text,
   tooltipText,
   rejectTitle,
@@ -19,8 +18,7 @@ export const RejectGlobal = ({
 
   const { mutate, isPending } = useMutate({
     method: "POST",
-    endpoint: `${endpoint}`, // e.g., /customers/123/reject
-    // queryKeysToInvalidate: [queryKey],
+    endpoint: `${endpoint}`,
   });
 
   const rejectHandler = () => {
@@ -32,7 +30,7 @@ export const RejectGlobal = ({
     }
 
     mutate(
-      { message: reason, current_status: "Cancelled" },
+      { message: reason, status: "cancelled" },
       {
         onSuccess: (data) => {
           toast.success(data?.message || t("rejected_successfully"));
@@ -101,7 +99,7 @@ export const RejectGlobal = ({
 };
 
 RejectGlobal.propTypes = {
-  endpoint: PropTypes.string.isRequired, // e.g. "/customers"
+  endpoint: PropTypes.string.isRequired, // e.g. "/clients"
   queryKey: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.any)

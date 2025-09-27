@@ -32,20 +32,6 @@ export const dateFormatHandler = (date) => {
   )}:${minutes} ${ampm}`;
 };
 
-export function snakeToTitleCase(str) {
-  return str
-    .replace(/_/g, " ") // استبدال كل "_" بمسافة
-    .split(" ") // تقسيم النص على المسافات
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // أول حرف كابيتال والباقي سمول
-    .join(" "); // إعادة تجميع الكلمات
-}
-export function processRoleFields(fields) {
-  return fields.map((field) => ({
-    ...field,
-    displayLabel: snakeToTitleCase(field.label),
-  }));
-}
-
 export const roleNameToFieldId = (roleName) => {
   if (!roleName) return "";
   return (

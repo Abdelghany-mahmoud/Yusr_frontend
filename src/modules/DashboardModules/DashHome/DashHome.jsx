@@ -1,4 +1,5 @@
 import { PageTitle } from "../../../components/PageTitle/PageTitle";
+import PropTypes from "prop-types";
 import { Table } from "../../../components/Table/Table";
 import { useTranslation } from "react-i18next";
 import { Bar, Line } from "react-chartjs-2";
@@ -51,32 +52,10 @@ export const DashHome = () => {
     return num;
   };
 
-  // Helper to format object values (for by_role, by_gender, by_officer_type, etc.)
-  const formatObjectNumbers = (obj) => {
-    if (!obj) return null;
-    return Object.entries(obj).map(([key, value]) => (
-      <div key={key} className="flex justify-between border-b py-1">
-        <span>{key}</span>
-        <span>{formatNumber(value)}</span>
-      </div>
-    ));
-  };
-
-  // Helper to format array of objects (for by_financing_type, by_nationality, etc.)
-  const formatArrayNumbers = (arr, labelKey = "", valueKey = "total") => {
-    if (!arr) return null;
-    return arr.map((item, idx) => (
-      <div key={idx} className="flex justify-between border-b py-1">
-        <span>{item[labelKey] || labelKey}</span>
-        <span>{formatNumber(item[valueKey])}</span>
-      </div>
-    ));
-  };
-
   // Prepare chart data for transactions by status
   const transactionStatuses = stats?.transactions?.by_status || [];
   const progressChartData = {
-    labels: transactionStatuses.map((s) => t(s.current_status)),
+    labels: transactionStatuses.map((s) => t(s.status)),
     datasets: [
       {
         label: "عدد المعاملات",
@@ -179,7 +158,7 @@ export const DashHome = () => {
               className="text-center transition-all hover:bg-[var(--secondary-bg-color)] duration-300 border-b last:border-0 font-semibold select-none"
             >
               <td className="p-2">{tx.client?.user?.name || "-"}</td>
-              <td className="p-2">{tx.current_status}</td>
+              <td className="p-2">{tx.status}</td>
               <td className="p-2">
                 {new Date(tx.created_at).toLocaleDateString("ar-EG")}
               </td>
@@ -441,6 +420,12 @@ const StatCard = ({ icon, label, value }) => (
   </div>
 );
 
+StatCard.propTypes = {
+  icon: PropTypes.node,
+  label: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+}
+
 const AlertCard = ({ type, icon, title, message }) => {
   const colorMap = {
     danger: "red",
@@ -460,3 +445,10 @@ const AlertCard = ({ type, icon, title, message }) => {
     </div>
   );
 };
+
+AlertCard.propTypes = {
+  type: PropTypes.oneOf(["danger", "warning"]),
+  icon: PropTypes.node,
+  title: PropTypes.string,
+  message: PropTypes.string,
+}

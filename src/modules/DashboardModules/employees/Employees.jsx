@@ -12,17 +12,12 @@ import {
 import { useGetData } from "../../../hooks/useGetData";
 import { useGetURLParam } from "../../../hooks/useGetURLParam";
 import { useTranslation } from "react-i18next";
-import { processRoleFields } from "../../../Helpers/Helpers";
-import { roleFields } from "../../../constant/customerType";
+import { roleFields } from "../../../constant/clientType";
 import { FaFilter } from "react-icons/fa";
 import { AssignRole } from "./AssignRole";
 import RegisterEmployee from "./RegisterEmployee";
 import UpdateEmployee from "./UpdateEmployee";
 import { useHasPermission } from "../../../hooks/useHasPermission";
-import { useRecoilValue } from "recoil";
-import { tokenAtom } from "../../../store/tokenAtom/tokenAtom";
-// import SendNoteForEmployee from "./SendNoteForEmployee";
-// import CustomerNotes from "../Customer/Components/CustomerNotes/CustomerNotes";
 import { toast } from "react-toastify";
 import { useAxios } from "../../../Config/axiosConfig/axiosConfig";
 import { useQueryClient } from "@tanstack/react-query";
@@ -30,17 +25,14 @@ import { useQueryClient } from "@tanstack/react-query";
 function Employees() {
   const { currentPage } = useGetURLParam();
   const { t } = useTranslation("layout");
-  const token = useRecoilValue(tokenAtom);
   const [searchKey, setSearchKey] = useState("phone");
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearchValue, setDebouncedSearchValue] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
   const [selectedRoleDisplay, setSelectedRoleDisplay] = useState("");
-  const canUpdateEmployee = useHasPermission("update-users");
-  const canDeleteEmployee = useHasPermission("delete-users");
-  const canCreateEmployee = useHasPermission("create-users");
-  const isSuperAdmin = token?.user?.roles.map((role) => role.name).includes("SuperAdmin");
-  // const userId = token?.user?.id;
+  const canUpdateEmployee = useHasPermission("update-employees");
+  const canDeleteEmployee = useHasPermission("delete-employees");
+  const canCreateEmployee = useHasPermission("create-employees");
   const axiosInstance = useAxios();
   const queryClient = useQueryClient();
   const [togglingId, setTogglingId] = useState(null);
@@ -67,7 +59,7 @@ function Employees() {
   const handleToggleStatus = async (id) => {
     setTogglingId(id);
     try {
-      await axiosInstance.post(`/users/${id}/receive-requests`);
+      await axiosInstance.post(`/employees/${id}/receive-requests`);
       toast.success(t("status_updated_successfully"));
       await queryClient.invalidateQueries({
         queryKey: ["employees"],
@@ -81,14 +73,18 @@ function Employees() {
   };
 
   const { data, isLoading, isError, error } = useGetData({
-    endpoint: `users?role=${selectedRoleDisplay}&${searchKey}=${debouncedSearchValue}&page=${currentPage}`,
+    endpoint: `employees?role=${selectedRoleDisplay}&${searchKey}=${debouncedSearchValue}&page=${currentPage}`,
     queryKey: [
       "employees",
       searchKey,
       debouncedSearchValue,
       selectedRoleDisplay,
+      currentPage
     ],
   });
+
+  const employees = data?.data?.data || [];
+  const pagination = data?.data?.meta;
 
   if (isError) {
     return <Error errorMassage={error?.response?.data?.message} />;
@@ -98,7 +94,7 @@ function Employees() {
     <div className="p-4">
       <div className="flex flex-col md:flex-row items-center justify-between  ">
         <PageTitle title={t("employees")} />
-        {canCreateEmployee && <RegisterEmployee/>}
+        {canCreateEmployee && <RegisterEmployee />}
       </div>
       <div className="mt-4 flex flex-col md:flex-row items-center justify-start gap-4">
         <DropDownMenu
@@ -107,9 +103,7 @@ function Employees() {
           className="px-4 py-2 rounded-md"
           selectedValue={t(
             selectedRole
-              ? processRoleFields(roleFields).find(
-                (role) => role.id === selectedRole
-              )?.displayLabel
+              ? roleFields.find((role) => role.id === selectedRole)?.label
               : null
           )}
         >
@@ -122,18 +116,17 @@ function Employees() {
           >
             {t("all")}
           </li>
-          {processRoleFields(roleFields)
-            .filter((role) => role.displayLabel !== "Client")
+          {roleFields.filter((role) => role.label !== "client")
             .map((role) => (
               <li
                 key={role.id}
                 onClick={() => {
                   setSelectedRole(role.id);
-                  setSelectedRoleDisplay(role.displayLabel);
+                  setSelectedRoleDisplay(role.label);
                 }}
                 className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === role.id ? "bg-[var(--bg-hover)]" : ""}`}
               >
-                {t(role.displayLabel)}
+                {t(role.label)}
               </li>
             ))}
         </DropDownMenu>
@@ -167,18 +160,18 @@ function Employees() {
 
       {isLoading ? (
         <Loading />
-      ) : data?.data?.length === 0 ? (
+      ) : employees.length === 0 ? (
         <IsEmpty text={t("employees")} />
       ) : (
         <div className="section-padding">
           <Table
             tableHead={tableHead}
-            body={data?.data?.data.map((employee, index) => (
+            body={employees.map((employee, index) => (
               <tr
                 key={employee.id}
                 className="text-center transition-all hover:bg-[var(--secondary-bg-color)] duration-300 border-b last:border-0 font-semibold select-none"
               >
-                <td className="p-3 max-w-2">{index + 1}</td>
+                <td className="p-3 max-w-2">{(pagination?.from || 0) + index}</td>
                 <td className="p-3 ">{employee.name}</td>
                 <td className="p-3 ">{employee.country_code}</td>
                 <td className="p-3 ">{employee.phone}</td>
@@ -201,14 +194,11 @@ function Employees() {
                   )}
                 </td>
                 <td className="p-3">
-                  {employee.roles.map((role) => t(role.name)).join(' | ')}
+                  {employee.roles.map((role) => t(role)).join(' | ')}
                 </td>
                 <td className="flex gap-2 items-center p-3 mt-2">
-                  {/* Add your action buttons here */}
-                  {/* <SendNoteForEmployee userId={employee?.id} /> */}
-                  {/* <CustomerNotes userId={userId} customer={employee} /> */}
                   {canUpdateEmployee && <UpdateEmployee userAdmin={employee} />}
-                  {isSuperAdmin && <AssignRole userAdmin={employee} />}
+                  {canUpdateEmployee && <AssignRole userAdmin={employee} />}
                   {canDeleteEmployee && (
                     <DeleteGlobal
                       endpoint={`users/${employee.id}`}
@@ -222,7 +212,10 @@ function Employees() {
               </tr>
             ))}
           />
-          <Pagination totalPages={data?.data?.last_page} />
+          <Pagination
+            totalPages={pagination?.last_page || 1}
+            currentPage={pagination?.current_page || 1}
+          />
         </div>
       )}
     </div>

@@ -40,9 +40,9 @@ function ClientHome() {
                   {t("created_at")}: {dateFormatHandler(transaction.created_at)}
                 </p>
                 <p className="text-gray-600">
-                  {t("current_status")}:
+                  {t("status")}:
                   <span className="font-medium">
-                    {t(transaction.current_status)}
+                    {t(transaction.status)}
                   </span>
                 </p>
               </div>

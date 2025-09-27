@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { Modal, IsEmpty } from "../../../../components";
+import PropTypes from "prop-types";
+import { Modal } from "../../../../components";
 import { useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { handleImageURL } from "../../../../Helpers/Helpers";
@@ -9,8 +10,6 @@ const ViewReceiptsModal = ({ transaction }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const receipts = transaction?.payment_receipts?.[0] || {};
-
-  // console.log(receipts, "receipts");
 
   return (
     <Modal
@@ -27,7 +26,7 @@ const ViewReceiptsModal = ({ transaction }) => {
       <div>
         <h2 className="text-center text-2xl mb-4">{t("view_receipts")}</h2>
         <p className="text-center text-[var(--secondary-text-color)] mb-6">
-          {t("transaction")} #{transaction?.id} -{" "}
+          {t("transaction")} #{transaction?.transaction_code} -{" "}
           {transaction?.client?.user?.name}
         </p>
 
@@ -70,6 +69,10 @@ const ViewReceiptsModal = ({ transaction }) => {
       </div>
     </Modal>
   );
+};
+
+ViewReceiptsModal.propTypes = {
+  transaction: PropTypes.object,
 };
 
 export default ViewReceiptsModal;

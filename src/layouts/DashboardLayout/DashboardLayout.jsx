@@ -1,12 +1,11 @@
 import { Outlet, useLocation } from "react-router-dom";
 import styles from "./DashboardLayout.module.css";
-import { AsideMenu, Header, ChatWidget, Loading } from "../../components";
+import { AsideMenu, Header, Loading } from "../../components";
 import { useEffect, useState } from "react";
 import { useTheme } from "../../hooks/useTheme";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { languageState } from "../../store/langAtom/languageAtom";
 import { useGetURLParam } from "../../hooks/useGetURLParam";
-import NotificationListener from "../../modules/DashboardModules/notification/NotificationListener";
 import { useGetData } from "../../hooks/useGetData";
 import { tokenAtom } from "../../store/tokenAtom/tokenAtom";
 import { currentRole } from "../../store/currentRoleAtom/currentRoleAtom";
@@ -91,12 +90,10 @@ export function DashboardLayout() {
                 <Header />
               </header>
               <main className={`${styles.main} min-w-[250px]`}>
-                <NotificationListener />
                 <Outlet />
               </main>
             </div>
           </div>
-          {/* <ChatWidget receiverId="1" /> */}
         </>
       )}
     </>

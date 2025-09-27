@@ -1,10 +1,10 @@
 export const statusOptions = [
-  { id: "Evaluation_Request", name: "Evaluation_Request" },
-  { id: "Pending", name: "Pending" },
-  { id: "In_Review", name: "In Review" },
-  { id: "Approved", name: "Approved" },
-  { id: "Rejected", name: "Rejected" },
-  { id: "On_Hold", name: "On Hold" },
-  { id: "Completed", name: "Completed" },
-  { id: "Cancelled", name: "Cancelled" },
+  { id: "evaluation_request", name: "Evaluation Request" },
+  { id: "pending", name: "Pending" },
+  { id: "in_review", name: "In Review" },
+  { id: "approved", name: "Approved" },
+  { id: "rejected", name: "Rejected" },
+  { id: "on_hold", name: "On Hold" },
+  { id: "completed", name: "Completed" },
+  { id: "cancelled", name: "Cancelled" },
 ];

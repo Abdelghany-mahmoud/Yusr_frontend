@@ -4,18 +4,16 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { languageState } from "../../store/langAtom/languageAtom";
-import { IoSearch } from "react-icons/io5";
-import { IoClose } from "react-icons/io5";
+import { IoSearch, IoClose } from "react-icons/io5";
 
-export const Pagination = ({ totalPages }) => {
+export const Pagination = ({ totalPages, currentPage }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const searchParams = new URLSearchParams(location.search);
-  const currentPage = parseInt(searchParams.get("page")) || 1;
   const lang = useRecoilValue(languageState);
 
-  const [searchPage, setSearchPage] = useState(1);
+  const [searchPage, setSearchPage] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+
   const getPageLink = (page) => {
     const newParams = new URLSearchParams(location.search);
     newParams.set("page", page);
@@ -23,7 +21,7 @@ export const Pagination = ({ totalPages }) => {
   };
 
   const handleSearch = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" || e === "EnterClick") {
       const pageNumber = parseInt(searchPage, 10);
       if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
         navigate(getPageLink(pageNumber));
@@ -59,22 +57,24 @@ export const Pagination = ({ totalPages }) => {
         totalPages === 1 ? "hidden" : "flex"
       } items-center justify-center gap-2 mt-4`}
     >
+      {/* Previous */}
       <Link
         aria-label="Previous Page"
         to={
           currentPage > 1
             ? getPageLink(currentPage - 1)
-            : `${location.pathname}?page=${currentPage.toString()}`
+            : getPageLink(currentPage)
         }
         className={`shadow-lg w-[35px] h-[35px] text-[25px] flex justify-center items-center rounded-md transition-all ${
           currentPage === 1
             ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-            : "hover:scale-105 bg-[var(--primary-color)] text-[var(--secondary-color)] hover:bg-[var(--primary-color)]"
+            : "hover:scale-105 bg-[var(--primary-color)] text-[var(--secondary-color)]"
         }`}
       >
         {lang === "en" ? <IoIosArrowBack /> : <IoIosArrowForward />}
       </Link>
 
+      {/* First page + dots */}
       {currentPage > 3 && (
         <>
           <Link
@@ -87,14 +87,15 @@ export const Pagination = ({ totalPages }) => {
         </>
       )}
 
+      {/* Middle pages */}
       {getPageNumbers().map((page) => (
         <Link
           key={page}
           to={getPageLink(page)}
           aria-current={page === currentPage ? "page" : undefined}
-          className={`shadow-lg duration-300 w-[35px] h-[35px] text-[20px] flex justify-center items-center rounded-md transition-all ${
+          className={`shadow-lg w-[35px] h-[35px] text-[20px] flex justify-center items-center rounded-md transition-all ${
             page === currentPage
-              ? "bg-[var(--secondary-dark-color)] text-white scale-105 transition-all"
+              ? "bg-[var(--secondary-dark-color)] text-white scale-105"
               : "bg-gray-300 text-gray-700 hover:bg-gray-400"
           }`}
         >
@@ -102,6 +103,7 @@ export const Pagination = ({ totalPages }) => {
         </Link>
       ))}
 
+      {/* Last page + dots */}
       {currentPage < totalPages - 2 && (
         <>
           {currentPage < totalPages - 3 && (
@@ -109,30 +111,33 @@ export const Pagination = ({ totalPages }) => {
           )}
           <Link
             to={getPageLink(totalPages)}
-            className="px-3 py-1 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300"
+            className="shadow-lg px-3 py-1 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300"
           >
             {totalPages}
           </Link>
         </>
       )}
 
+      {/* Next */}
       <Link
         aria-label="Next Page"
         to={
           currentPage < totalPages
             ? getPageLink(currentPage + 1)
-            : `${location.pathname}?page=${currentPage.toString()}`
+            : getPageLink(currentPage)
         }
         className={`shadow-lg w-[35px] h-[35px] text-[25px] flex justify-center items-center rounded-md transition-all ${
           currentPage === totalPages
             ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-            : "hover:scale-105 bg-[var(--primary-color)] text-[var(--secondary-color)] hover:bg-[var(--primary-color)]"
+            : "hover:scale-105 bg-[var(--primary-color)] text-[var(--secondary-color)]"
         }`}
       >
         {lang === "en" ? <IoIosArrowForward /> : <IoIosArrowBack />}
       </Link>
+
+      {/* Jump to page */}
       {totalPages >= 5 && (
-        <div className={`relative flex items-center `}>
+        <div className="relative flex items-center">
           <div
             className={`relative flex items-center ${
               isOpen
@@ -149,19 +154,21 @@ export const Pagination = ({ totalPages }) => {
               onKeyDown={handleSearch}
               placeholder="Go to"
               className={`appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none w-[60px] h-[35px] px-1 text-center ${
-                lang == "en"
+                lang === "en"
                   ? "rounded-l-md border-l border-t border-b"
                   : "rounded-r-md border-r border-t border-b"
-              }  ${
-                searchPage != "" && searchPage >= 1 && searchPage <= totalPages
+              } ${
+                searchPage &&
+                searchPage >= 1 &&
+                searchPage <= totalPages
                   ? "border-[var(--primary-color)]"
                   : "border-red-500"
               } focus:outline-none bg-[var(--secondary-bg-color)] text-[var(--main-text-color)]`}
             />
             <button
-              onClick={() => handleSearch({ key: "Enter" })}
+              onClick={() => handleSearch("EnterClick")}
               className={`min-w-[35px] h-[35px] text-[20px] flex justify-center items-center bg-[var(--primary-color)] text-[var(--secondary-color)] ${
-                lang == "en" ? "rounded-r-md" : "rounded-l-md"
+                lang === "en" ? "rounded-r-md" : "rounded-l-md"
               }`}
             >
               <IoSearch />
@@ -181,4 +188,5 @@ export const Pagination = ({ totalPages }) => {
 
 Pagination.propTypes = {
   totalPages: PropTypes.number.isRequired,
+  currentPage: PropTypes.number.isRequired,
 };

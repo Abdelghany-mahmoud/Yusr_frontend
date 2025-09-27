@@ -32,8 +32,6 @@ function TransactionProgress({ transaction, userId }) {
   const [hasMoreClientNotes, setHasMoreClientNotes] = useState(true);
   const [selectedFiles, setSelectedFiles] = useState([]);
 
-  // console.log(transaction.client[selectedRole?.key], "transaction");
-
   const { data: notesFromEmployee, isLoading: notesLoading } = useGetData({
     endpoint: `notes?&sender_id=${transaction.client[selectedRole?.key]}&receiver_id=${userId}&transaction_id=${transaction?.id}&page=${employeeNotesPage}`,
     queryKey: [
@@ -94,13 +92,13 @@ function TransactionProgress({ transaction, userId }) {
   });
 
   const roles = [
-    { id: "frontline", name: "Frontline Liaison Officer", key: "frontline_liaison_officer_id", },
-    { id: "main_case", name: "Main Case Handler", key: "main_case_handler_id" },
-    { id: "financial", name: "Financial Officer", key: "financial_officer_id" },
-    { id: "executive", name: "Executive Director", key: "executive_director_id", },
-    { id: "legal", name: "Legal Supervisor", key: "legal_supervisor_id" },
-    { id: "quality", name: "Quality Assurance Officer", key: "quality_assurance_officer_id", },
-    { id: "bank", name: "Bank Liaison Officer", key: "bank_liaison_officer_id", },
+    { id: "frontline", name: "frontline_liaison_officer", key: "frontline_liaison_officer_id", },
+    { id: "main_case", name: "main_case_handler", key: "main_case_handler_id" },
+    { id: "financial", name: "financial_officer", key: "financial_officer_id" },
+    { id: "executive", name: "executive_director", key: "executive_director_id", },
+    { id: "legal", name: "legal_supervisor", key: "legal_supervisor_id" },
+    { id: "quality", name: "quality_assurance_officer", key: "quality_assurance_officer_id", },
+    { id: "bank", name: "bank_liaison_officer", key: "bank_liaison_officer_id", },
   ];
 
   const getRoleStatus = (role) => {
@@ -215,13 +213,11 @@ function TransactionProgress({ transaction, userId }) {
 
   // Add payment receipts tab if bank role is selected
   const showPaymentReceiptsTab =
-    selectedRole?.name === "Bank Liaison Officer" &&
+    selectedRole?.name === "bank_liaison_officer" &&
     transaction.payment_receipts.length > 0;
 
   const showNotesTab = false;
 
-  // console.log(transaction, "transaction");
-  // console.log(selectedRole, "selectedRole?.id");
   return (
     <div className="relative">
       {/* Progress Line */}
@@ -380,7 +376,7 @@ function TransactionProgress({ transaction, userId }) {
                   validationSchema={validationSchema}
                   onSubmit={handleFileUpload}
                 >
-                  {({ setFieldValue, values, isSubmitting }) => (
+                  {({ setFieldValue, isSubmitting }) => (
                     <Form className="space-y-4">
                       <FileUploadField
                         name="documents"
@@ -392,7 +388,6 @@ function TransactionProgress({ transaction, userId }) {
                           setFieldValue("documents", files);
                           setFieldValue(
                             "fileNames",
-                            files.map((f) => "")
                           );
                         }}
                         setFieldValue={setFieldValue}

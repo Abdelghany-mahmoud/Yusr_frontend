@@ -8,13 +8,14 @@ import { useTranslation } from "react-i18next";
 import { tokenAtom } from "../../../store/tokenAtom/tokenAtom";
 import { useRecoilValue } from "recoil";
 import { RiInboxArchiveLine } from "react-icons/ri";
+import { useHasPermission } from "../../../hooks/useHasPermission";
 export const HeaderDropDown = () => {
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
   const { t } = useTranslation("layout");
   const token = useRecoilValue(tokenAtom);
-  const userRoles = token?.user?.roles.map((role) => role.name);
-  const canViewRoles = userRoles.includes("SuperAdmin") || userRoles.includes("Executive Director");
+  const userRoles = token?.user?.roles;
+  const canViewRoles = useHasPermission("read-roles");
   const toggleMenu = () => {
     setOpen((prevOpen) => !prevOpen);
   };
@@ -59,7 +60,7 @@ export const HeaderDropDown = () => {
       >
         <li>
           <Link
-            to={userRoles.includes("Client") ? "/client/" : "/"}
+            to={userRoles.includes("client") ? "/client/" : "/dashboard"}
             className="hover:bg-[var(--bg-hover)] flex px-4 py-2 transition-colors"
           >
             {t("home")}
@@ -68,7 +69,7 @@ export const HeaderDropDown = () => {
         {canViewRoles && (
           <li>
             <Link
-              to={"/archive/transactions?page=1"}
+              to={"/archive/transactions"}
               className="hover:bg-[var(--bg-hover)] flex justify-between items-center px-4 py-2 transition-colors"
             >
               {t("archive")}
@@ -78,7 +79,7 @@ export const HeaderDropDown = () => {
         )}
         {/* <li>
           <Link
-            to={"/dashboard/settings?page=1"}
+            to={"/dashboard/settings"}
             className="hover:bg-[var(--bg-hover)] flex justify-between items-center px-4 py-2 transition-colors"
           >
             {t("settings")}

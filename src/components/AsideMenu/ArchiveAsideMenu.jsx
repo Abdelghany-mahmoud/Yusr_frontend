@@ -15,7 +15,7 @@ export const ArchiveAsideMenu = ({ open, handleCloseAside }) => {
   const links = [
     {
       name: t("transactions"),
-      to: "/archive/transactions?page=1",
+      to: "/archive/transactions",
       icon: FaGraduationCap,
     },
   ];

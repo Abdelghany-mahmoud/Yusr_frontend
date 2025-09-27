@@ -3,7 +3,6 @@ import { DashboardLayout } from "../../layouts/DashboardLayout/DashboardLayout";
 import { ClientLayout } from "../../layouts/ClientLayout/ClientLayout";
 import { ProtectedRoute } from "../../components";
 import {
-  CustomerRequests,
   DashError,
   DashHome,
   Login,
@@ -15,9 +14,9 @@ import {
   ClientProfile,
   ClientTransactions,
 } from "../../modules/ClientModules/index";
-import Customers from "../../modules/DashboardModules/Customer/Customers";
+import Clients from "../../modules/DashboardModules/Client/Clients";
 import TransactionsPage from "../../modules/DashboardModules/transactions/TransactionsPage";
-import TransactionsTransferred from "../../modules/DashboardModules/Customer/Components/MainCaseHandler/TransactionsTransferred";
+import TransactionsTransferred from "../../modules/DashboardModules/Client/Components/MainCaseHandler/TransactionsTransferred";
 import Employees from "./../../modules/DashboardModules/employees/Employees";
 import Statuses from "../../components/Statuses/Statuses";
 import LegalTasks from "../../modules/DashboardModules/LegalTasks/LegalTasks";
@@ -68,16 +67,12 @@ export const Routes = createBrowserRouter([
         element: <DashHome />,
       },
       {
-        path: "new-customer-requests",
-        element: <CustomerRequests />,
-      },
-      {
         path: "Transactions-transferred",
         element: <TransactionsTransferred />,
       },
       {
-        path: "customers",
-        element: <Customers />,
+        path: "clients",
+        element: <Clients />,
       },
       {
         path: "transactions",

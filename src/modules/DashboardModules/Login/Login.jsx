@@ -33,13 +33,13 @@ export const Login = () => {
       onSuccess: async (response) => {
         toast.success(response?.message);
         setToken(response?.data);
-        if (response?.data?.token && response?.data?.user?.roles.map((role) => role.name).includes("Client")) {
+        if (response?.data?.token && response?.data?.user?.roles.map((role) => role.name).includes("client")) {
           navigate("/client");
         }
-        else if (response?.data?.token && response?.data?.user?.roles.map((role) => role.name).includes("Bank Liaison Officer")) {
+        else if (response?.data?.token && response?.data?.user?.roles.map((role) => role.name).includes("bank_liaison_officer")) {
           navigate("/dashboard/transactions");
         } else {
-          navigate("/dashboard/customers");
+          navigate("/dashboard/clients");
         }
       },
       onError: (error) => {

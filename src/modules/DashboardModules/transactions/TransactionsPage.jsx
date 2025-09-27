@@ -1,14 +1,11 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import TransactionList from "./TransactionList";
-import { statusOptions } from "../../../constant/status";
 import { DropDownMenu, PageTitle } from "../../../components";
 import { FaFilter } from "react-icons/fa";
 import { useGetData } from "../../../hooks/useGetData";
-import { roleFields } from "../../../constant/customerType";
-import { processRoleFields } from "../../../Helpers/Helpers";
-import { useRecoilState } from "recoil";
-import { tokenAtom } from "../../../store/tokenAtom/tokenAtom";
+import { roleFields } from "../../../constant/clientType";
+import { useHasPermission } from "../../../hooks/useHasPermission";
 
 export default function TransactionsPage() {
   const { t } = useTranslation("layout");
@@ -20,6 +17,13 @@ export default function TransactionsPage() {
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearchValue, setDebouncedSearchValue] = useState("");
 
+  const { data: statusData } = useGetData({
+    endpoint: `transactions/statuses`,
+    queryKey: ["transactionStatuses"],
+  });
+
+  const transactionStatuses = statusData?.data || [];
+
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchValue(searchValue);
@@ -27,20 +31,14 @@ export default function TransactionsPage() {
 
     return () => clearTimeout(handler);
   }, [searchValue]);
-  const [page, setPage] = useState(1);
 
   const { data: usersData, isLoading: usersLoading } = useGetData({
-    endpoint: `users?role=${selectedRoleDisplay}&page=${page}`,
-    queryKey: ["officers", page, selectedRoleDisplay],
+    endpoint: `employees?role=${selectedRoleDisplay}`,
+    queryKey: ["officers", selectedRoleDisplay],
     enabledKey: !!selectedRoleDisplay,
   });
 
-  const [token, setToken] = useRecoilState(tokenAtom);
-
-  const userRoles = token?.user?.roles.map((role) => role.name);
-  const isSuperAdmin = userRoles.includes("SuperAdmin");
-  const isExecutiveDirector = userRoles.includes("Executive Director");
-  const canViewRoles = isSuperAdmin || isExecutiveDirector;
+  const canViewRoles = useHasPermission("read-roles");
 
   return (
     <div>
@@ -73,7 +71,7 @@ export default function TransactionsPage() {
                 menuTitle={t("filter_by_status")}
                 MenuIcon={<FaFilter />}
                 className="px-4 py-2 rounded-md"
-                selectedValue={selectedStatus ? t(selectedStatus.name) : null} // Pass the selected value
+                selectedValue={selectedStatus ? t(selectedStatus) : null} // Pass the selected value
               >
                 <li
                   onClick={() => {
@@ -83,16 +81,16 @@ export default function TransactionsPage() {
                 >
                   {t("all")}
                 </li>
-                {statusOptions.map((status) => (
+                {transactionStatuses.map((status, index) => (
                   <li
-                    key={status.id}
+                    key={index}
                     onClick={() => {
                       setSelectedStatus(status);
                     }}
-                    className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedStatus?.id === status.id ? "bg-[var(--bg-hover)]" : ""
+                    className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedStatus === status ? "bg-[var(--bg-hover)]" : ""
                       }`}
                   >
-                    {t(status.name)}
+                    {t(status)}
                   </li>
                 ))}
               </DropDownMenu>
@@ -104,9 +102,7 @@ export default function TransactionsPage() {
                     className="px-4 py-2 rounded-md"
                     selectedValue={t(
                       selectedRole
-                        ? processRoleFields(roleFields).find(
-                          (role) => role.id === selectedRole
-                        )?.displayLabel
+                        ? roleFields.find((role) => role.id === selectedRole)?.label
                         : null
                     )}
                   >
@@ -119,17 +115,17 @@ export default function TransactionsPage() {
                     >
                       {t("all")}
                     </li>
-                    {processRoleFields(roleFields).map((role) => (
+                    {roleFields.map((role) => (
                       <li
                         key={role.id}
                         onClick={() => {
                           setSelectedRole(role.id); // ✅ خزن فقط الـ id
                           setSelectedUserId("");
-                          setSelectedRoleDisplay(role.displayLabel);
+                          setSelectedRoleDisplay(role.label);
                         }}
                         className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === role.id ? "bg-[var(--bg-hover)]" : ""}`}
                       >
-                        {t(role.displayLabel)}
+                        {t(role.label)}
                       </li>
                     ))}
                   </DropDownMenu>
@@ -174,7 +170,6 @@ export default function TransactionsPage() {
         status={selectedStatus}
         userFilter={{ roleKey: selectedRole, userId: selectedUserId }}
         searchKey={searchKey}
-        // searchValue={searchValue}
         debouncedSearchValue={debouncedSearchValue}
       />
     </div>

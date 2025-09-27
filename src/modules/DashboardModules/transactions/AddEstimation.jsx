@@ -5,6 +5,7 @@ import { FaCalendarPlus } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 import { InputField, Loading, Modal } from "../../../components";
 import { useMutate } from "../../../hooks/useMatute";
+import { PropTypes } from "prop-types";
 
 const AddEstimation = ({ transactionId, queryKeyToInvalidate = [] }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -70,5 +71,10 @@ const AddEstimation = ({ transactionId, queryKeyToInvalidate = [] }) => {
     </Modal>
   );
 };
+
+AddEstimation.propTypes = {
+  transactionId: PropTypes.string,
+  queryKeyToInvalidate: PropTypes.array,
+}
 
 export default AddEstimation;

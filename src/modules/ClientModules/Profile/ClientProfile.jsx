@@ -1,11 +1,15 @@
 import { useTranslation } from "react-i18next";
 import { Loading, PageTitle } from "../../../components";
 import { useGetData } from "../../../hooks/useGetData";
+import { useRecoilValue } from "recoil";
+import { tokenAtom } from "../../../store/tokenAtom/tokenAtom";
 
 function ClientProfile() {
   const { t } = useTranslation("layout");
+    const token = useRecoilValue(tokenAtom);
+  const userId = token?.user?.id;
   const { data: profile, isLoading } = useGetData({
-    endpoint: "users/profile",
+    endpoint: `clients/${userId}`,
     queryKey: ["client-profile"],
   });
 

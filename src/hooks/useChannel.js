@@ -11,7 +11,7 @@ export function useChannel(channelName, events = {}) {
     const channel = pusher.subscribe(channelName);
 
     channel.bind("pusher:subscription_succeeded", () => {
-      console.log(`✅ Subscribed to ${channelName}`);
+      // console.log(`✅ Subscribed to ${channelName}`);
     });
 
     Object.entries(events).forEach(([event, handler]) => {
@@ -23,7 +23,7 @@ export function useChannel(channelName, events = {}) {
         channel.unbind(event, handler);
       });
       pusher.unsubscribe(channelName);
-      console.log(`🚪 Unsubscribed from ${channelName}`);
+      // console.log(`🚪 Unsubscribed from ${channelName}`);
     };
   }, [pusher, channelName]);
 }

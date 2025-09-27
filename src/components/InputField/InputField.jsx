@@ -1,7 +1,7 @@
 import { ErrorMessage, Field } from "formik";
-import { PropTypes } from "prop-types";
+import PropTypes from "prop-types";
 
-export const InputField = ({ name, label, type = "text", placeholder, icon, readOnly = false }) => {
+export const InputField = ({name, label, type = "text", placeholder, icon, readOnly = false }) => {
   return (
     <>
       {label && (
@@ -10,14 +10,19 @@ export const InputField = ({ name, label, type = "text", placeholder, icon, read
         </label>
       )}
       <div className="relative">
-        <Field
-          placeholder={placeholder}
-          id={name}
-          name={name}
-          type={type}
-          className="w-full input input-bordered focus:outline-none text-black"
-          readOnly={readOnly}
-        />
+        <Field name={name}>
+          {({ field }) => (
+            <input
+              {...field}
+              id={name}
+              type={type}
+              placeholder={placeholder}
+              readOnly={readOnly}
+              className="w-full input input-bordered focus:outline-none text-black"
+              value={field.value ?? ""}
+            />
+          )}
+        </Field>
 
         {icon && (
           <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black">
@@ -36,9 +41,9 @@ export const InputField = ({ name, label, type = "text", placeholder, icon, read
 
 InputField.propTypes = {
   name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  type: PropTypes.string,
   placeholder: PropTypes.string,
   icon: PropTypes.element,
-  readOnly: PropTypes.bool
+  readOnly: PropTypes.bool,
 };

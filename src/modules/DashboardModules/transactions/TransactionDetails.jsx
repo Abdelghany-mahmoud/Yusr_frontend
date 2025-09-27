@@ -17,7 +17,6 @@ export default function TransactionDetails({ transaction, onClose }) {
 
   // Extract the transaction data from the response
   const transactionData = showTransactions?.data || transaction;
-  // console.log(transactionData, "transactionData");
 
   // Officer fields configuration
   const officerFields = [
@@ -115,11 +114,11 @@ export default function TransactionDetails({ transaction, onClose }) {
         <div className="flex justify-between items-start border-b pb-4">
           <div>
             <h2 className="text-xl font-bold">
-              {t("transaction")} #{transactionData.id}
+              {t("transaction")} #{transactionData.transaction_code}
             </h2>
             <div className="flex items-center gap-2 mt-1">
-              <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(transactionData.current_status)}`}>
-                {t(transactionData.current_status)}
+              <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(transactionData.status)}`}>
+                {t(transactionData.status)}
               </span>
               <span className="text-sm text-[var(--secondary-text-color)]">
                 {new Date(transactionData.created_at).toLocaleString()}
@@ -128,7 +127,7 @@ export default function TransactionDetails({ transaction, onClose }) {
           </div>
           <div>
             <span className="text-sm font-medium">
-              {t("client")}: {transactionData.client?.user?.name}
+              {t("client_name")}: {transactionData.client?.user?.name}
             </span>
           </div>
         </div>
@@ -362,7 +361,7 @@ TransactionDetails.propTypes = {
   transaction: PropTypes.shape({
     id: PropTypes.number.isRequired,
     client_id: PropTypes.number.isRequired,
-    current_status: PropTypes.string.isRequired,
+    status: PropTypes.string.isRequired,
     status_history: PropTypes.arrayOf(
       PropTypes.shape({
         status: PropTypes.string.isRequired,

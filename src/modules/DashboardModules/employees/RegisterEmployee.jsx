@@ -1,5 +1,5 @@
 import { useState } from "react";
-import RegisterForm from "../Customer/Components/RegisterForm";
+import RegisterForm from "../Client/Components/RegisterForm";
 import { Formik } from "formik";
 import { Modal } from "../../../components";
 import { toast } from "react-toastify";
@@ -33,7 +33,7 @@ function RegisterEmployee() {
 
   const { mutate, isPending } = useMutate({
     method: "POST",
-    endpoint: "users",
+    endpoint: "users/create",
   });
 
   const handleClose = () => {

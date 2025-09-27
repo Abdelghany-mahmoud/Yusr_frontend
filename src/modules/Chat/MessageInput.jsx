@@ -9,8 +9,8 @@ import { useRecoilValue } from "recoil";
 export default function MessageInput({ onSend, employees, currentUserId }) {
   const { t } = useTranslation("layout");
   const token = useRecoilValue(tokenAtom);
-  const userRoles = token?.user?.roles.map((role) => role.name);
-  const isClient = userRoles.includes("Client");
+  const userRoles = token?.user?.roles;
+  const isClient = userRoles.includes("client");
   const [text, setText] = useState("");
   const [mentions, setMentions] = useState([]);
   const [showEmployeeSelector, setShowEmployeeSelector] = useState(false);
@@ -19,8 +19,8 @@ export default function MessageInput({ onSend, employees, currentUserId }) {
   // --- popper elements as state (callback refs) ---
   const [mentionRefEl, setMentionRefEl] = useState(null);
   const [mentionPopperEl, setMentionPopperEl] = useState(null);
-  const [selectedRefEl, setSelectedRefEl] = useState(null);
-  const [selectedPopperEl, setSelectedPopperEl] = useState(null);
+  const [selectedRefEl] = useState(null);
+  const [selectedPopperEl] = useState(null);
 
   // --- usePopper for both dropdowns ---
   const {
@@ -38,8 +38,6 @@ export default function MessageInput({ onSend, employees, currentUserId }) {
   });
 
   const {
-    styles: selectedStyles,
-    attributes: selectedAttrs,
     update: updateSelected,
   } = usePopper(selectedRefEl, selectedPopperEl, {
     placement: "top-start",

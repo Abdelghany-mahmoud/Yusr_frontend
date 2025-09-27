@@ -6,10 +6,10 @@ import { useMutate } from "../../hooks/useMatute";
 import { useHasPermission } from "../../hooks/useHasPermission";
 import { useQueryClient } from "@tanstack/react-query";
 import { MessagesSkeleton } from "./MessagesSkeleton";
-import ShowCustomer from "../DashboardModules/Customer/Components/ShowCustomer";
-import UpdateCustomer from "../DashboardModules/Customer/Components/UpdateCustomer";
-import Transactions from "../DashboardModules/Customer/Components/transactions/Transactions";
-import CustomerTransaction from "../DashboardModules/Customer/Components/CustomerTransaction";
+import ShowClient from "../DashboardModules/Client/Components/ShowClient";
+import UpdateClient from "../DashboardModules/Client/Components/UpdateClient";
+import Transactions from "../DashboardModules/Client/Components/transactions/Transactions";
+import ClientTransaction from "../DashboardModules/Client/Components/ClientTransaction";
 import ChatList from "./ChatList";
 import MessagesList from "./MessagesList";
 import MessageInput from "./MessageInput";
@@ -18,8 +18,8 @@ import PropTypes from "prop-types";
 import { useParams, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { tokenAtom } from "../../store/tokenAtom/tokenAtom";
-import AddDocs from "../DashboardModules/Customer/Components/ClientDocs/AddDocs";
-import SendFinancingPlan from "../DashboardModules/Customer/Components/MainCaseHandler/SendFinancingPlan";
+import AddDocs from "../DashboardModules/Client/Components/ClientDocs/AddDocs";
+import SendFinancingPlan from "../DashboardModules/Client/Components/MainCaseHandler/SendFinancingPlan";
 
 function ChatsPage({ basePath }) {
   const token = useRecoilValue(tokenAtom);
@@ -28,8 +28,8 @@ function ChatsPage({ basePath }) {
   const canUpdateClients = useHasPermission("update-clients");
   const canViewTransactions = useHasPermission("read-transactions");
   const canCreateDocuments = useHasPermission("create-documents");
-  const createViewFinancialEvaluation = useHasPermission("create-financial-evaluation");
-  const updateViewFinancialEvaluation = useHasPermission("update-financial-evaluation");
+  const createViewFinancialEvaluation = useHasPermission("create-financial-evaluations");
+  const updateViewFinancialEvaluation = useHasPermission("update-financial-evaluations");
   const { chatId } = useParams();
   const navigate = useNavigate();
   const [activeChat, setActiveChat] = useState(chatId || null);
@@ -77,7 +77,7 @@ function ChatsPage({ basePath }) {
 
   // Fetch employees
   const { data: employeesResponse } = useGetData({
-    endpoint: `users?conversationId=${activeChat}`,
+    endpoint: `employees-by-chat/${activeChat}`,
     queryKey: ["employees", activeChat],
     enabledKey: basePath === "/dashboard" && !!activeChat,
   });
@@ -92,7 +92,7 @@ function ChatsPage({ basePath }) {
   });
 
   const messages = useMemo(() => messagesResponse?.data?.messages || [], [messagesResponse]);
-  const customer = useMemo(() => messagesResponse?.data?.customer || {}, [messagesResponse]);
+  const client = useMemo(() => messagesResponse?.data?.client || {}, [messagesResponse]);
 
   const currentChat = useMemo(
     () => chats.find((c) => String(c.id) === String(activeChat)),
@@ -102,12 +102,10 @@ function ChatsPage({ basePath }) {
   // Live channel updates
   useChannel(userId ? `private-user.${userId}` : null, {
     "message.sent": (data) => {
-      console.log("New message:", data);
-
       // 1️⃣ Update messages list
       queryClient.setQueryData(["messages", activeChat], (old) => {
         if (!old?.data?.messages) {
-          return { data: { messages: [data], customer: old?.data?.customer || {} } };
+          return { data: { messages: [data], client: old?.data?.client || {} } };
         }
         return {
           ...old,
@@ -183,12 +181,12 @@ function ChatsPage({ basePath }) {
                 </div>
               </div>
               <div className="flex gap-2">
-                <ShowCustomer customer={customer} />
-                {!isMessagesLoading && (createViewFinancialEvaluation || updateViewFinancialEvaluation) && (<SendFinancingPlan transaction={customer.transactions?.[0]} />)}
-                {!isMessagesLoading && canUpdateClients && <UpdateCustomer customer={customer} />}
-                {!isMessagesLoading && canUpdateClients && <CustomerTransaction customer={customer} />}
-                {!isMessagesLoading && canViewTransactions && (<Transactions id={customer?.user?.id} />)}
-                {!isMessagesLoading && canCreateDocuments && <AddDocs customer={customer} />}
+                <ShowClient client={client} />
+                {!isMessagesLoading && (createViewFinancialEvaluation || updateViewFinancialEvaluation) && (<SendFinancingPlan transaction={client.transaction} />)}
+                {!isMessagesLoading && canUpdateClients && <UpdateClient client={client} />}
+                {!isMessagesLoading && canUpdateClients && <ClientTransaction client={client} />}
+                {!isMessagesLoading && canViewTransactions && (<Transactions id={client?.user?.id} />)}
+                {!isMessagesLoading && canCreateDocuments && <AddDocs client={client} />}
               </div>
             </div>
 

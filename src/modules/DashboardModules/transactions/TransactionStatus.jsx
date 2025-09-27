@@ -5,14 +5,20 @@ import { DropDownMenu } from "../../../components/DropDownMenu/DropDownMenu";
 import { useMutate } from "../../../hooks/useMatute";
 import { toast } from "react-toastify";
 import { Button } from "../../../components/Button/Button";
-import { statusOptions } from "../../../constant/status";
 import PropTypes from "prop-types";
+import { useGetData } from "../../../hooks/useGetData";
 
 function TransactionStatus({ transactionId, status }) {
-  // console.log(statusOptions, "statusOptions");
   const { t } = useTranslation("layout");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(null);
+
+  const { data: statusData } = useGetData({
+    endpoint: `transactions/statuses`,
+    queryKey: ["transactionStatuses"],
+  });
+
+  const transactionStatuses = statusData?.data || [];
 
   const { mutate, isPending } = useMutate({
     method: "post",
@@ -48,23 +54,21 @@ function TransactionStatus({ transactionId, status }) {
       btnText={status}
       btnClassName="btn text-[var(--secondary-color)] bg-[var(--primary-color)] flex items-center justify-center"
       title={t("change_status")}
-      classNameModalStyle="max-w-[650px] h-[50vh]  w-full p-3"
+      classNameModalStyle="max-w-[650px] h-[400px]  w-full p-3"
     >
       <div className="flex flex-col  h-full justify-around gap-20 items-center">
-        <h2 className="text-xl font-bold">{t("select_status")}</h2>
-
         <DropDownMenu
           menuTitle={t("select_status")}
           selectedValue={t(selectedStatus)}
           className="w-full p-2 rounded-md"
         >
-          {statusOptions.map((status) => (
+          {transactionStatuses.map((status , index) => (
             <li
-              key={status.id}
+              key={index}
               className="p-2 hover:bg-[var(--bg-hover)] cursor-pointer"
-              onClick={() => setSelectedStatus(status.id)}
+              onClick={() => setSelectedStatus(status)}
             >
-              {t(status.name)}
+              {t(status)}
             </li>
           ))}
         </DropDownMenu>
