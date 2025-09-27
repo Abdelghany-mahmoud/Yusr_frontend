@@ -6,7 +6,7 @@ import { useRecoilState } from "recoil";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { clientFormDataAtom } from "../store/clientAtom";
-import { useMutate } from "../../../../hooks/useMatute";
+import { useMutate } from "../../../../hooks/useMutate";
 import { Modal } from "../../../../components";
 import { ClientForm } from "./ClientForm";
 

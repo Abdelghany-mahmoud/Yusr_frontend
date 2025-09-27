@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useMutate } from "../../../../../hooks/useMatute";
+import { useMutate } from "../../../../../hooks/useMutate";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { Modal } from "../../../../../components";

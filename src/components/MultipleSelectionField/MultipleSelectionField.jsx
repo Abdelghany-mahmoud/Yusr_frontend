@@ -59,6 +59,11 @@ export const MultipleSelectionField = ({
       ...styles,
       color: isDarkMode ? "white" : "black",
     }),
+    menuList: (styles) => ({
+      ...styles,
+      maxHeight: 200, // 👈 مهم عشان scrollbar يظهر
+      overflowY: "auto",
+    }),
   };
 
   return (

@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import PropTypes from "prop-types";
 import { FaEdit } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { useMutate } from "./../../../hooks/useMatute";
+import { useMutate } from "./../../../hooks/useMutate";
 import {
   Button,
   Modal,
@@ -14,21 +14,22 @@ import {
 } from "../../../components";
 import { roleFields } from "../../../constant/clientType";
 
-function UpdateEmployee({ userAdmin }) {
+function UpdateEmployee({ employee }) {
   const { t } = useTranslation("layout");
   const [isOpen, setIsOpen] = useState(false);
 
   const selectedRoles = useMemo(
     () =>
-      (userAdmin?.roles || []).map((role) => ({
-        value: role.name,
-        label: t(role.name),
+      (employee?.roles || []).map((role) => ({
+        value: role,
+        label: t(role),
       })),
-    [userAdmin, t]
+    [employee, t]
   );
 
   const allRoles = useMemo(
-    () => roleFields.map((role) => ({
+    () =>
+      roleFields.map((role) => ({
         value: role.label,
         label: t(role.label),
       })),
@@ -36,18 +37,15 @@ function UpdateEmployee({ userAdmin }) {
   );
 
   const filteredRoles = useMemo(() => {
-    const selectedValues = selectedRoles.map((r) => r.value);
-    return allRoles.filter(
-      (role) => role.value !== "Client" && !selectedValues.includes(role.value)
-    );
-  }, [allRoles, selectedRoles]);
+    return allRoles.filter((role) => role.value !== "client");
+  }, [allRoles]);
 
   const initialValues = {
-    user_id: userAdmin?.id || "",
-    name: userAdmin?.name || "",
-    email: userAdmin?.email || "",
-    country_code: userAdmin?.country_code || 966,
-    phone: userAdmin?.phone || "",
+    user_id: employee?.id || "",
+    name: employee?.name || "",
+    email: employee?.email || "",
+    country_code: employee?.country_code || 966,
+    phone: employee?.phone || "",
     password: "",
     password_confirmation: "",
     roles: selectedRoles,
@@ -59,7 +57,7 @@ function UpdateEmployee({ userAdmin }) {
     country_code: Yup.string(),
     phone: Yup.string().required(t("phone_required")).matches(/^5\d{8}$/, t("invalid_phone")),
     password: Yup.string(),
-    password_confirmation: Yup.string().oneOf([Yup.ref("password"), null],t("passwords_must_match")),
+    password_confirmation: Yup.string().oneOf([Yup.ref("password"), null], t("passwords_must_match")),
     roles: Yup.array().min(1, t("role_required")),
   });
 
@@ -146,7 +144,7 @@ function UpdateEmployee({ userAdmin }) {
 }
 
 UpdateEmployee.propTypes = {
-  userAdmin: PropTypes.object.isRequired,
+  employee: PropTypes.object.isRequired,
 };
 
 export default UpdateEmployee;

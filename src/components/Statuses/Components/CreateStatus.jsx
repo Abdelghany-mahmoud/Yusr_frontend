@@ -3,7 +3,7 @@ import { Button, InputField, Modal } from "../..";
 import { Formik, Form } from "formik";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
-import { useMutate } from "../../../hooks/useMatute";
+import { useMutate } from "../../../hooks/useMutate";
 import { IoMdDocument } from "react-icons/io";
 
 function CreateStatus({ isOpen, setIsOpen, selectedStatus }) {

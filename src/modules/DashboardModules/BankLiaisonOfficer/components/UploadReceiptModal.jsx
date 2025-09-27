@@ -5,7 +5,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Modal, Button, FileUploadField, TextArea } from "../../../../components";
 import { FaUpload } from "react-icons/fa";
-import { useMutate } from "../../../../hooks/useMatute";
+import { useMutate } from "../../../../hooks/useMutate";
 import { toast } from "react-toastify";
 
 const UploadReceiptModal = ({ transaction }) => {

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FcEditImage } from "react-icons/fc";
 import { Modal } from "../../../../components";
-import { useMutate } from "../../../../hooks/useMatute";
+import { useMutate } from "../../../../hooks/useMutate";
 import { ClientForm } from "./ClientForm";
 import * as Yup from "yup";
 import PropTypes from "prop-types";

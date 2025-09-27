@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Formik, Form } from "formik";
 import { loginValidationSchema } from "./Validation/loginValidation";
 import { toast } from "react-toastify";
-import { useMutate } from "../../../hooks/useMatute";
+import { useMutate } from "../../../hooks/useMutate";
 import { Button, InputField, PageTitle } from "../../../components";
 import logo from "/assets/images/logo/logo.png";
 import { FaRegEyeSlash } from "react-icons/fa6";

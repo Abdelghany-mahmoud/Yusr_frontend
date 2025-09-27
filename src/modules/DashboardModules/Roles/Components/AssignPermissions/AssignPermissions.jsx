@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useMutate } from "../../../../../hooks/useMatute";
+import { useMutate } from "../../../../../hooks/useMutate";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";

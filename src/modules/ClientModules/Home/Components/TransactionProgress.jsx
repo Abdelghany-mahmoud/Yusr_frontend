@@ -10,7 +10,7 @@ import {
 import PropTypes from 'prop-types';
 import { useLocation } from "react-router-dom";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
-import { useMutate } from "../../../../hooks/useMatute";
+import { useMutate } from "../../../../hooks/useMutate";
 import { useGetData } from "../../../../hooks/useGetData";
 import * as Yup from "yup";
 import { toast } from "react-toastify";

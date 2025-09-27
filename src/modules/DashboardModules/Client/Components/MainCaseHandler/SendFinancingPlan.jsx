@@ -3,7 +3,7 @@ import { Modal } from "../../../../../components";
 import { useTranslation } from "react-i18next";
 import { FaHandHoldingUsd } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { useMutate } from "../../../../../hooks/useMatute";
+import { useMutate } from "../../../../../hooks/useMutate";
 import FinancingPlanForm from "./FinancingPlanForm";
 import PropTypes from "prop-types";
 import Solutions from "./Solutions";

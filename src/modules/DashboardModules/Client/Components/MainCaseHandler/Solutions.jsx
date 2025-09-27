@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import SolutionModal from "./SolutionModal";
 import { useTranslation } from "react-i18next";
 import { Pencil, Trash2 } from "lucide-react";
-import { useMutate } from "../../../../../hooks/useMatute";
+import { useMutate } from "../../../../../hooks/useMutate";
 import { useGetData } from "../../../../../hooks/useGetData";
 import { Loading, Spinner } from "../../../../../components/index";
 

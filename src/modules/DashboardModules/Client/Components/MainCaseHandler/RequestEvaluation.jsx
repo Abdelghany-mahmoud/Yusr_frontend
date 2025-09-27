@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { useTranslation } from "react-i18next";
 import { Modal, Loading, DropDownMenu, TextArea } from "../../../../../components";
 import { useGetData } from "../../../../../hooks/useGetData";
-import { useMutate } from "../../../../../hooks/useMatute";
+import { useMutate } from "../../../../../hooks/useMutate";
 import { SingleSelectionField } from "../../../../../components/InputField/SingleSelectionField";
 import { roleFields } from "../../../../../constant/clientType";
 import { FaFilter } from "react-icons/fa";

@@ -3,7 +3,7 @@ import RegisterForm from "./RegisterForm";
 import { Formik } from "formik";
 import { Modal } from "../../../../components";
 import { toast } from "react-toastify";
-import { useMutate } from "../../../../hooks/useMatute";
+import { useMutate } from "../../../../hooks/useMutate";
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 

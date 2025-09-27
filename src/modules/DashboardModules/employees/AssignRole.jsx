@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { useGetData } from "../../../hooks/useGetData";
-import { useMutate } from "../../../hooks/useMatute";
+import { useMutate } from "../../../hooks/useMutate";
 import { Button, Modal, SelectField, Spinner } from "../../../components";
 
 export const AssignRole = ({ userAdmin }) => {

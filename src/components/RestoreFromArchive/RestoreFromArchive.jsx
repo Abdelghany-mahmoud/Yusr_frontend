@@ -1,6 +1,6 @@
 import { Button, Modal, Spinner } from "../index";
 import { PropTypes } from "prop-types";
-import { useMutate } from "../../hooks/useMatute";
+import { useMutate } from "../../hooks/useMutate";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";

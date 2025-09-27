@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Modal } from "../../../components/Modal/Modal";
 import { DropDownMenu } from "../../../components/DropDownMenu/DropDownMenu";
-import { useMutate } from "../../../hooks/useMatute";
+import { useMutate } from "../../../hooks/useMutate";
 import { toast } from "react-toastify";
 import { Button } from "../../../components/Button/Button";
 import PropTypes from "prop-types";

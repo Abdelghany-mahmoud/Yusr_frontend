@@ -4,7 +4,7 @@ import { IoMdDocument } from "react-icons/io";
 import { Modal, Button, InputField } from "../../../../../components";
 import { Formik, Form } from "formik";
 import { FileUploadField } from "../../../../../components/FileUploadField/FileUploadField";
-import { useMutate } from "../../../../../hooks/useMatute";
+import { useMutate } from "../../../../../hooks/useMutate";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import PropTypes from "prop-types";

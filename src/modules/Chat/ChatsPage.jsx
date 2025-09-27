@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useGetData } from "../../hooks/useGetData";
 import { useChannel } from "../../hooks/useChannel";
-import { useMutate } from "../../hooks/useMatute";
+import { useMutate } from "../../hooks/useMutate";
 import { useHasPermission } from "../../hooks/useHasPermission";
 import { useQueryClient } from "@tanstack/react-query";
 import { MessagesSkeleton } from "./MessagesSkeleton";

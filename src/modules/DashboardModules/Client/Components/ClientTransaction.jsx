@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { MdSwapHoriz } from "react-icons/md";
 import { Modal, Loading, DropDownMenu } from "../../../../components";
 import { useGetData } from "../../../../hooks/useGetData";
-import { useMutate } from "../../../../hooks/useMatute";
+import { useMutate } from "../../../../hooks/useMutate";
 import { SingleSelectionField } from "../../../../components/InputField/SingleSelectionField";
 import { roleFields } from "../../../../constant/clientType";
 import { tokenAtom } from "../../../../store/tokenAtom/tokenAtom";

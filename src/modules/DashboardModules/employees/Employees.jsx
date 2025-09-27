@@ -197,7 +197,7 @@ function Employees() {
                   {employee.roles.map((role) => t(role)).join(' | ')}
                 </td>
                 <td className="flex gap-2 items-center p-3 mt-2">
-                  {canUpdateEmployee && <UpdateEmployee userAdmin={employee} />}
+                  {canUpdateEmployee && <UpdateEmployee employee={employee} />}
                   {canUpdateEmployee && <AssignRole userAdmin={employee} />}
                   {canDeleteEmployee && (
                     <DeleteGlobal

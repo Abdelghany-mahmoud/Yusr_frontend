@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { FaCheckCircle } from "react-icons/fa";
-import { useMutate } from "../../../../hooks/useMatute";
+import { useMutate } from "../../../../hooks/useMutate";
 import { Button, Modal } from "../../../../components";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
