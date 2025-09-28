@@ -132,7 +132,7 @@ export default function Solutions({ transactionId }) {
         <h3 className="font-bold text-xl">{t("solutions")}</h3>
         <button
           type="button"
-          className="bg-green-600 text-white px-3 py-1 rounded flex items-center gap-2"
+          className="btn border-none bg-green-600 text-white px-3 py-1 rounded flex items-center gap-2"
           onClick={() => setIsOpen(true)}
           disabled={isCreating || isUpdating}
         >

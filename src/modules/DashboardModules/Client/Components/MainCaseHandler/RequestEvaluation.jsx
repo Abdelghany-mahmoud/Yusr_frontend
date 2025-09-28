@@ -105,7 +105,7 @@ function RequestEvaluation({ client }) {
       // }
       // btnClassName="btn text-2xl btn-circle bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-[var(--secondary-color)] hover:scale-[1.07] btn-sm flex items-center justify-center"
       btnText={t("request_evaluation")}
-      btnClassName="btn btn-black text-white"
+      btnClassName="btn border-none bg-[var(--primary-color)] text-white px-3 py-1 rounded"
       classNameModalStyle="max-w-[650px] w-full p-3"
     >
       <Formik

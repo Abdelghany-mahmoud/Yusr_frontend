@@ -380,7 +380,7 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
               text={t("submit")}
               disabled={isPending}
               loading={isPending}
-              className="btn btn-primary"
+              className="btn border-none bg-blue-600 text-white px-3 py-1 rounded"
             />
           </div>
         </form>
