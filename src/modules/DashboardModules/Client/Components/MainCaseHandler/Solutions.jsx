@@ -14,9 +14,8 @@ const SolutionRow = ({ label, value, highlight }) => (
       {label}
     </td>
     <td
-      className={`p-2 border border-gray-400 text-center ${
-        highlight ? "text-red-600 font-bold" : "font-semibold"
-      }`}
+      className={`p-2 border border-gray-400 text-center ${highlight ? "text-red-600 font-bold" : "font-semibold"
+        }`}
     >
       {value ?? "-"}
     </td>
@@ -43,7 +42,6 @@ const FIELD_CONFIG = Object.freeze([
 
 export default function Solutions({ transactionId }) {
   const { t } = useTranslation("layout");
-
   const fields = useMemo(
     () => FIELD_CONFIG.map((f) => ({ ...f, label: t(f.label) })),
     [t]
@@ -146,90 +144,93 @@ export default function Solutions({ transactionId }) {
       </div>
 
       {isFetching || isCreating || isUpdating ? (
-        <Loading height={"100vh"} />
-      ) : solutions.length === 0 ? (
-        <p className="text-gray-500">{t("no_solutions_added")}</p>
+        <Loading />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {solutions.map((solution, index) => (
-            <div
-              key={solution.id}
-              className="border border-gray-400 rounded-lg overflow-hidden"
-            >
-              {/* Header */}
-              <div className="bg-red-100 p-2 border-b border-gray-400 flex justify-between items-center">
-                <span className="font-bold text-gray-800">
-                  {t("solution")} {index + 1}
-                </span>
-                <span className="font-bold text-gray-800">
-                  {t("entity_name")}: {solution.entity_name}
-                </span>
-                <div className="flex items-center gap-3">
-                  <button
-                    type="button"
-                    aria-label={t("edit")}
-                    className="text-blue-600 hover:text-blue-800 disabled:opacity-50"
-                    onClick={() => handleEdit(solution)}
-                    disabled={isUpdating}
-                  >
-                    {isUpdating && selectedSolution?.id === solution.id ? (
-                      <Spinner/>
-                    ) : (
-                      <Pencil size={18} />
-                    )}
-                  </button>
-                  <button
-                    type="button"
-                    aria-label={t("delete")}
-                    className="text-red-600 hover:text-red-800 disabled:opacity-50"
-                    onClick={() => handleDelete(solution.id)}
-                    disabled={isDeleting}
-                  >
-                    {isDeleting && selectedSolution?.id === solution.id ? (
-                      <Spinner/>
-                    ) : (
-                      <Trash2 size={18} />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {/* Table */}
-              <table className="w-full text-sm border-collapse">
-                <tbody>
-                  {fields.map((f) => (
-                    <SolutionRow
-                      key={f.key}
-                      label={f.label}
-                      value={solution[f.key]}
-                      highlight={f.highlight}
-                    />
-                  ))}
-                </tbody>
-              </table>
-
-              {/* Transaction duration */}
-              <div className="p-1 bg-red-50 border border-red-400 text-center">
-                <span>{t("transaction_duration")}: </span>
-                <span className="font-bold">{solution.transaction_duration}</span>
-              </div>
-
-              {/* Notes */}
-              {solution.notes && (
-                <div className="p-3 bg-gray-50 border-t border-gray-400">
-                  <div className="border-2 border-dashed border-red-500 p-3 rounded text-sm">
-                    <span className="font-semibold text-lg">
-                      {t("notes")} :{" "}
-                    </span>
-                    <br />
-                    {solution.notes}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[65vh]">
+          {solutions.length === 0 ? (
+            <p className="text-gray-500">{t("no_solutions_added")}</p>
+          ) : (
+            solutions.map((solution, index) => (
+              <div
+                key={solution.id}
+                className="border border-gray-400 rounded-lg overflow-hidden"
+              >
+                {/* Header */}
+                <div className="bg-red-100 p-2 border-b border-gray-400 flex justify-between items-center">
+                  <span className="font-bold text-gray-800">
+                    {t("solution")} {index + 1}
+                  </span>
+                  <span className="font-bold text-gray-800">
+                    {t("entity_name")}: {solution.entity_name}
+                  </span>
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      aria-label={t("edit")}
+                      className="text-blue-600 hover:text-blue-800 disabled:opacity-50"
+                      onClick={() => handleEdit(solution)}
+                      disabled={isUpdating}
+                    >
+                      {isUpdating && selectedSolution?.id === solution.id ? (
+                        <Spinner />
+                      ) : (
+                        <Pencil size={18} />
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      aria-label={t("delete")}
+                      className="text-red-600 hover:text-red-800 disabled:opacity-50"
+                      onClick={() => handleDelete(solution.id)}
+                      disabled={isDeleting}
+                    >
+                      {isDeleting && selectedSolution?.id === solution.id ? (
+                        <Spinner />
+                      ) : (
+                        <Trash2 size={18} />
+                      )}
+                    </button>
                   </div>
                 </div>
-              )}
-            </div>
-          ))}
+
+                {/* Table */}
+                <table className="w-full text-sm border-collapse">
+                  <tbody>
+                    {fields.map((f) => (
+                      <SolutionRow
+                        key={f.key}
+                        label={f.label}
+                        value={solution[f.key]}
+                        highlight={f.highlight}
+                      />
+                    ))}
+                  </tbody>
+                </table>
+
+                {/* Transaction duration */}
+                <div className="p-1 bg-red-50 border border-red-400 text-center">
+                  <span>{t("transaction_duration")}: </span>
+                  <span className="font-bold">{solution.transaction_duration}</span>
+                </div>
+
+                {/* Notes */}
+                {solution.notes && (
+                  <div className="p-3 bg-gray-50 border-t border-gray-400">
+                    <div className="border-2 border-dashed border-red-500 p-3 rounded text-sm">
+                      <span className="font-semibold text-lg">
+                        {t("notes")} :{" "}
+                      </span>
+                      <br />
+                      {solution.notes}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))
+          )}
         </div>
       )}
+
 
       {/* Modal */}
       <SolutionModal

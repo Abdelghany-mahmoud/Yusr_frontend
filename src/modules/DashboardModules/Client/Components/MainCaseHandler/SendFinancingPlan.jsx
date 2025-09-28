@@ -24,19 +24,15 @@ function SendFinancingPlan({ transaction }) {
   });
 
   const handleSubmit = async (values, { resetForm }) => {
-    const statusKey = values?.status ? "status" : "status";
-    console.log(values, 'values');
-    // Remove `message` if statusKey is "status"
     const { ...restValues } = values;
 
     const updatedValues = {
-      ...(statusKey === "status" ? restValues : values),
+      ...restValues,
       financial_officer_id: values?.financialOfficer?.value,
-      [statusKey]: values?.[statusKey]?.value,
+      status: values?.status?.value,
     };
-    console.log(updatedValues, 'updatedValues');
 
-    mutate(updatedValues, {
+    mutate(updatedValues, { 
       onSuccess: (data) => {
         setIsOpen(false);
         resetForm();

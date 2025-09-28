@@ -62,7 +62,7 @@ function RequestEvaluation({ client }) {
 
   const handleSubmit = (values, { resetForm }) => {
     const cleanedValues = {
-      [selectedRole]: values.officers_id?.value ?? "",
+      employee_id: values.officers_id?.value ?? "",
       notes: values.notes,
     };
 

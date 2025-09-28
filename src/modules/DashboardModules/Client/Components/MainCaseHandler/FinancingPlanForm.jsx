@@ -5,7 +5,6 @@ import {
   InputField,
   TextArea,
   SwitchField,
-  Loading,
   Button,
   MultipleSelectionField
 } from "../../../../../components";
@@ -112,7 +111,6 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
         handleBlur,
         handleSubmit,
         setFieldValue,
-        isValid,
         setFieldTouched,
       }) => (
         <form onSubmit={handleSubmit} className="space-y-4 w-full">
@@ -379,8 +377,8 @@ function FinancingPlanForm({ onSubmit, isPending, transaction }) {
 
             <Button
               type="submit"
-              text={isPending ? <Loading /> : t("submit")}
-              disabled={isPending || !isValid}
+              text={t("submit")}
+              disabled={isPending}
               loading={isPending}
               className="btn btn-primary"
             />
