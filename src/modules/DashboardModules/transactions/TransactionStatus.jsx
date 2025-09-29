@@ -33,7 +33,7 @@ function TransactionStatus({ transactionId, status }) {
     }
 
     mutate(
-      { status_id: selectedStatus },
+      { status : selectedStatus },
       {
         onSuccess: () => {
           toast.success(t("success"));

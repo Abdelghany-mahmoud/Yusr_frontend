@@ -49,9 +49,10 @@ export const AssignPermissions = ({ role, permissionsSet = [] }) => {
     [data, t]
   );
 
-  // Submit handler
   const assignPermissionsHandler = async (values, { resetForm, setSubmitting }) => {
-    const payload = values.permissions.map((p) => p.value);
+    const payload = {
+      permissions: values.permissions.map((p) => p.value),
+    };
 
     mutate(payload, {
       onSuccess: (response) => {
@@ -88,7 +89,7 @@ export const AssignPermissions = ({ role, permissionsSet = [] }) => {
                   isLoading={isLoading}
                   options={permissionsOptions}
                   values={values?.permissions}
-                  name={"permissions"}
+                  name={"permissions[]"}
                   setFieldValue={setFieldValue}
                   totalPages={1}
                   label={t("select_permissions")}
