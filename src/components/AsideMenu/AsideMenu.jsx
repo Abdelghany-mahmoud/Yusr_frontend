@@ -23,8 +23,8 @@ export const AsideMenu = ({ open, handleCloseAside }) => {
   const { theme } = useTheme();
   const token = useRecoilValue(tokenAtom);
   const userRoles = token?.user?.roles;
-  const canViewTransactions = useHasPermission("read-transactions");
-  const canViewClients = useHasPermission("read-clients");
+  // const canViewTransactions = useHasPermission("read-transactions");
+  // const canViewClients = useHasPermission("read-clients");
   const canReadBankTransactions = useHasPermission("read-payment-receipts");
   const canViewStatuses = useHasPermission("read-status");
   const canCreateStatuses = useHasPermission("create-status");
@@ -38,12 +38,12 @@ export const AsideMenu = ({ open, handleCloseAside }) => {
       to: "/dashboard",
       icon: FaBarsProgress,
     },
-    canViewTransactions && {
+    {
       name: t("transactions"),
       to: "/dashboard/transactions",
       icon: MdOutlineSwapHoriz,
     },
-    canViewClients && {
+    {
       name: t("clients"),
       to: "clients",
       icon: Users,

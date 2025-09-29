@@ -33,7 +33,7 @@ function RegisterEmployee() {
 
   const { mutate, isPending } = useMutate({
     method: "POST",
-    endpoint: "users/create",
+    endpoint: "employees/create",
   });
 
   const handleClose = () => {

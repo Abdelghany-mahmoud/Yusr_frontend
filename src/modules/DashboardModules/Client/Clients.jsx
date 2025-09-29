@@ -44,7 +44,7 @@ function Clients() {
     value: status.id,
   })) || [];
 
-  const [searchKey, setSearchKey] = useState("national_id");
+  const [searchKey, setSearchKey] = useState("phone");
   const [searchValue, setSearchValue] = useState("");
   const [financingType, setFinancingType] = useState("");
   const [selectedStatus, setSelectedStatus] = useState({});
@@ -108,7 +108,7 @@ function Clients() {
                   {/* <option value="job">{t("job")}</option> */}
                   <option value="phone">{t("phone")}</option>
                   <option value="name">{t("name")}</option>
-                  <option value="transaction_id">{t("transaction_id")}</option>
+                  <option value="transaction_code">{t("transaction_code")}</option>
                 </select>
                 <input
                   type="text"

@@ -47,7 +47,6 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
   const canCreateDocuments = useHasPermission("create-documents");
   const canCreateEstimation = useHasPermission("create-estimation-transactions");
   const canUpdateEstimation = useHasPermission("update-estimation-transactions");
-
   const { filterQuery } = useSearchHandler();
   const {
     data: transactionsData,
@@ -58,7 +57,7 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
       }&${searchKey}=${debouncedSearchValue
       }${filterQuery
       }${!isSuperAdmin ? `&${roleFilters}` : ""
-      }&status=${status?.id || ""
+      }&status=${status || ""
       }${userFilter.roleKey && `&${userFilter.roleKey}=${userFilter.userId}` || ""
       }`,
 
@@ -80,7 +79,7 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
   const tableHead = [
     "#",
     t("name"),
-    t("transaction_id"),
+    t("transaction_code"),
     t("status"),
     t("created_at"),
     !isLegalSupervisor ? t("financing_type") : null,
@@ -98,9 +97,9 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
   const renderTransactionRow = (transaction, index) => {
     let rowBgColor = "";
 
-    if (transaction.status === "Cancelled") {
+    if (transaction.status === "cancelled") {
       rowBgColor = "bg-red-200";
-    } else if (transaction.status === "Completed") {
+    } else if (transaction.status === "completed") {
       rowBgColor = "bg-green-200 text-[var(--secondary-text-color)]";
     }
     return (

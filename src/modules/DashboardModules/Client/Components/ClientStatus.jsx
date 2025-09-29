@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { Button } from "../../../../components/Button/Button";
 import PropTypes from "prop-types";
 
-function ClientStatus({ userId, clientStatus }) {
+function ClientStatus({ clientId, clientStatus }) {
   const { t } = useTranslation("layout");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(null);
@@ -25,7 +25,7 @@ function ClientStatus({ userId, clientStatus }) {
 
   const { mutate, isPending } = useMutate({
     method: "post",
-    endpoint: `clients/${userId}/update-status`,
+    endpoint: `clients/${clientId}/update-status`,
     queryKeysToInvalidate: ["clients"],
   });
 
@@ -55,7 +55,7 @@ function ClientStatus({ userId, clientStatus }) {
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       btnText={clientStatus}
-      btnClassName="btn text-[var(--secondary-color)] bg-[var(--primary-color)] flex items-center justify-center"
+      btnClassName="btn text-[var(--secondary-color)] bg-[var(--primary-color)] flex items-center justify-center mx-auto"
       title={t("change_status")}
       classNameModalStyle="max-w-[650px] h-[30vh] w-full p-3"
     >
@@ -97,6 +97,6 @@ function ClientStatus({ userId, clientStatus }) {
 export default ClientStatus;
 
 ClientStatus.propTypes = {
-  userId: PropTypes.number,
+  clientId: PropTypes.number,
   clientStatus: PropTypes.string,
 };

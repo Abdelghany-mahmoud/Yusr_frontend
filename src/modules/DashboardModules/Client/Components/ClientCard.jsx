@@ -28,6 +28,7 @@ export const ClientCard = ({ client, index, pagination}) => {
   const canViewActivities = useHasPermission("read-activities");
   const [selected, setSelected] = useState(null);
   const isLegalSupervisor = token?.user?.roles.map((role) => role.name).includes("legal_supervisor");
+  console.log(client?.id);
   return (
     <tr
       key={client.id}
@@ -39,7 +40,7 @@ export const ClientCard = ({ client, index, pagination}) => {
       <td className="p-3"> {format(client?.created_at, "yyyy-MM-dd hh:mm") || "-"} </td>
       <td className="p-3">{`${client?.phone || client?.user?.phone || "-"} `}</td>
       {client.financing_type && (<td className="p-3">{t(client?.financing_type || "-")}</td>)}
-      <td className="p-3"> {canUpdateStatus && (<ClientStatus userId={client?.user?.id} clientStatus={t(client?.status?.name)} />)} </td>
+      <td className="p-3"> {canUpdateStatus && (<ClientStatus clientId={client.id} clientStatus={t(client?.status?.name)} />)} </td>
 
       <td className="flex gap-2 items-center justify-center p-3 mt-2">
         {

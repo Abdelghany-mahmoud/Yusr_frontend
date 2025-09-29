@@ -55,7 +55,7 @@ export default function TransactionsPage() {
                   className="select select-bordered w-40 text-center bg-[var(--secondary-bg-color)] text-[var(--main-text-color)]"
                 >
                   <option value="phone">{t("phone")}</option>
-                  <option value="transaction_id">{t("transaction_id")}</option>
+                  <option value="transaction_code">{t("transaction_code")}</option>
                   <option value="name">{t("name")}</option>
                 </select>
                 <input
@@ -74,9 +74,7 @@ export default function TransactionsPage() {
                 selectedValue={selectedStatus ? t(selectedStatus) : null} // Pass the selected value
               >
                 <li
-                  onClick={() => {
-                    setSelectedStatus("");
-                  }}
+                  onClick={() => { setSelectedStatus(""); }}
                   className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === "" ? "bg-[var(--bg-hover)]" : ""}`}
                 >
                   {t("all")}
@@ -84,11 +82,8 @@ export default function TransactionsPage() {
                 {transactionStatuses.map((status, index) => (
                   <li
                     key={index}
-                    onClick={() => {
-                      setSelectedStatus(status);
-                    }}
-                    className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedStatus === status ? "bg-[var(--bg-hover)]" : ""
-                      }`}
+                    onClick={() => { setSelectedStatus(status); }}
+                    className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedStatus === status ? "bg-[var(--bg-hover)]" : ""}`}
                   >
                     {t(status)}
                   </li>
