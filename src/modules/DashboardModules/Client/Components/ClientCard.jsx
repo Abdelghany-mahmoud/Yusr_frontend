@@ -6,7 +6,7 @@ import { DeleteGlobal } from "../../../../components";
 import ActivityLog from "./ActivityLog";
 import ClientTransaction from "./ClientTransaction";
 import AddDocs from "./ClientDocs/AddDocs";
-import Transactions from "./transactions/Transactions";
+// import Transactions from "./transactions/Transactions";
 import { useRecoilValue } from "recoil";
 import { tokenAtom } from "../../../../store/tokenAtom/tokenAtom";
 import { format } from "date-fns";
@@ -24,7 +24,7 @@ export const ClientCard = ({ client, index, pagination}) => {
   const canDeleteClients = useHasPermission("delete-clients");
   const canUpdateStatus = useHasPermission("update-statuses");
   const canCreateDocuments = useHasPermission("create-documents");
-  const canViewTransactions = useHasPermission("read-transactions");
+  // const canViewTransactions = useHasPermission("read-transactions");
   const canViewActivities = useHasPermission("read-activities");
   const [selected, setSelected] = useState(null);
   const isLegalSupervisor = token?.user?.roles.map((role) => role.name).includes("legal_supervisor");
@@ -49,7 +49,7 @@ export const ClientCard = ({ client, index, pagination}) => {
               <ShowClient client={client} />
               {canUpdateClients && <UpdateClient client={client} />}
               {<ClientTransaction client={client} />}
-              {canViewTransactions && <Transactions id={client.user.id} />}
+              {/* {canViewTransactions && <Transactions id={client.user.id} />} */}
               <Link to={`/dashboard/chats/${client?.id}`}>
                 <button
                   type="button"

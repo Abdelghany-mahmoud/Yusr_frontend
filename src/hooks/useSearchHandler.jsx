@@ -22,7 +22,7 @@ export const useSearchHandler = () => {
   const filterValue = searchValue?.searchValue;
   useEffect(() => {
     setSearchKeys([
-      { key: "transaction_id", value: t("transaction_id") },
+      { key: "transaction_code", value: t("transaction_code") },
       { key: "name", value: t("name") },
       { key: "phone", value: t("phone_number") },
     ]);

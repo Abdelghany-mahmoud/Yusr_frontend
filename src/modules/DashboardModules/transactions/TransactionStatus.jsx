@@ -52,11 +52,11 @@ function TransactionStatus({ transactionId, status }) {
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       btnText={status}
-      btnClassName="btn text-[var(--secondary-color)] bg-[var(--primary-color)] flex items-center justify-center"
+      btnClassName="btn text-[var(--secondary-color)] bg-[var(--primary-color)] mx-auto"
       title={t("change_status")}
-      classNameModalStyle="max-w-[650px] h-[400px]  w-full p-3"
+      classNameModalStyle="max-w-[650px] h-[400px] w-full p-3"
     >
-      <div className="flex flex-col  h-full justify-around gap-20 items-center">
+      <div className="flex flex-col h-full justify-around gap-20 items-center">
         <DropDownMenu
           menuTitle={t("select_status")}
           selectedValue={t(selectedStatus)}

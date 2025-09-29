@@ -16,6 +16,7 @@ import ViewReceiptsModal from "./components/ViewReceiptsModal";
 import UploadReceiptModal from "./components/UploadReceiptModal";
 import TransactionDetails from "../transactions/TransactionDetails";
 import { useHasPermission } from "../../../hooks/useHasPermission";
+import TransactionStatus from "../transactions/TransactionStatus";
 
 function BankLiaisonOfficer() {
   const { t } = useTranslation("layout");
@@ -55,14 +56,10 @@ function BankLiaisonOfficer() {
       <td className="p-3">#{transaction.transaction_code}</td>
       <td className="p-3">{transaction?.client?.user?.name || "-"}</td>
       <td className="p-3">{transaction?.amount || "-"}</td>
+      <td className="p-3"> {new Date(transaction.created_at).toLocaleDateString()} </td>
       <td className="p-3">
-        {new Date(transaction.created_at).toLocaleDateString()}
-      </td>
-      <td className="p-3">
-        <span className="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-          {transaction.status}
-        </span>
-      </td>
+        <TransactionStatus transactionId={transaction.id} status={t(transaction.status)} />
+        </td>
       <td className="flex gap-2 items-center justify-center p-3">
         <button
           onClick={() => setSelected(transaction)}

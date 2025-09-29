@@ -11,58 +11,58 @@ import {
 import { useGetData } from "../../../../../hooks/useGetData";
 import { Form, Formik } from "formik";
 
-export const AssignPermissions = ({ role, permissionsSet }) => {
+export const AssignPermissions = ({ role, permissionsSet = [] }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation("layout");
+
+  // Fetch permissions
   const { data, isLoading } = useGetData({
     endpoint: `permissions`,
     queryKey: ["permissions"],
   });
 
+  // Mutation
   const { mutate, isPending } = useMutate({
     method: "POST",
     endpoint: `roles/${role?.id}/assign-permissions`,
     queryKeysToInvalidate: ["roles"],
   });
 
-  const initialValues = {
-    permissions:
-      permissionsSet?.map((category) => ({
-        value: category.name,
-        label: category.name,
-      })) || [],
-  };
+  // Helpers
+  const mapPermissions = (permissions) =>
+    permissions.map((permission) => ({
+      value: permission.name,
+      label: t(permission.name),
+    }));
 
-  const permissionsOptions = useMemo(() => {
-    if (data?.data) {
-      return data?.data?.map((permission) => ({
-        value: permission.name,
-        label: t(permission.name),
-      }));
-    }
-    return [];
-  }, [data, t]);
+  // Initial values memoized
+  const initialValues = useMemo(
+    () => ({
+      permissions: mapPermissions(permissionsSet),
+    }),
+    [permissionsSet, t]
+  );
 
-  const assignPermissionsHandler = async (
-    values,
-    { resetForm, setSubmitting }
-  ) => {
-    const formData = new FormData();
+  // Options from API
+  const permissionsOptions = useMemo(
+    () => (data?.data ? mapPermissions(data.data) : []),
+    [data, t]
+  );
 
-    if (values.permissions?.length > 0) {
-      values.permissions.forEach((permission, index) => {
-        formData.append(`permissions[${index}]`, permission.value);
-      });
-    }
-    mutate(formData, {
+  // Submit handler
+  const assignPermissionsHandler = async (values, { resetForm, setSubmitting }) => {
+    const payload = values.permissions.map((p) => p.value);
+
+    mutate(payload, {
       onSuccess: (response) => {
-        toast.success(response?.message);
+        toast.success(response?.message || t("success"));
         resetForm();
         setSubmitting(false);
         setIsOpen(false);
       },
       onError: (error) => {
-        toast.error(error?.response?.data?.message);
+        toast.error(error?.response?.data?.message || t("error_occurred"));
+        setSubmitting(false);
       },
     });
   };
@@ -113,6 +113,6 @@ export const AssignPermissions = ({ role, permissionsSet }) => {
 };
 
 AssignPermissions.propTypes = {
-  role: PropTypes.object,
+  role: PropTypes.object.isRequired,
   permissionsSet: PropTypes.array,
 };

@@ -36,12 +36,12 @@ export const DropDownSearch = ({ searchValue, setSearchValue }) => {
         <div
           ref={menuRef}
           onClick={toggleMenu}
-          className={`flex z-50 gap-1 text-sm md:text-base items-center justify-between absolute ${
+          className={`flex z-50 gap-1 text-sm md:text-base items-center cursor-pointer justify-between absolute ${
             lang === "ar" ? "left-0" : "right-0"
           } min-w-28 md:w-52 bg-[var(--primary-color)] rounded-xl h-full -translate-y-1/2 top-1/2 p-2`}
         >
           <div className="font-semibold text-[var(--secondary-color)] flex items-center flex-1 justify-center">
-            <p className="">
+            <p>
               {searchValue?.value || t("choose_the_search_method")}
             </p>
           </div>
