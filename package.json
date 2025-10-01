@@ -9,7 +9,7 @@
     "build:prod": "vite build --mode production",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "npm run build && rm -rf ../yusr_dashboard_backend/public/assets && cp -r dist/* ../yusr_dashboard_backend/public/"
+    "deploy": "npm run build:prod && rm -rf ../yusr_dashboard_backend/public/assets && cp -r dist/* ../yusr_dashboard_backend/public/"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
