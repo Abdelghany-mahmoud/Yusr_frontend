@@ -107,7 +107,7 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
                 <>
                   <span>{transaction.client.user.phone}</span>
                   <a
-                    href={`https://wa.me/${transaction.client.user.phone}`}
+                    href={`https://wa.me/${transaction.client.user.country_code}${transaction.client.user.phone}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-green-500 hover:text-green-600"

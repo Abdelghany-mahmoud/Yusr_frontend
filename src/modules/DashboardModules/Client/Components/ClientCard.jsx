@@ -43,7 +43,7 @@ export const ClientCard = ({ client, index, pagination }) => {
           <>
             <span>{client.user.phone}</span>
             <a
-              href={`https://wa.me/${client.user.phone}`}
+              href={`https://wa.me/${client.user.country_code}${client.user.phone}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-green-500 hover:text-green-600"
