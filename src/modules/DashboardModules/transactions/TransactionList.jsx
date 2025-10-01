@@ -21,6 +21,7 @@ import UpdateClient from "../Client/Components/UpdateClient";
 import TransactionStatus from "./TransactionStatus";
 import PropTypes from "prop-types";
 import { FaMessage } from "react-icons/fa6";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function TransactionList({ status = "", userFilter = "", searchKey = "", debouncedSearchValue = "" }) {
   const canUpdateClients = useHasPermission("update-clients");
@@ -36,9 +37,9 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
 
   const userId = token?.user?.id;
   const roleFilters = roleNames.map(roleName => {
-      const key = roleNameToFieldId(roleName);
-      return `${key}=${userId}`;
-    }).join("&");
+    const key = roleNameToFieldId(roleName);
+    return `${key}=${userId}`;
+  }).join("&");
 
   const createViewFinancialEvaluation = useHasPermission("create-financial-evaluations");
   const updateViewFinancialEvaluation = useHasPermission("update-financial-evaluations");
@@ -101,7 +102,23 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
             <td className="p-3">
               {t(transaction?.client?.financing_type) || "-"}
             </td>
-            <td className="p-3">{transaction?.client?.user?.phone || "-"}</td>
+            <td className="p-3 flex items-center gap-2">
+              {transaction?.client?.user?.phone ? (
+                <>
+                  <span>{transaction.client.user.phone}</span>
+                  <a
+                    href={`https://wa.me/${transaction.client.user.phone}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-green-500 hover:text-green-600"
+                  >
+                    <FaWhatsapp size={20} />
+                  </a>
+                </>
+              ) : (
+                "-"
+              )}
+            </td>
           </>
         )}
         <td className="p-3">

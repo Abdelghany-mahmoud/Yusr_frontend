@@ -57,7 +57,7 @@ function ClientStatus({ clientId, clientStatus }) {
       btnText={clientStatus}
       btnClassName="btn text-[var(--secondary-color)] bg-[var(--primary-color)] flex items-center justify-center mx-auto"
       title={t("change_status")}
-      classNameModalStyle="max-w-[650px] h-[30vh] w-full p-3"
+      classNameModalStyle="max-w-[650px] h-[400px] w-full p-3"
     >
       <div className="flex flex-col  h-full justify-around gap-20 items-center">
         <DropDownMenu

@@ -16,8 +16,9 @@ import { useState } from "react";
 import TransactionDetails from "../../transactions/TransactionDetails";
 import { Link } from "react-router-dom";
 import { FaMessage } from "react-icons/fa6";
+import { FaWhatsapp } from "react-icons/fa";
 
-export const ClientCard = ({ client, index, pagination}) => {
+export const ClientCard = ({ client, index, pagination }) => {
   const { t } = useTranslation("layout");
   const token = useRecoilValue(tokenAtom);
   const canUpdateClients = useHasPermission("update-clients");
@@ -37,7 +38,23 @@ export const ClientCard = ({ client, index, pagination}) => {
       <td className="p-3 max-w-2">#{client.transaction.transaction_code}</td>
       <td className="p-3">{client?.name || client?.user?.name || "-"}</td>
       <td className="p-3"> {format(client?.created_at, "yyyy-MM-dd hh:mm") || "-"} </td>
-      <td className="p-3">{`${client?.phone || client?.user?.phone || "-"} `}</td>
+      <td className="p-3 flex items-center gap-2">
+        {client?.user?.phone ? (
+          <>
+            <span>{client.user.phone}</span>
+            <a
+              href={`https://wa.me/${client.user.phone}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-green-500 hover:text-green-600"
+            >
+              <FaWhatsapp size={20} />
+            </a>
+          </>
+        ) : (
+          "-"
+        )}
+      </td>
       {client.financing_type && (<td className="p-3">{t(client?.financing_type || "-")}</td>)}
       <td className="p-3"> {canUpdateStatus && (<ClientStatus clientId={client.id} clientStatus={t(client?.status?.name)} />)} </td>
 
