@@ -16,7 +16,6 @@ import {
 } from "../../modules/ClientModules/index";
 import Clients from "../../modules/DashboardModules/Client/Clients";
 import TransactionsPage from "../../modules/DashboardModules/transactions/TransactionsPage";
-import TransactionsTransferred from "../../modules/DashboardModules/Client/Components/MainCaseHandler/TransactionsTransferred";
 import Employees from "./../../modules/DashboardModules/employees/Employees";
 import Statuses from "../../components/Statuses/Statuses";
 import LegalTasks from "../../modules/DashboardModules/LegalTasks/LegalTasks";
@@ -65,10 +64,6 @@ export const Routes = createBrowserRouter([
       {
         path: "",
         element: <DashHome />,
-      },
-      {
-        path: "Transactions-transferred",
-        element: <TransactionsTransferred />,
       },
       {
         path: "clients",

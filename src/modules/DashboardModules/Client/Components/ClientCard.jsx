@@ -28,7 +28,6 @@ export const ClientCard = ({ client, index, pagination}) => {
   const canViewActivities = useHasPermission("read-activities");
   const [selected, setSelected] = useState(null);
   const isLegalSupervisor = token?.user?.roles.map((role) => role.name).includes("legal_supervisor");
-  console.log(client?.id);
   return (
     <tr
       key={client.id}

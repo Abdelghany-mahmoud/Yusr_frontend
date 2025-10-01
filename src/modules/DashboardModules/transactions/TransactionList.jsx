@@ -30,17 +30,15 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
   const location = useLocation();
   const token = useRecoilValue(tokenAtom);
   const roleNames = token?.user?.roles?.map(role => role.name) || [];
-  const isSuperAdmin = roleNames.includes("SuperAdmin") || roleNames.includes("executive_director");
+  const isSuperAdmin = roleNames.includes("superAdmin") || roleNames.includes("executive_director");
   const isQualityOfficer = roleNames.includes("quality_assurance_officer");
   const isLegalSupervisor = roleNames.includes("legal_supervisor");
 
   const userId = token?.user?.id;
-  const roleFilters = roleNames
-    .map(roleName => {
+  const roleFilters = roleNames.map(roleName => {
       const key = roleNameToFieldId(roleName);
       return `${key}=${userId}`;
-    })
-    .join("&");
+    }).join("&");
 
   const createViewFinancialEvaluation = useHasPermission("create-financial-evaluations");
   const updateViewFinancialEvaluation = useHasPermission("update-financial-evaluations");
@@ -48,33 +46,19 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
   const canCreateEstimation = useHasPermission("create-estimation-transactions");
   const canUpdateEstimation = useHasPermission("update-estimation-transactions");
   const { filterQuery } = useSearchHandler();
-  const {
-    data: transactionsData,
-    isLoading,
-    refetch,
-  } = useGetData({
-    endpoint: `transactions?page=${currentPage
-      }&${searchKey}=${debouncedSearchValue
-      }${filterQuery
-      }${!isSuperAdmin ? `&${roleFilters}` : ""
-      }&status=${status || ""
-      }${userFilter.roleKey && `&${userFilter.roleKey}=${userFilter.userId}` || ""
-      }`,
+  const { data: transactionsData, isLoading, refetch, } = useGetData({
+    endpoint: `transactions?${searchKey}=${debouncedSearchValue}${filterQuery}
+    ${!isSuperAdmin ? `&${roleFilters}` : ""}&status=${status || ""}
+    ${userFilter.roleKey && `&${userFilter.roleKey}=${userFilter.userId}` || ""}&per_page=10&page=${currentPage}`,
 
     queryKey: [
-      "transactions",
-      currentPage,
-      status,
-      userFilter?.userId,
-      userFilter.roleKey,
-      debouncedSearchValue,
-      filterQuery,
-      roleFilters // include for cache busting if roles change
+      "transactions", currentPage, status, userFilter?.userId, userFilter.roleKey,
+      debouncedSearchValue, filterQuery, roleFilters
     ],
   });
 
   const transactions = transactionsData?.data?.data || [];
-  const totalPages = transactionsData?.data?.last_page || 1;
+  const pagination = transactionsData?.data?.meta;
 
   const tableHead = [
     "#",
@@ -83,12 +67,10 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
     t("status"),
     t("created_at"),
     !isLegalSupervisor ? t("financing_type") : null,
-    !isLegalSupervisor ? t("name") : null,
-    !isLegalSupervisor ? t("national_id") : null,
     !isLegalSupervisor ? t("phone") : null,
     t("payment_amount"),
     t("actions"),
-  ].filter(Boolean); // removes null/false/undefined
+  ].filter(Boolean);
 
   if (isLoading) {
     return <Loading />;
@@ -110,7 +92,6 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
         <td className="p-3 max-w-2">{index + 1}</td>
         <td className="p-3">{transaction.client.user.name}</td>
         <td className="p-3">#{transaction.transaction_code}</td>
-        {/* <td className="p-3">{t(transaction.status)}</td> */}
         <td className="p-3"><TransactionStatus transactionId={transaction.id} status={t(transaction.status)} /></td>
         <td className="p-3">
           {new Date(transaction.created_at).toLocaleString()}
@@ -120,8 +101,6 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
             <td className="p-3">
               {t(transaction?.client?.financing_type) || "-"}
             </td>
-            <td className="p-3">{transaction?.client?.user?.name || "-"}</td>
-            <td className="p-3">{transaction?.client?.national_id || "-"}</td>
             <td className="p-3">{transaction?.client?.user?.phone || "-"}</td>
           </>
         )}
@@ -217,20 +196,15 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
               renderTransactionRow(tx, index)
             )}
           />
-        </div>
-      )}
-
-      {totalPages > 1 && (
-        <div className="mt-4 flex justify-center">
-          <Pagination totalPages={totalPages} />
+          <Pagination
+            totalPages={pagination?.last_page || 1}
+            currentPage={pagination?.current_page || 1}
+          />
         </div>
       )}
 
       {selected && (
-        <TransactionDetails
-          transaction={selected}
-          onClose={() => setSelected(null)}
-        />
+        <TransactionDetails transaction={selected} onClose={() => setSelected(null)} />
       )}
     </div>
   );

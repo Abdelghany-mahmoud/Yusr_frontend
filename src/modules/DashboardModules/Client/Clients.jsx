@@ -76,9 +76,10 @@ function Clients() {
   ];
 
   const { data, isLoading, isError, error } = useGetData({
-    endpoint: `clients?${searchKey}=${debouncedSearchValue}${financingType ? `&financing_type=${financingType}` : ""}
-    ${selectedUserId ? `&user_id=${selectedUserId}` : ""}${selectedRole ? `&role=${selectedRole}` : ""}${selectedStatus.value ? `&status=${selectedStatus.value}` : ""}`,
-    queryKey: ["clients", searchKey, debouncedSearchValue, financingType, selectedUserId, selectedRole, selectedStatus.value],
+    endpoint: `clients?${searchKey}=${debouncedSearchValue}&per_page=10&page=${currentPage}${financingType ? `&financing_type=${financingType}` : ""}
+    ${selectedUserId ? `&user_id=${selectedUserId}` : ""}${selectedRole ? `&role=${selectedRole}` : ""}
+    ${selectedStatus.value ? `&status=${selectedStatus.value}` : ""}`,
+    queryKey: ["clients", searchKey,currentPage, debouncedSearchValue, financingType, selectedUserId, selectedRole, selectedStatus.value],
   });
 
   const clients = data?.data?.data || [];
@@ -172,7 +173,7 @@ function Clients() {
                       <li
                         key={role.id}
                         onClick={() => {
-                          setSelectedRole(role.id); // ✅ خزن فقط الـ id
+                          setSelectedRole(role.id);
                           setSelectedUserId("");
                           setSelectedRoleDisplay(role.label);
                         }}
@@ -257,7 +258,6 @@ function Clients() {
             tableHead={tableHead}
             body={<ClientList clients={clients} pagination={pagination} />}
           />
-          {/* <Pagination totalPages={data?.data?.last_page} /> */}
           <Pagination
             totalPages={pagination?.last_page || 1}
             currentPage={pagination?.current_page || 1}

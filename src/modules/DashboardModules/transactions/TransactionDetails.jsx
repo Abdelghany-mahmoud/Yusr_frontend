@@ -9,7 +9,6 @@ export default function TransactionDetails({ transaction, onClose }) {
     "read-financial-evaluation"
   );
 
-  console.log(transaction);
   const officerFields = [
     "frontline_liaison_officer",
     "main_case_handler",

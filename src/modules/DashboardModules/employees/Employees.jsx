@@ -73,7 +73,7 @@ function Employees() {
   };
 
   const { data, isLoading, isError, error } = useGetData({
-    endpoint: `employees?role=${selectedRoleDisplay}&${searchKey}=${debouncedSearchValue}&page=${currentPage}`,
+    endpoint: `employees?role=${selectedRoleDisplay}&${searchKey}=${debouncedSearchValue}&per_page=10&page=${currentPage}`,
     queryKey: [
       "employees",
       searchKey,

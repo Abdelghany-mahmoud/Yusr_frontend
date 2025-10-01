@@ -5,7 +5,6 @@ import { DropDownMenu, PageTitle } from "../../../components";
 import { FaFilter } from "react-icons/fa";
 import { useGetData } from "../../../hooks/useGetData";
 import { roleFields } from "../../../constant/clientType";
-import { useHasPermission } from "../../../hooks/useHasPermission";
 
 export default function TransactionsPage() {
   const { t } = useTranslation("layout");
@@ -37,8 +36,6 @@ export default function TransactionsPage() {
     queryKey: ["officers", selectedRoleDisplay],
     enabledKey: !!selectedRoleDisplay,
   });
-
-  const canViewRoles = useHasPermission("read-roles");
 
   return (
     <div>
@@ -89,72 +86,69 @@ export default function TransactionsPage() {
                   </li>
                 ))}
               </DropDownMenu>
-              {canViewRoles && (
-                <>
-                  <DropDownMenu
-                    menuTitle={t("filter_by_role")}
-                    MenuIcon={<FaFilter />}
-                    className="px-4 py-2 rounded-md"
-                    selectedValue={t(
-                      selectedRole
-                        ? roleFields.find((role) => role.id === selectedRole)?.label
-                        : null
-                    )}
-                  >
-                    <li
-                      onClick={() => {
-                        setSelectedRole("");
-                        setSelectedUserId("");
-                      }}
-                      className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === "" ? "bg-[var(--bg-hover)]" : ""}`}
-                    >
-                      {t("all")}
-                    </li>
-                    {roleFields.map((role) => (
-                      <li
-                        key={role.id}
-                        onClick={() => {
-                          setSelectedRole(role.id); // ✅ خزن فقط الـ id
-                          setSelectedUserId("");
-                          setSelectedRoleDisplay(role.label);
-                        }}
-                        className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === role.id ? "bg-[var(--bg-hover)]" : ""}`}
-                      >
-                        {t(role.label)}
-                      </li>
-                    ))}
-                  </DropDownMenu>
 
-                  {selectedRole && (
-                    <DropDownMenu
-                      menuTitle={t("select_user")}
-                      MenuIcon={<FaFilter />}
-                      className="px-4 py-2 rounded-md"
-                      selectedValue={
-                        selectedUserId
-                          ? usersData?.data?.data?.find(
-                            (user) => user.id === selectedUserId
-                          )?.name
-                          : null
-                      }
-                    >
-                      {usersLoading ? (
-                        <li className="p-2">{t("loading")}...</li>
-                      ) : (
-                        usersData?.data?.data?.map((user) => (
-                          <li
-                            key={user.id}
-                            onClick={() => setSelectedUserId(user.id)}
-                            className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedUserId === user.id ? "bg-[var(--bg-hover)]" : ""
-                              }`}
-                          >
-                            {user.name}
-                          </li>
-                        ))
-                      )}
-                    </DropDownMenu>
+              <DropDownMenu
+                menuTitle={t("filter_by_role")}
+                MenuIcon={<FaFilter />}
+                className="px-4 py-2 rounded-md"
+                selectedValue={t(
+                  selectedRole
+                    ? roleFields.find((role) => role.id === selectedRole)?.label
+                    : null
+                )}
+              >
+                <li
+                  onClick={() => {
+                    setSelectedRole("");
+                    setSelectedUserId("");
+                  }}
+                  className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === "" ? "bg-[var(--bg-hover)]" : ""}`}
+                >
+                  {t("all")}
+                </li>
+                {roleFields.map((role) => (
+                  <li
+                    key={role.id}
+                    onClick={() => {
+                      setSelectedRole(role.id); // ✅ خزن فقط الـ id
+                      setSelectedUserId("");
+                      setSelectedRoleDisplay(role.label);
+                    }}
+                    className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedRole === role.id ? "bg-[var(--bg-hover)]" : ""}`}
+                  >
+                    {t(role.label)}
+                  </li>
+                ))}
+              </DropDownMenu>
+
+              {selectedRole && (
+                <DropDownMenu
+                  menuTitle={t("select_user")}
+                  MenuIcon={<FaFilter />}
+                  className="px-4 py-2 rounded-md"
+                  selectedValue={
+                    selectedUserId
+                      ? usersData?.data?.data?.find(
+                        (user) => user.id === selectedUserId
+                      )?.name
+                      : null
+                  }
+                >
+                  {usersLoading ? (
+                    <li className="p-2">{t("loading")}...</li>
+                  ) : (
+                    usersData?.data?.data?.map((user) => (
+                      <li
+                        key={user.id}
+                        onClick={() => setSelectedUserId(user.id)}
+                        className={`cursor-pointer p-2 hover:bg-[var(--bg-hover)] ${selectedUserId === user.id ? "bg-[var(--bg-hover)]" : ""
+                          }`}
+                      >
+                        {user.name}
+                      </li>
+                    ))
                   )}
-                </>
+                </DropDownMenu>
               )}
             </div>
           </div>
