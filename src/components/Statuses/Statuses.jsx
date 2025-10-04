@@ -27,7 +27,7 @@ function Statuses() {
     "#",
     t("name"),
     t("created_at"),
-    t("updated_at"),
+    // t("updated_at"),
     t("actions"),
   ];
 

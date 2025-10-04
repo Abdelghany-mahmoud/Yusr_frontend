@@ -70,7 +70,7 @@ function Clients() {
     // t("gender"),
     t("type"),
     t("status"),
-    // t("job"),
+    t("updated_at"),
     // t("national_id"),
     t("actions"),
   ];

@@ -5,11 +5,12 @@ import UpdateClient from "./UpdateClient";
 import { DeleteGlobal } from "../../../../components";
 import ActivityLog from "./ActivityLog";
 import ClientTransaction from "./ClientTransaction";
+import ClientFollowUp from "./ClientFollowUp";
 import AddDocs from "./ClientDocs/AddDocs";
-// import Transactions from "./transactions/Transactions";
+import AddNotes from "./AddNotes";
 import { useRecoilValue } from "recoil";
 import { tokenAtom } from "../../../../store/tokenAtom/tokenAtom";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import ClientStatus from "./ClientStatus";
 import { useHasPermission } from "../../../../hooks/useHasPermission";
 import { useState } from "react";
@@ -25,7 +26,6 @@ export const ClientCard = ({ client, index, pagination }) => {
   const canDeleteClients = useHasPermission("delete-clients");
   const canUpdateStatus = useHasPermission("update-statuses");
   const canCreateDocuments = useHasPermission("create-documents");
-  // const canViewTransactions = useHasPermission("read-transactions");
   const canViewActivities = useHasPermission("read-activities");
   const [selected, setSelected] = useState(null);
   const isLegalSupervisor = token?.user?.roles.map((role) => role.name).includes("legal_supervisor");
@@ -57,13 +57,18 @@ export const ClientCard = ({ client, index, pagination }) => {
       </td>
       {client.financing_type && (<td className="p-3">{t(client?.financing_type || "-")}</td>)}
       <td className="p-3"> {canUpdateStatus && (<ClientStatus clientId={client.id} clientStatus={t(client?.status?.name)} />)} </td>
-
+      <td className="p-3">
+        {client?.last_follow_up
+          ? format(parseISO(client.last_follow_up), "yyyy-MM-dd HH:mm")
+          : "--"}
+      </td>
       <td className="flex gap-2 items-center justify-center p-3 mt-2">
         {
           (
             <>
               {" "}
               <ShowClient client={client} />
+              <ClientFollowUp client={client} />
               {canUpdateClients && <UpdateClient client={client} />}
               {<ClientTransaction client={client} />}
               {/* {canViewTransactions && <Transactions id={client.user.id} />} */}
@@ -82,6 +87,7 @@ export const ClientCard = ({ client, index, pagination }) => {
               </Link>
               {canViewActivities && <ActivityLog client={client} />}
               {canCreateDocuments && <AddDocs client={client} />}
+              <AddNotes client={client} />
               {canDeleteClients && (
                 <DeleteGlobal
                   endpoint={`clients/${client?.id}`}

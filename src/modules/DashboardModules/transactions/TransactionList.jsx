@@ -22,6 +22,7 @@ import TransactionStatus from "./TransactionStatus";
 import PropTypes from "prop-types";
 import { FaMessage } from "react-icons/fa6";
 import { FaWhatsapp } from "react-icons/fa";
+import AddNotes from "../Client/Components/AddNotes";
 
 export default function TransactionList({ status = "", userFilter = "", searchKey = "", debouncedSearchValue = "" }) {
   const canUpdateClients = useHasPermission("update-clients");
@@ -169,6 +170,7 @@ export default function TransactionList({ status = "", userFilter = "", searchKe
               </div>
             </button>
           </Link>
+          <AddNotes client={transaction?.client} />
           {(canUpdateEstimation || canCreateEstimation) && (
             <>
               <AddEstimation

@@ -20,9 +20,9 @@ export const StatusCard = ({ status, index, onEdit }) => {
       <td className="p-3">
         {format(new Date(status?.created_at), "yyyy-MM-dd hh:mm") || "-"}
       </td>
-      <td className="p-3">
+      {/* <td className="p-3">
         {format(new Date(status?.updated_at), "yyyy-MM-dd hh:mm") || "-"}
-      </td>
+      </td> */}
       <td className="flex gap-2 items-center p-3 justify-center">
         {canUpdateStatus && (
           <Button

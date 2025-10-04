@@ -20,6 +20,7 @@ import { useRecoilValue } from "recoil";
 import { tokenAtom } from "../../store/tokenAtom/tokenAtom";
 import AddDocs from "../DashboardModules/Client/Components/ClientDocs/AddDocs";
 import SendFinancingPlan from "../DashboardModules/Client/Components/MainCaseHandler/SendFinancingPlan";
+import AddNotes from "../DashboardModules/Client/Components/AddNotes";
 
 function ChatsPage({ basePath }) {
   const token = useRecoilValue(tokenAtom);
@@ -187,6 +188,7 @@ function ChatsPage({ basePath }) {
                 {!isMessagesLoading && canUpdateClients && <ClientTransaction client={client} />}
                 {!isMessagesLoading && canViewTransactions && (<Transactions id={client?.user?.id} />)}
                 {!isMessagesLoading && canCreateDocuments && <AddDocs client={client} />}
+                <AddNotes client={client} />
               </div>
             </div>
 

@@ -240,8 +240,8 @@
   "image_documents": "مستندات صور",
   "to_client": "إلى العميل",
   "to_employee": "إلى موظف",
-  "add_note": "اضف استفسار",
-  "note": "استفسار",
+  "add_note": "اضف ملاحظة",
+  "no_notes_available": "لا توجد ملاحظات متاحة",
   "image_document": "مستند صورة",
   "personal_info": "معلومات شخصية",
   "financial_info": "معلومات التمويل",
@@ -262,7 +262,7 @@
   "delete_status ": "حذف الحالة",
   "edit_status": "تعديل الحالة",
   "delete_status": "حذف الحالة",
-  "updated_at": "تم التحديث في",
+  "updated_at": "آخر تحديث",
   "add_status": "اضف حالة",
   "LegalTasks": " المهام القانونية",
   "no_notes_found": "لم يتم العثور على استفسارات",
@@ -356,5 +356,9 @@
   "notify_employees": "ارسال اشعار الى الموظفين",
   "select_permissions" : "اختر الصلاحيات",
   "read-allChats" : "الاطلاع علي جميع المحادثات",
-  "transfer-clients" : "تحويل العملاء"
+  "transfer-clients" : "تحويل العملاء",
+  "create-notes" : "انشاء ملاحظات",
+  "read-notes" : "قراءة الملاحظات",
+  "delete-notes" : "حذف الملاحظات",
+  "client_follow_up" : "متابعة العميل"
 }
